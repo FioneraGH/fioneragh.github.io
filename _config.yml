@@ -70,5 +70,5 @@ theme: landscape
 deploy:
   type: git
   repository: https://github.com/FioneraGH/fioneragh.github.io.git
-  branch: master
+  branch: gh-pages
   plugins: -hexo-generator-feed
