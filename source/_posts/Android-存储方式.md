@@ -4,6 +4,8 @@ date: 2016-01-18 22:55:20
 tags:
 ---
 
+## [迁移]
+
 ### 0x80 Android 主要存储方式
 File，SharedPreference，SQLite，Content Provider(安卓四大组件之一)
 
