@@ -1,6 +1,6 @@
 ---
 title: 简历
-date: 2016-01-06 22:57:44
+date: 2016-01-22 22:52:44
 tags:
 ---
 
@@ -13,7 +13,7 @@ tags:
 * 男 21岁 山东，青岛 中国海洋大学
 * 联系电话：13156218856
 * [常用邮箱：fionera@outlook.com](mailto:fionera@outlook.com "常用邮箱")
-* [简历地址：http://fioneragh.github.io/2016/01/06/Resume/](http://fioneragh.github.io/2016/01/06/Resume/ "简历地址")
+* [简历地址：http://fioneragh.github.io/resume/](http://fioneragh.github.io/resume/ "简历地址")
 * [新浪博客：http://blog.sina.com.cn/u/2594140111](http://blog.sina.com.cn/u/2594140111 "新浪博客")
 
 ***
