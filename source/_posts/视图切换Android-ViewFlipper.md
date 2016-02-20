@@ -1,6 +1,6 @@
 ---
 title: 视图切换Android ViewFlipper
-date: 2016-01-19 19:00:34
+date: 2015-06-02 19:06:34
 tags:
 ---
 

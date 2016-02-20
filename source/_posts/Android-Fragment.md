@@ -1,6 +1,6 @@
 ---
 title: Android Fragment
-date: 2016-01-18 22:30:02
+date: 2015-04-13 20:50:02
 tags:
 ---
 
