@@ -1,9 +1,9 @@
 # Header
 menu:
   主页: /
-  文章: /archives
-  简历: /resume
-  关于: /about
+  文章: /archives/
+  简历: /resume/
+  关于: /about/
 rss: /atom.xml
 
 # Content
