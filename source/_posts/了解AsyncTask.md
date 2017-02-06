@@ -52,5 +52,5 @@ private static volatile Executor sDefaultExecutor = SERIAL_EXECUTOR;
 
 ### 0x86 AsyncTask直接使用暴露的问题
 1. 若线程数大于maximumPoolSize，直接崩溃
-2. 主线程创建避免低Api 平台崩溃
+2. 主线程创建，避免低Api 平台崩溃
 3. 各平台兼容性

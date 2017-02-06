@@ -10,7 +10,7 @@ Data Binding 解决了 Android UI 编程的一个痛点，官方原生支持 MVV
 ### 0x82 配置方法
 如今配置方法已经很简单了，设置Project的`build.gradle`的`gradle-plugin:1.5.0`，然后在Module的`build.gradle`中添加块：
 ```Groovy
-dataBinding{
+dataBinding {
 	enabled true
 }
 ```
