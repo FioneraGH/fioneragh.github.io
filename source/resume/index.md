@@ -13,6 +13,7 @@ tags:
 * 男 22岁 山东，青岛 中国海洋大学
 * 联系电话：13156218856
 * 目前就职：青岛百灵信息科技股份有限公司（青岛市崂山区松岭路169号）
+* [生涯重要人物：Demesne, 阿里ASRC大牛, 饿了么ESRC创始人之一](http://weibo.com/121478098 "智障女票")
 * [常用邮箱：fionera@outlook.com](mailto:fionera@outlook.com "常用邮箱")
 * [简历地址：http://fioneragh.github.io/resume/](http://fioneragh.github.io/resume/ "简历地址")
 
