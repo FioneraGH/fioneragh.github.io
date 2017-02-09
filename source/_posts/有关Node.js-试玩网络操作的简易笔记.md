@@ -1,7 +1,7 @@
 ---
 title: 有关Node.js 试玩网络操作的简易笔记
 date: 2015-07-07 21:14:02
-tags:
+tags: [node.js]
 ---
 
 ## [迁移]

@@ -1,7 +1,7 @@
 ---
 title: 有关Kernel Compile的简易笔记
 date: 2015-07-19 20:15:30
-tags:
+tags: [Linux,Kernel]
 ---
 
 ## [迁移]

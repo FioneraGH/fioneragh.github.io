@@ -1,7 +1,7 @@
 ---
 title: 了解AsyncTask
 date: 2016-01-18 21:51:49
-tags:
+tags: [Android,AsyncTask]
 ---
 
 ### 0x80 什么是AsyncTask

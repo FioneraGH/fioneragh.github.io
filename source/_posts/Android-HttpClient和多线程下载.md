@@ -1,7 +1,7 @@
 ---
 title: Android HttpClient和多线程下载
 date: 2015-07-03 21:44:22
-tags:
+tags: [HttpClient]
 ---
 
 ## [迁移]

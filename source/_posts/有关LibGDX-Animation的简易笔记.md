@@ -1,7 +1,7 @@
 ---
 title: 有关LibGDX Animation的简易笔记
 date: 2015-07-03 15:23:14
-tags:
+tags: [libGDX]
 ---
 
 ## [迁移]

@@ -1,7 +1,7 @@
 ---
 title: Sudoers Configuration
 date: 2017-02-05 12:16:10
-tags:
+tags: [Linux,Sudoers]
 ---
 
 ### 0x80 概述

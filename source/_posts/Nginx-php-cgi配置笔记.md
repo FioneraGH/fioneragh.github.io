@@ -1,7 +1,7 @@
 ---
 title: Nginx php-cgi配置笔记
 date: 2015-07-02 20:52:01
-tags:
+tags: [Linux,Nginx]
 ---
 
 ## [迁移]

@@ -1,7 +1,7 @@
 ---
 title: Android DataBinding
 date: 2016-02-05 19:38:30
-tags:
+tags: [Android,DataBinding]
 ---
 
 ### 0x81 前言

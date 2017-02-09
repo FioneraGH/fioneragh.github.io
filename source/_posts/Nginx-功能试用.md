@@ -1,7 +1,7 @@
 ---
 title: Nginx 功能试用
 date: 2015-07-03 09:56:38
-tags:
+tags: [Linux,Nginx]
 ---
 
 ## [迁移]

@@ -1,7 +1,7 @@
 ---
 title: 有关LibGDX TrueTypeFont处理的简易笔记
 date: 2015-07-03 17:14:58
-tags:
+tags: [libGDX]
 ---
 
 ## [迁移]

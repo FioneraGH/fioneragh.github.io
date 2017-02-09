@@ -1,7 +1,7 @@
 ---
 title: Fragment 日常笔记 StateLoss
 date: 2017-02-08 18:14:10
-tags: Android, Fragment
+tags: [Android,Fragment]
 ---
 
 ### 0x81 StateLoss 问题

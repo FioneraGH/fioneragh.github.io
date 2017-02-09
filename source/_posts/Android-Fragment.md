@@ -1,7 +1,7 @@
 ---
 title: Android Fragment
 date: 2015-04-13 20:50:02
-tags:
+tags: [Android,Fragment]
 ---
 
 ## [迁移]

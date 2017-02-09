@@ -1,7 +1,7 @@
 ---
 title: Linux 挂载点设置
 date: 2017-02-07 19:16:10
-tags:
+tags: [Linux,Mount]
 ---
 
 ### 0x80 /etc/fstab

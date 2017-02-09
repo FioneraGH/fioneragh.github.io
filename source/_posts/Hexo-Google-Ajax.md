@@ -1,7 +1,7 @@
 ---
 title: Hexo Google Ajax
 date: 2016-01-18 23:02:57
-tags:
+tags: [Hexo]
 ---
 
 ### 0x80 ajax.googleapis.com无法访问

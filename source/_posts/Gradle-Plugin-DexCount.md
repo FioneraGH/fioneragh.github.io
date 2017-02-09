@@ -1,7 +1,7 @@
 ---
 title: Gradle Plugin DexCount
 date: 2016-02-02 17:32:24
-tags:
+tags: [Gradle,Dex]
 ---
 
 ### 0x81 DexCount作用

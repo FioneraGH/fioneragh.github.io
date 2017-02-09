@@ -1,7 +1,7 @@
 ---
 title: Android Activity
 date: 2015-04-25 19:56:53
-tags:
+tags: [Android,Activity]
 ---
 
 ## [迁移]

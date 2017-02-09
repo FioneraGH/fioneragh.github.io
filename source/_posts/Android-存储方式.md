@@ -1,7 +1,7 @@
 ---
 title: Android 存储方式
 date: 2016-01-18 22:55:20
-tags:
+tags: [Android,Storage]
 ---
 
 ## [迁移]

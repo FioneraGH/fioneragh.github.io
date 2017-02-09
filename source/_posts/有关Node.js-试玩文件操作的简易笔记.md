@@ -1,7 +1,7 @@
 ---
 title: 有关Node.js 试玩文件操作的简易笔记
 date: 2015-07-06 21:27:40
-tags:
+tags: [node.js]
 ---
 
 ## [迁移]
