@@ -1,6 +1,6 @@
 ---
 title: Android DataBinding[更新]
-date: 2017-02-05 19:38:55
+date: 2017-02-14 19:38:55
 tags: [Android,DataBinding]
 ---
 
