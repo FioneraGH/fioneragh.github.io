@@ -72,4 +72,4 @@ filetype plugin indent on    " required
 
 由于YCM的Python补全是基于Jedi的，而Jedi的具体使用是[ycmd-server:A code-completion & code-comprehension server]("https://github.com/Valloric/ycmd")启动了[JediHTTP]("https://github.com/vheon/JediHTTP")。这种补全具体的模式我的水平不够还看不懂，但这种模式无疑是极大的增加了扩展性，而我之前遇到的补全无效的问题也是由于JediHTTP服务启动失败，虽然我在`:YcmDebugInfo`中看到它是正常启动的，但是在/tmp下的log文件中显示该服务一直链接失败，解决了这个问题就能使用补全了。
 
-PS:YCM有很多SubModule，个别找不到依赖的错误可能是子模块没有检出，使用`git submodule update --init --recursive`可能解决问题。
+>PS:YCM有很多SubModule，个别找不到依赖的错误可能是子模块没有检出，使用`git submodule update --init --recursive`可能解决问题。
