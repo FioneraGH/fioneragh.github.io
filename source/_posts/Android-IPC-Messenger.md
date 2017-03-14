@@ -36,6 +36,3 @@ Android的每个应用的进程都是zygote进程的子进程，它负责拷贝�
 举一个最典型的例子，SharedPreference存取数据，SP的默认获取模式是MODE_PRIVATE，也就是说是进程私有的，它不具备跨进程的能力，多进程调用数据写操作不能保证写安全，虽然早期有MULTI_PROCESS模式，但是被Google标记为Deprecated不再被推荐使用。Google推荐的跨进程数据共享是使用ContentProvider实现，很多三方库包括DPreference就是模仿了SP的API，用CP实现的。
 
 因为有了这些为了安全性考虑的局限，Android实现了以Binder为基础的IPC通信机制，提供了Messenger、AIDL等方式供开发者使用，后面我们就说一说Messenger的用法和我遇到的坑。
-
-
-
