@@ -29,10 +29,10 @@ screen nohup mongodb-linux-x86_64-3.2.10/bin/mongod --dbpath nodejs/db &
 
 在screen中的所有可操作快捷键都以`Ctrl+a`开始，比如我们继续`Ctrl+d`就可以detach这个screen，回到之前的shell，我们可用`screen -r`重连刚刚detach的screen：
 
-![01](/images/2017_03_16_02.png)
+![02](/images/2017_03_16_02.png)
 
 如果我们离开了ssh的shell，回来还想连接这个screen怎么办，screen提供了`-ls`参数用于查询当前运行的screen，之后根据id`-r`就可以了：
 
-![01](/images/2017_03_16_03.png)
+![03](/images/2017_03_16_03.png)
 
 screen支持的功能非常多，会话共享、多会话切换等功能都是很有用的特性，需要的话查manual就可以了。
