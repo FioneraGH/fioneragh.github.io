@@ -4,6 +4,9 @@ date: 2017-03-21 18:19:45
 tags: [Android,Context]
 ---
 
+### 0x80 前言
+Framework源码来自Android Platform API 25
+
 ### 0x81 startActivity的定义
 是时候倒回来重新看一下startActivity这个方法了，我们从Activity进入会发现是在ContentWrapper中调用了mBase中的方法，而mBase继承自Context，贴一段在Context中的官方的源码：
 ```Java
