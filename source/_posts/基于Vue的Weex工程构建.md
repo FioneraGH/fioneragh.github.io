@@ -10,7 +10,7 @@ tags: [Weex,Vue]
 
 使用`weex init project`命令创建的工程目录结构如下：
 
-![工程结构](/images/2017_03_01_01.png)
+![工程结构](/images/2017_03_27_01.png)
 
 其中.vscode是Visual Studio Code生成的配置文件夹，src是我们的源码目录，webpack.config.js是webpack（1.14.0）的配置文件，package.json是项目配置信息文件。
 
