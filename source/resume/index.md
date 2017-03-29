@@ -95,7 +95,7 @@ tags:
 
 * 热爱研究移动跨平台开发，善于接受学习新事物，简单学习过React，Angular，Vue（自己在用）等Web框架，使用React Native以及Weex进行过Android项目的开发。
 
-* 使用libGDX进行过Android游戏开发的学习，最终使用Unity3D开发过小游戏，掌握UnityEngine Api，使用Visual Studio Code编写C#脚本开发Unity游戏。
+* 使用Unity3D开发过小游戏，掌握UnityEngine Api，使用Visual Studio Code编写C#脚本开发Unity游戏。
 
 * 熟练掌握Java SE Api并辅以Kotlin，最初进行过J2EE的学习，理解Servlet的原理，掌握AOP编程思想，课程设计使用SSH框架开发过点餐系统（而后用Spring Boot重写）。
 
