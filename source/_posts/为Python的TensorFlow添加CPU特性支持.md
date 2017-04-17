@@ -16,7 +16,7 @@ print session.run(hello)
 ```
 得到了如下结果：
 
-![AVX和SSE警告](/image/2017_04_14_01.png)
+![AVX和SSE警告](/images/2017_04_14_01.png)
 
 ### 0x82 添加CPU支持
 添加支持的方式很简单，只需要在之前的bazel构建命令里添加对应的参数，这样gcc在执行编译时便会添加对应的cpu特性支持。
