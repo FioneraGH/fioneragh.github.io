@@ -1,4 +1,4 @@
 ##博客君
 萌萌的博客sama
 
-* 暂时修改node_modules/hexo/lib/plugins/helper/search_form.js =文件替代google搜索为bing搜索。
+决定找时间规范下文章结构，并把一些坑填了，当然完成这件事情不知道要拖多久，但有些事情总要去做，留个念想总是好的。
