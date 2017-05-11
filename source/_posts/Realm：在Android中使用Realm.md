@@ -1,5 +1,5 @@
 ---
-title: 在Android中使用Realm
+title: Realm：在Android中使用Realm
 date: 2017-05-10 19:01:56
 tags: [Android,Realm]
 ---
@@ -59,6 +59,11 @@ gankItem.setId("cz89a7s4ehsjkf");
 
 Realm.init(context);
 Realm realm = Realm.getDefaultInstance();
+realm.beginTransaction();
 RealmResults<GankItem> items = realm.where(GankItem.class).findAll(); // 查询
+realm.copyToRealmOrUpdate(gankItem); // 插入或更新
+items.deleteAllFromRealm(); // 删除
+realm.commitTransaction();
+realm.close();
 ```
 Realm简单使用就是这样，后面我会写写具体的操作以及事务。
