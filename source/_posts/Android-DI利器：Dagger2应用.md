@@ -1,5 +1,5 @@
 ---
-title: Android-DI利器：Dagger2应用
+title: Android DI利器：Dagger2应用
 date: 2017-03-08 18:53:36
 tags: [Android,Dagger]
 ---
@@ -63,7 +63,7 @@ public class AppModule {
     }
 }
 ```
-其中`@Module`注解指明了该类是一个工厂，就是它返回实例对象给Component然在再被注入到`@Inject`成员上。`@Provides`注解修饰的方法通常用provide开头（不强制），Dagger会主动寻找对应的方法获取对象。`@Singleton`注解是Dagger提供的默认的一个Scope注解，并不是说加了这个注解它就单例了，实际上它规约了一种Scope，如前面所说的同一Scope下它是单例的，因此如果我们只在一个地方进行初始化，那它就是单例的，儿歌注解名也起到一定的标记作用。从OkHttpClient->Retrofit->ApiService，当我们注入ApiService时，Dagger会自动根据依赖图为我们创建好对象并注入。
+其中`@Module`注解指明了该类是一个工厂，就是它返回实例对象给Component然在再被注入到`@Inject`成员上。`@Provides`注解修饰的方法通常用provide开头（不强制），Dagger会主动寻找对应的方法获取对象。`@Singleton`注解是Dagger提供的默认的一个Scope注解，并不是说加了这个注解它就单例了，实际上它规约了一种Scope，如前面所说的同一Scope下它是单例的，因此如果我们只在一个地方进行初始化，那它就是单例的，而这个注解名也起到一定的标记作用。从OkHttpClient->Retrofit->ApiService，当我们注入ApiService时，Dagger会自动根据依赖图为我们创建好对象并注入。
 
 Module的最简单用法就是这样，当然它本身就是这么简单，当你理解了Scope，你就能了解到Dagger2的奇妙之处了。
 
