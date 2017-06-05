@@ -33,7 +33,7 @@ buildscript {
 apply plugin: 'com.getkeepsafe.dexcount'
 ```
 3. gradlew assemble
-```Shell
+```Bash
 ./gradlew assembleDebug
 ```
 > 如果想查看详情，执行一次后在`${buildDir}/outputs/dexcount/${variant}`会生成一个详情文件。
