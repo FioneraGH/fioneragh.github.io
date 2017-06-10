@@ -6,6 +6,7 @@ tags: [Linux,debugfs]
 
 ### 0x81 debugfs
 > debugfs - ext2/ext3/ext4 file system debugger
+
 上面这句话时是manual对debugfs工具的描述，它是ext2/ext3/ext4文件系统的调试器，用于调试或即时修改文件系统的状态，如inode信息等。
 
 ### 0x82 基本用法
