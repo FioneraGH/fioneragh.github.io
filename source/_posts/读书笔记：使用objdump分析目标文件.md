@@ -20,7 +20,7 @@ tags: [Linux,objdump]
 
 目标文件的结构到底是怎样的？它们通常按类别存储，而每一个类别叫做一个Section，比如编译后的机器指令存放在Code Section，数据存放在Data Section当中。
 
-### 0x82 目标文件的结构
+### 0x82 生成目标文件
 为了方便以后到回头来结合书看，我就用书上的例子。
 ```C
 // SimpleSection.c
@@ -57,7 +57,7 @@ objdump来自于包binutils，隶属于GNU Development Tools，它的主要功�
 
 ![objdump结果](/images/2017_06_13_03.png)
 
-从上述的结果我们可以看出SimpleSection.o一共有7个Section，分别是.text、.data、.bss、.rodata、.comment、.note.GNU-stack、.eh_frame对应代码段、数据段、符号块预留段、只读数据段、注释段、栈标记段、异常处理段（书上没有，exception handling的意思，内容类似debug_frame段）。
+从上述的结果我们可以看出SimpleSection.o一共有7个Section，分别是.text、.data、.bss、.rodata、.comment、.note.GNU-stack、.eh_frame对应代码段、数据段、符号块预留段、只读数据段、编译器信息段、栈标记段、异常处理段（书上没有，exception handling的意思，内容类似debug_frame段）。
 
 其中的Size表示段长，File Off表示段起始偏移，Algn表示对齐，所以我们可以看出各段是连续存储的，最初是ELF Header，它记录了最基本的信息。
 
@@ -72,4 +72,33 @@ objdump来自于包binutils，隶属于GNU Development Tools，它的主要功�
 
 我们可以发现.bss段是只申请内存而不占据文件内容的，因此.bss段可以视作未初始化的全局变量和局部静态变量的预留位置。
 
-### 0x84 目标文件分析（未完待续）
+### 0x84 目标文件分析（2017-06-15更新）
+从前面的基本信息中我们可以发现，目标文件是按段存储的，接下来我们来分别看每个段的内容。
+
+1. 代码段（.text）
+    关于目标文件的内容我们可以先用objdump显示出来，使用它的`objdump -s, --full-contents Display the full contents of all sections requested`参数，控制台会打印16进制的文件内容。
+
+    ![16进制内容](/images/2017_06_15_01.png)
+
+    通过这种方式我们可以看每个段的内容，代码段长度0x62与之前的信息一致，然后使用`objdump -d, --disassemble Display assembler contents of executable sections`参数，可以显示代码段的反汇编指令：
+
+    ![代码段反汇编](/images/2017_06_15_02.png)
+
+    从图中能看到我们定义的两个函数名，这两个函数的地址就保存在符号表当中，如果SimpleSection.o被strip工具脱符，那就看不到函数地址，但是我们可以推断出来只是不知道名字。
+
+    ![stripped反汇编](/images/2017_06_15_03.png)
+
+    从反汇编的结果来看，0x1b和0x61相对位置的0xc3正好是函数返回ret操作。
+
+2. 数据段和只读数据段（.data/.rodata）
+    从16进制内容中可以看出，数据段正好8字节，每4字节对应84和85，也就是我们源代码中的global_init_var及static_var这两个初始化的全局和静态局部整形变量。global_uninit_var和static_var2则不在这一段，看符号表会发现static_var2是在BSS段，而global_uninit_var没有存放在任何段，只是用一个COMMON符号标记，按书中所说，这跟编译器的实现有关，全局未初始化变量也有可能记录在BSS段。
+
+    至于只读数据段25640a00正是源代码中的"%d\n"字符串，其中0a是ASCII中的换行，最后的00是终止符。
+
+    > PS：static int x1 = 0; static int x2 = 1;
+    这两种数据所在的段是不一定一致的，x2在数据段很容易理解，而x1赋值为0在某些编译器看来它相当于是未初始化的，所以经过编译器的优化它可能会存放在BSS段当中。
+
+3. 其他段
+    其他的内容主要都是一些附加信息，比如comment段显示的是编译器的信息。
+
+简单的使用objdump就说这么多，接下来就结合另一个elf文件分析利器readelf剖析它们的文件结构（以我的表达能力可能得写好几篇，然后烂尾= =不得不说写东西实在是个体力活）。
