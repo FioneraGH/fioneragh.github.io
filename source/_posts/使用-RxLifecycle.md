@@ -7,7 +7,7 @@ tags: [RxJava,RxLifecycle]
 ## [2017-07-21修改]
 
 ### 0x80 “解除订阅”
-经过进一步的使用和Github上README的解释，Rxlifecycle实际上并没有真正的解除订阅关系，而只是终止了事件流，如若需要显式地解除订阅（比如doOnUnsubscribe/doOnDispose的操作）可能仍然需要手动解除。另一方面，如果事件流已经停止并且没有强引用的对象存在，当发生GC时Disposable也会变为DISPOSED状态并最终被回收。
+经过进一步的使用和Github上README的解释，Rxlifecycle实际上并没有真正的解除订阅关系，而只是终止了事件流，如若需要显式地解除订阅（比如doOnUnsubscribe/doOnDispose的操作）可能仍然需要手动解除。另一方面，如果事件流已经停止并且没有强引用的对象存在，当发生GC时变为DISPOSED状态的Disposable最终会被回收。
 
 ### 0x81 响应式编程
 RxJava 为编程带来的便利性毋庸置疑，它把我这种编码猴子从复杂的多线程编程和回调地狱中解救出来。
