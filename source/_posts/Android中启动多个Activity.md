@@ -1,8 +1,10 @@
 ---
 title: Android中启动多个Activity
-date: 2017-07-06 19:01:14
+date: 2017-08-09 14:41:14
 tags: [Android,Activity]
 ---
+
+## [2017-08-09修改]
 
 ### 0x81 Notification
 Android操作系统开放给我们Notification的相关API，使得我们可以轻松的控制通知的显示和行为。其中我们想要对通知的点击进行相应的响应时，就会使用到PendingIntent这个东西，PendingIntent有三个非常重要的成员方法getActivity、getBroadcast和getService，根据官方文档的解释，它们分别用点击通知时打开一个Activity、发送一个广播、启动一个Service，从而达到某些目的。
@@ -27,6 +29,8 @@ channel.setLightColor(Color.RED);
 notificationManager.createNotificationChannel(channel);
 ```
 之后在NotificationBuilder中指定ChannelId就可以弹出通知了。
+
+> [修改补充] Android Support Library 更新到了26.0.0，其中的v7.NotificationCompat被废弃，Google推荐使用v4.Notificationompat.Builder(context，channelId)构建通知，由于支持库对Android O 的通知做了兼容支持，我们将不再需要手动判断Platform版本。
 
 ### 0x82 startActivities和getActivities
 继续之前的例子，打开了新闻详情的页面，如果是正常情况下我们还可以按返回键回到根Activity，但若是我们的Activity是通过重新创建Task后启动的，那按返回键就会直接退出到先前的Task，这种体验有时候不是很好。我们知道startActivities就是用于启动多个Activity的，而PendingIntent提供了类似的方法getActivities，这样PendingIntent就会在触发时按顺序打开Activity，从而做到从新闻详情返回到首页的需求：
