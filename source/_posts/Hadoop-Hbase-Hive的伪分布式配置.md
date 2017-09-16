@@ -76,3 +76,27 @@ Hadoop提供三种配置方式:单机模式,伪分布式模式和完全分布式
     `hadoop-2.6.5/sbin`中提供了启动脚本,其中startall.sh可以直接启动hadoop,但是该脚本已被视为废弃,官方推荐使用start-dfs.sh和start-yarn.sh来启动NameNode,DataNode和Node/ResourceManager.
 
 ### 0x83 在HDFS上配置HBase
+1. 下载hbase的tar包
+    与hadoop类似,我们可以在[Apache HBase官网](http://www.apache.org/dyn/closer.cgi/hbase/)下载到tar包,各个镜像站都提供二进制包下载,截至到目前为止最新版本是2.0.0-alpha2,我们需要注意版本兼容性,这里我下载的是1.3.1
+
+2. 配置hbase
+    我们将tar包移动到hadoop用户的Home目录下,执行`tar zxvf hbase-1.3.1-bin.tar.gz`将hadoop软件包解压,然后进入`hbase-1.3.1/config`下对相应的配置文件进行更改,我们主要配置JAVA环境变量和hbase所使用的rootdir:
+    ```XML
+    hbase-site.xml
+    <configuration>
+        <property>
+            <name>hbase.rootdir</name>
+            <value>hdfs://single:9000/hbase</value>
+        </property>
+        <property>
+            <name>hbase.cluster.distributed</name>
+            <value>true</value>
+        </property>
+    </configuration>
+    ```
+    如果要禁用hbase自带的zookeeper,还需要进行配置并启用自己的zookeeper服务.
+
+3. 启动hbase
+    hbase的启动方式也很简单,但有一个重要前提是hadoop的hdfs必须处于启动状态,调用`hbase-1.3.1/bin/start-hbase.sh`脚本即可启动HMaster,HRegionServer和HQuorumPeer.
+
+### 0x84 在HDFS上配置Hive
