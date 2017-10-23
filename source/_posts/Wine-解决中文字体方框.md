@@ -14,6 +14,7 @@ Wine 2.2 于2月末发布，并且官方将默认系统兼容曾提升到Windows
 这是因为Wine使用的字体是Tahoma，而它对中文字体的支持并不好，或者说不提供支持，能显示一部分中文或许是因为个别地方使用了SimSun。
 
 ### 0x83 字体更换
+
 字体的配置主要在注册表当中，`HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Fonts`键下映射了当前系统中已存在并缓存的所有字体。
 `HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes`键下保存了字体的替代方案。
 `HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\FontLink\SystemLink`键下保存了字体的链接。
@@ -23,12 +24,12 @@ Wine 2.2 于2月末发布，并且官方将默认系统兼容曾提升到Windows
     这里面是字体的替代方案，指定当系统需要这种字体时用哪一种字体替代，它配置的是要替代的字体名，网上很多解决办法就是通过在`~/.wine/dosdrive_c/windows/Fonts`下放置需要的字体（如果不是用Linux系统已有字体，而想要给特定的Wine Enviroment设定字体，可以放在这），
     然后配置替代方案。
 
-2. FontLink\SystemLink
+1. FontLink\SystemLink
     这里配置字体链接，当系统加载某一种字体时实际上读取了哪个字体文件就可以在这里指定。我的配置如下：
-    
+
     ![配置结果](/images/2017_03_01_01.png)
-    
+
     这样重启Wine程序就能看到效果了。
 
-3. HKCU/S/Wine/Fonts/Replacements
+1. HKCU/S/Wine/Fonts/Replacements
     这里面是字体的替代方案，指定当系统需要这种字体时用哪一种字体替代，它配置的是要替代的字体名，和第一种方法一致，唯一的区别就是这种替换仅仅发生在字体缺失时。

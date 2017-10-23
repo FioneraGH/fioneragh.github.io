@@ -7,9 +7,11 @@ tags: [libGDX]
 ## [迁移]
 
 ### 0x80 简介
+
 libGDX是常用的Android游戏框架， 而Animation类用于将一组图片按照一定的顺序展示，形成动画。
 
 ### 0x81 常用Class
+
 ```Java
 private float statetime; // 状态时间
 private Animation walkAnimation; // 动画类
@@ -20,6 +22,7 @@ private SpriteBatch batch; // 画笔，用于在render期间绘制图像
 ```
 
 ### 0x82 初始化变量
+
 ```Java
 （create阶段）：
 Texture.setEnforcePotImages(false); // 将纹理的强制2点阵关闭，这样才能使用任意分辨率的图片（libgdx 0.9.9 之前的限制）
@@ -33,6 +36,7 @@ statetime = 0;
 ```
 
 ### 0x83 GL绘制
+
 ```Java
 （render阶段）：
 Gdx.gl.glClearColor(0, 0, 0, 0); // 置背景全黑
@@ -45,4 +49,5 @@ batch.end();
 ```
 
 ### 0x84 总结
+
 Texture纹理图片经裁剪放入一个TextureRegion[]，动画类通过该帧数组实例化一个内容动态的实例（该实例按时间轴播放），之后每隔一定的时间（比如deltatime）获取该实例当前帧并使用画笔绘制出来。

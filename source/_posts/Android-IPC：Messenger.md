@@ -5,18 +5,23 @@ tags: [Android,IPC,Messenger]
 ---
 
 ### 0x81 Messenger 是什么
+
 Messenger就是一个消息邮递员，它负责发送消息到队列并依次给它关联的Handler进行处理，它多用于跨进程通信，是Android IPC的一共工作实现方式。Messenger的源码比较简单，继承自Parcelable，构造时持有Handler并可将Handler转换成跨进程通信的Binder，它不会影响关联组件的生命周期，但是当相关组件（比如独立进程的Service）被销毁时通信也会中断。
 
 ### 0x82 如何在一个独立的进程中运行Activity或Service
+
 我们都知道，Android系统上的App在启动时会通过zygote创建一个进程，Android Framework便会初始化一个Application，之后所运行的Acitivity或启动的Service都会运行在同一个进程下，共享PID。那我们如何指定某一个组件运行在独立的进程上呢，只需要在Manifest清单文件上指定process属性名就行：
+
 ```XML
 <service
     android:name=".service.UDeviceControllerService"
     android:process=":controller" />
 ```
+
 这样，UDeviceControllerService这个服务就会运行在package:controller这个进程。但是问题也接踵而来，由于跨进程的原因，原本很多偷懒或投机取巧的实现方式都会出现问题，包括一些系统调用也会变得不可靠。
 
 ### 0x83 MultiProcess 带来的问题
+
 在C语言当中，比如Unix系统编程会用到的，一个进程使用fork方法fork一个子进程，那其实是一个很繁重的操作，操作系统会拷贝对应进程的资源给子进程然后子进程从刚刚fork的位置继续执行，父进程退出时通常会发送SIGNAL通知子进程退出，如果子进程有未完成的任务将会使父进程进入等待状态，等其完成任务后退出程序。在这个过程当中，两个进程的资源相互隔离而独立的，在父进程作的修改并不会在子进程中体现（特定的处理方式除外，这里指一般状况），也就是说进程与进程之间是不能直接通信的，需要借助pipe、binder等IPC通信机制实现。
 
 Android的每个应用的进程都是zygote进程的子进程，它负责拷贝和分配资源，提供良好的环境给应用程序，这就出现了如上方ELF程序一样的问题，不可避免要进行跨进程通信，处理“资源共享”。
@@ -24,6 +29,7 @@ Android的每个应用的进程都是zygote进程的子进程，它负责拷贝�
 多进程的问题主要有两类，一种是自定义代码问题，一种是系统调用问题。
 
 1. 静态共享变量的问题
+
 首先，Google指出Android是不应该使用静态变量进行数据共享和数据传递的，原因有二：跨进程无效和不可靠。
 
 跨进程无效很好理解，假如我们在Application类中创建了一个静态变量`static int UPLOAD_COUNT = 0`来记录我们在使用过程中共上传了几张图片，本来在理想状况下使用的很正常没有任何问题。突然有一天，你的上传逻辑抽到了UploadService当中，并且会占用很多内存资源，这时候不能使用LocalService和主进程共享内存了，你便将它放到了一个独立的进程当中，噩梦出现了，你更改的值并没有在原来的进程中生效，你原本的未初始化静态变量后来经过了初始化但是在这个Service中获取却依然为null，你通过修改静态变量进行传值，发现传过去的值还是初始化值，一切都变得糟糕起来。
@@ -32,7 +38,8 @@ Android的每个应用的进程都是zygote进程的子进程，它负责拷贝�
 
 正如前面提到的，静态存储区是在进程创建时指定的初始位置，你可以对他进行修改，它是非持久性的，一旦进程被杀死，数据就会丢，就会回到开始的状态。而Android作为移动设备的操作系统，资源往往比较紧张，必要的时候LMK会杀死优先级的进程，在有新的需要时尝试还原原本的数据，这是静态存储区会重新创建，就会发现数据丢失，也就造成了所谓的静态变量数据不可靠。
 
-2. 系统调用
+1. 系统调用
+
 举一个最典型的例子，SharedPreference存取数据，SP的默认获取模式是MODE_PRIVATE，也就是说是进程私有的，它不具备跨进程的能力，多进程调用数据写操作不能保证写安全，虽然早期有MULTI_PROCESS模式，但是被Google标记为Deprecated不再被推荐使用。Google推荐的跨进程数据共享是使用ContentProvider实现，很多三方库包括DPreference就是模仿了SP的API，用CP实现的。
 
 因为有了这些为了安全性考虑的局限，Android实现了以Binder为基础的IPC通信机制，提供了Messenger、AIDL等方式供开发者使用，后面我们就说一说Messenger的用法和我遇到的坑。

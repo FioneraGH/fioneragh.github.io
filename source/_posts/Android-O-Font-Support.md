@@ -5,9 +5,11 @@ tags: [Android,Font]
 ---
 
 ### 0x81 早期的字体支持
+
 在平时的开发当中，我们通常不会去手动干预应用的字体，因为使用系统的字体时，如果系统的字体发生改变，相应的我们的APP也会跟着改变。可是有的时候产品会有特殊的需求，我们需要保持整体的界面风格或者在某些位置我们需要使用特殊风格的艺术字体，更有甚者使用iconfont作为app的图标来源，在这种状况下我们就需要修改我们应用内的字体从而达到我们想要的效果。
 
 在Android O之前的平台，字体一直是作为普通资源存在的，它不像Drawable中的图片拥有自己的resId从而通过R文件的方式引用它。Google推荐我们将字体放入Android的静态资源目录assets下，然后通过Typeface提供的方法createFromAsset获取Typeface对象并设置给TextView：
+
 ```Java
 Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "number.otf");
         setTypeface(typeFace);
@@ -18,7 +20,9 @@ Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "number.otf");
 所幸，在Android O之后，Google终于又将字体支持提上了台面。
 
 ### 0x82 Android Studio 3.0 对字体的支持
+
 Android Studio已经可以直接预览字体文件，并且提供了对font资源的支持，我们只需要将字体文件放入res/font资源文件夹，AS会为字体文件生成资源ID，但是这个字体文件还不推荐直接使用，我们需要创建一个xml资源描述文件来描述一个fontFamily才能在程序中使用它：
+
 ```XML
 <font-family xmlns:tools="http://schemas.android.com/tools"
              xmlns:android="http://schemas.android.com/apk/res/android"
@@ -33,16 +37,20 @@ Android Studio已经可以直接预览字体文件，并且提供了对font资�
         tools:targetApi="o" />
 </font-family>
 ```
+
 上面描述了一个字重400普通风格的number字体，其中app命名空间是为了向后兼容，其中对于字重的信息可以去看维基百科。
 
 对于Java代码中字体资源的使Google提供了新的ResourceCompat类来帮助我们返回Typeface：
+
 ```Java
 Typeface typeFace = ResourcesCompat.getFont(context, R.font.number_font);
 setTypeface(typeFace);
 ```
 
 ### 0x83 ResourceCompat
+
 这个类提供了兼容API的方式获取资源，其中部分方法与ContextCompat类似但他们大都废弃了，基本上这个类就是专门为Font服务的，getFont最终调用了loadFont，源码很简单：
+
 ```Java
 private static Typeface loadFont(
         @NonNull Context context, Resources wrapper, TypedValue value, int id, int style,
@@ -84,4 +92,5 @@ private static Typeface loadFont(
     return null;
 }
 ```
+
 其实就是解析了xml并最终使用了TypefaceCompat这个类去获取Typeface，对于具体的解析分析就不在这里展开了。
