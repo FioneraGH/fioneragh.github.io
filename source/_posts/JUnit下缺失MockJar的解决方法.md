@@ -24,7 +24,7 @@ tags: [JUnit,Mock]
 
 ### 0x83 "xxx" is not mocked method
 
-在执行单元测试时还有可能遇到一个很奇葩的问题,某某类的某个方法没有被mock,对于这种状况其实也可以理解,某些情况下个别方法不存在模拟的普适性就不会被模拟.
+在执行单元测试时还有可能遇到一个很奇葩的问题,某某类的某个方法没有被mock,对于这种状况其实也可以理解,某些情况下不存在模拟的普适性就不会被模拟,mockable默认只能保证不会出点ClassNotDefined异常,任何实例方法的调用都将导致`"Method x in a.b.c.D not mocked. See http://g.co/androidstudio/not-mocked for details."`.
 
 对于这种状况解决方法其实不难,我们可以自己模拟实现没有被mock的方法,也可以通过一个Gradle配置忽略结果让他返回默认结果从而保证测试代码能顺利执行下去:
 
