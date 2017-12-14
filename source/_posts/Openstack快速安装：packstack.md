@@ -9,11 +9,11 @@ tags: [Openstack]
 我曾经在差不多两年前安装过Openstack，当时是按照某个论坛的大牛的分享，一步一个脚印，用了很长时间才进入Openstack DashBoard并进行自己劳动成果的体验，感受自己为自己提供的服务。但是那次血泪安装史也并不完美，虽然核心组件成功运行，但是仍旧有部分功能存在问题，迫于精力有限，我便没有再碰过Openstack。
 最近又心血来潮想要玩一玩这个曾经的玩物，恰巧了解到Openstack可以近乎一键安装，于是便再次操弄起来。
 
-这里要特别感谢《Linux就该这么学》的主题网站，两年前的论坛我是记不住了，但这个网站我个人觉得是非常适合参照学习来提升个人能力的。[第22章 使用openstack部署云计算服务环境。 | 《Linux就该这么学》]("http://www.linuxprobe.com/chapter-22.html")
+这里要特别感谢《Linux就该这么学》的主题网站，两年前的论坛我是记不住了，但这个网站我个人觉得是非常适合参照学习来提升个人能力的。[第22章 使用openstack部署云计算服务环境。 | 《Linux就该这么学》](http://www.linuxprobe.com/chapter-22.html)
 
 ### 0x81 安装准备
 
-处于学习目的，我使用的资源都是这篇教程的网站提供的。再次感谢让我有一次轻松学习部署Openstack的机会。[软件资源库 | 《Linux就该这么学》]("http://www.linuxprobe.com/tools")
+处于学习目的，我使用的资源都是这篇教程的网站提供的。再次感谢让我有一次轻松学习部署Openstack的机会。[软件资源库 | 《Linux就该这么学》](http://www.linuxprobe.com/tools)
 
 ### 0x82 RHEL 7 安装
 

@@ -6,7 +6,7 @@ tags: [Weex]
 
 ### 0x81 Weex 是什么
 
-[Weex官方主页]("https://weex-project.io/","Weex")
+[Weex官方主页](https://weex-project.io/,"Weex")
 Weex 是什么，用它官方的slogan——“A framework for building Mobile cross-platform UI”，它是一个跨平台移动UI框架。
 Weex 足够轻量，易扩展且高性能。
 

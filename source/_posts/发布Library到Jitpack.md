@@ -16,4 +16,4 @@ JitPack是一个Maven仓库，但是他的配置比写大量的gradle配置代�
 
 ### 0x83 Github发布信息
 
-在Github上发布一个Release，填写完发布信息后即可在[JitPack]("https://jitpack.io")上找到刚刚发布的库。
+在Github上发布一个Release，填写完发布信息后即可在[JitPack](https://jitpack.io)上找到刚刚发布的库。

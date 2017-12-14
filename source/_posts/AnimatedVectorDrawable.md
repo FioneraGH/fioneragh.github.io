@@ -6,7 +6,7 @@ tags: [Android,AnimatedVectorDrawable]
 
 ### 0x81 AnimatedVectorDrawable
 
-承接上篇[SVG在Android上的实现——VectorDrawable]("https://fioneragh.github.io/2017/02/20/SVG%E5%9C%A8Android%E4%B8%8A%E7%9A%84%E5%AE%9E%E7%8E%B0%E2%80%94%E2%80%94VectorDrawable/","VectorDrawable")，本片主要介绍SVG的动画。
+承接上篇[SVG在Android上的实现——VectorDrawable](https://fioneragh.github.io/2017/02/20/SVG%E5%9C%A8Android%E4%B8%8A%E7%9A%84%E5%AE%9E%E7%8E%B0%E2%80%94%E2%80%94VectorDrawable/,"VectorDrawable")，本片主要介绍SVG的动画。
 AnimatedVectorDrawable通过`ObjectAnimator`和`AnimatorSet`两组API对VectorDrawable进行动画处理，本着分治原则，一个动画通常包含动画描述文件、动画文件和VectorDrawable文件。
 
 ### 0x82 动画描述文件
