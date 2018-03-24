@@ -20,7 +20,7 @@ macOS由于自身独特的封闭性，所以对传统laptop的DGPU并没有提�
 
 到了10.13，系统底层做了大量的修改，尤其是显卡驱动部分，就像10.11的USB栈重写，nv_disable参数已经失效，系统在监测到设备会尝试进行驱动，由于根本无法驱动DGPU，所以WindowServer会出现“Window Server Service only ran for 0 seconds”的提示，其实如果能看到完整的log你就会发现WindowServer的确起不来，服务运行0s也就说得通了。
 
-之前禁用独立显卡的方法仍然有效，但是在引导安装器阶段可能会遇到问题，于是RehabMan出了篇教程[[FIX] "Window Server Service only ran for 0 seconds" with dual-GPU](https://www.tonymacx86.com/threads/fix-window-server-service-only-ran-for-0-seconds-with-dual-gpu.233092/)就是解决这个问题。
+之前禁用独立显卡的方法仍然有效，但是在引导安装器阶段可能会遇到问题，于是RehabMan出了篇教程[[FIX] "Window Server Service only ran for 0 seconds" with dual-GPU](https://www.tonymacx86.com/threads/fix-window-server-service-only-ran-for-0-seconds-with-dual-gpu.233092/)就是解决这个问题。这篇教程通过DeviceSpecificMethod注入了一些属性，其实作用和Clover的Devices/AddProperties作用类似，有机会做个对比。
 
 ### 0x83 SSDT-DDGPU.dsl
 
@@ -189,6 +189,6 @@ DefinitionBlock ("", "SSDT", 2, "hack", "_DDGPU", 0x00000000)
 }
 ```
 
-很多人可能有疑虑，为什么这里_OFF方法可以放心调用，因为Hotpatch的SSDT是在最后才将设备挂上，而不是像之前的_INI方法调用比较早，有可能EC还没准备好，所以需要将EC的调用放到确保EC已经准备好的位置。
+很多人可能有疑虑，为什么这里_OFF方法可以放心调用，我猜测是因为Hotpatch的SSDT是在最后才将设备挂上，而不是像之前的_INI方法调用比较早，有可能EC还没准备好，所以需要将EC的调用放到确保EC已经准备好的位置。
 
 目前为止，配合正确的config文件和驱动你应该已经能看到Installer了。
