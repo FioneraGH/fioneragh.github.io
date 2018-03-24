@@ -1,7 +1,7 @@
 ---
 title: 使用inobounce移除iOS的bounce效果
 date: 2017-11-16 18:11:30
-tags: [Vue.js, inobounce]
+tags: [Vue, inobounce]
 ---
 
 ### 0x81 问题来源
