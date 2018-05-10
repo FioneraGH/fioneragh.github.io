@@ -12,7 +12,7 @@ tags: [速记,Mysql]
 
 ### 0x81 命令
 
-其中无前缀的是bash命令，以':'开头的是mycli命令，以'['和']'包裹的是术语，以';'开始的为SQL语句或部分SQL语句。
+其中无前缀的是bash命令，以':'开头的是mycli命令或全局SQL语句，以'['和']'包裹的是术语，以';'开始的为SQL语句或部分SQL语句。
 
 systemctl start mariadb // 开启mariadb service
 systemctl stop mariadb // 关闭mariadb service
@@ -25,6 +25,9 @@ mycli -u root -p {password} // 以管理员登录mysql
 :USE {database} // 选择数据库
 :SHOW CREATE DATABASE {database} // 查看数据库定义
 :SHOW VARIABLES LIKE 'storage_engine' // 查看正在使用的数据库存储引擎
+:SELECT @@GLOBAL.sql_mode ~ SELECT @@sql_mode // 查看sql_mode，比如only_full_group_by模式的的设置
+:SET GLOBAL sql_mode='ONLY_FULL_GROUP_BY' // 直接指定sql_mode
+[ONLY_FULL_GROUP_BY] // 新版本mysql添加的特性，用于和oracle特性相符，对于select target list 不出现在group by list的不具有单调性的元素，server拒绝查询
 
 1. Structure
 
