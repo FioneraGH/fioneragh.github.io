@@ -24,13 +24,13 @@ bom文件位置：`/System/Library/Receipts`，我们主要关注`com.apple.pkg.
 
 使用lsbom命令可以解析bom文件，内容显示pkg释放了哪些文件，我们要做的就是先删除这些文件。
 
-![com.apple.pkg.MobileDevice.bom](/images/2018_07-14_01.png)
+![com.apple.pkg.MobileDevice.bom](/images/2018_07_14_01.png)
 
 经过分析，我们看到MobileDevice主要向`/System/Library/CoreServices/CoreTypes.bundle/Contents/Library/`写入了`MobileDevices.bundle`，向`/System/Library/Extensions/`写入了`AppleMobileDevice.kext`、`AppleUSBEthernetHost.kext`，向`/System/Library/LaunchAgents/`写入了`com.apple.mobiledeviceupdater.plist`，向`/System/Library/LaunchDaemons/`写入了`com.apple.usbmuxd.plist`，向`/System/Library/PrivateFrameworks/`写入了`AirTrafficHost.framework`、`DeviceLink.framework`、`MobileDevice.framework`，这些文件主要是用于移动设备支持。悲剧就发上在第一个目录上，CoreServices是系统的基础服务，像是Finder.app就在这个位置，而CoreTypes.bundle内有基础类型的定义，我因为失误不小心删除了整个CoreTypes.bundle，随之而来的就是Finder等系统内置App的崩溃，重启后不显示Dock等问题，完全没办法使用，最后我通过另一台10.13.3设备将CoreTypes打了个tar包，解压到了`/System/Library/CoreServices/`才得以解决这个问题，虽然系统是Mojave，但是并没有遇到什么大的问题，后面重新下载了PublicBeta全量更新了整个系统，这幕悲剧则彻底结束。
 
 其实对于`com.apple.pkg.MobileDevice.bom`和`com.apple.pkg.MobileDeviceDevelopment.bom`这两部分，他们的内容主要在/S*/L*，我感觉不应该去，甚至我连它们到底是不是Xcode的组件都不清楚，虽然在Xcode中能找到他们的pkg文件，否则也不会出现这次悲剧。我们看一下XcodeSystemResources：
 
-![com.apple.pkg.XcodeSystemResources.bom](/images/2018_07-14_02.png)
+![com.apple.pkg.XcodeSystemResources.bom](/images/2018_07_14_02.png)
 
 很明显，内容都在`/Library/Developer`下，可以放心大胆地删除。
 
@@ -38,6 +38,6 @@ bom文件位置：`/System/Library/Receipts`，我们主要关注`com.apple.pkg.
 
 剩下的工作就很简单了，打开Xcode的资源目录：`/Applications/Xcode.app/Contents/Resources/Packages`：
 
-![Packages](/images/2018_07-14_03.png)
+![Packages](/images/2018_07_14_03.png)
 
 我们能看到三个pkg文件，这就是我们刚刚分析三个bom文件对应的安装包，依次安装它们，之后Xcode应该就能正常工作了。
