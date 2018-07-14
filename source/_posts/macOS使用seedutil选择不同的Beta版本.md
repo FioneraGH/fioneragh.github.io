@@ -8,7 +8,7 @@ tags: [macOS]
 
 之前我写过一片获取macOS Developer Beta更新的笔记，[获取macOS的DeveloperBeta更新](https://fioneragh.github.io/2018/01/31/%E8%8E%B7%E5%8F%96macOS%E7%9A%84DeveloperBeta%E6%9B%B4%E6%96%B0/)简单剖析了seedutil是如何控制更新的。
 
-处于一些特殊的需求，我又深入研究一下为什么seedutil的命令执行后会起到这种效果，最终发现根源还在Seeding.framework上。
+出于一些特殊的需求，我又深入研究一下为什么seedutil的命令执行后会起到这种效果，最终发现根源还在Seeding.framework上。
 
 ### 0x82 Seeding.framenwork
 
