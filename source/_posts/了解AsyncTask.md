@@ -4,10 +4,6 @@ date: 2016-01-18 21:51:49
 tags: [Android,AsyncTask]
 ---
 
-### 0x80 什么是AsyncTask
-
-AsyncTask是Android对线程池和Handler的封装。
-
 ### 0x81 核心：ThreadPoolExecutor
 
 ```Java

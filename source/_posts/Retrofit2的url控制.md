@@ -23,5 +23,3 @@ Retrofit使用Builder初始化时，我们通常需要传入一个BaseUrl，而�
     如`@DELETE(http://cloud.in/api/member/45177/)`，则最终url为`http://cloud.in/api/member/45177/`。
 
 使用这种特殊的匹配规则，有的时候可以满足我们特殊的需求。
-
-### 0x82 使用规则做api测试
