@@ -19,6 +19,7 @@
     "hexo-server": "^0.3.2"
   },
   "devDependencies": {
+    "fsevents": "^1.2.4",
     "marked": "^0.3.19",
     "uglify-js": "^3.3.25"
   }
