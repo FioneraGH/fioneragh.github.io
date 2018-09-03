@@ -1,0 +1,87 @@
+% !TEX TS-program = xelatex
+% !TEX encoding = UTF-8 Unicode
+% !Mode:: "TeX:UTF-8"
+
+\documentclass{resume}
+\usepackage{zh_CN-Adobefonts_external} % Simplified Chinese Support using external fonts (./fonts/zh_CN-Adobe/)
+% \usepackage{NotoSansSC_external}
+% \usepackage{NotoSerifCJKsc_external}
+% \usepackage{zh_CN-Adobefonts_internal} % Simplified Chinese Support using system fonts
+\usepackage{linespacing_fix} % disable extra space before next section
+\usepackage{cite}
+
+\begin{document}
+\pagenumbering{gobble} % suppress displaying page number
+
+\name{杨阳}
+
+\basicInfo{
+  24岁/山东青岛 \textperiodcentered\
+  \email{fionera@outlook.com} \textperiodcentered\ 
+  \phone{(+86) 13156218856} \textperiodcentered\ 
+  \github[github.com/fioneragh]{https://github.com/fioneragh}
+}
+ 
+\section{\faGraduationCap\  教育背景}
+\datedsubsection{\textbf{中国海洋大学}，青岛}{2012 -- 2016}
+\textit{学士}\ 计算机信息保密
+
+基础课程：计算机网络，操作系统，数据结构，计算机组成原理，系统攻防，网络与信息安全
+
+\section{\faUsers\ 项目经历}
+\datedsubsection{\textbf{青岛百灵信息科技股份有限公司、青岛盈智科技 } 青岛}{2015年3月 -- 至今}
+\role{Android/Java}{项目负责人，团队负责人，货代财务账单系统负责人}
+\begin{onehalfspacing}
+物联网相关：青岛英泰智能办公、海尔健康厨房/创世圆镜/塔塔家机器人
+\begin{itemize}
+  \item 需求制定，负责整体程序架构设计，项目整体进度规划
+  \item 手持设备BLE 4.0设备通信，印章设备串口通信，特定协议传输与解析，数据加密传输
+  \item 功能需求变更调整、代码重构及网络摄像头，蓝牙门禁，智能门锁等设备集成调试
+  \item 使用SpringBoot开发管理平台，包括设备管理，密钥管理等，Kafka管理业务和运维通信
+\end{itemize}
+
+平台相关：货代管理系统财务系统，游戏头条项目负责人，恒尼内衣、荣源木业等电商合作项目开发
+\begin{itemize}
+  \item 熟悉货代业务，完善财务账单票据系统功能规划和设计，部署平台LICENSE管理
+  \item 整体项目进度控制，技术选型，技术栈RxJava、RxBus、Retrofit等
+  \item 游戏视频的点播和直播，定制ijkplayer以适应业务需求
+  \item SpringBoot全家桶，Vue技术栈，Node.js，Webpack，Python数据爬虫等
+\end{itemize}
+\end{onehalfspacing}
+
+% Reference Test
+%\datedsubsection{\textbf{Paper Title\cite{zaharia2012resilient}}}{May. 2015}
+%An xxx optimized for xxx\cite{verma2015large}
+%\begin{itemize}
+%  \item main contribution
+%\end{itemize}
+
+\section{\faCogs\ 专业技能}
+% increase linespacing [parsep=0.5ex]
+\begin{itemize}[parsep=0.5ex]
+  \item Android、Java开发，熟练掌握常用的设计模式、数据结构和Framework API，热爱研究移动跨平台开发，善于接受学习新事物，乐于钻研新技术和阅读源代码。掌握响应式编程的思想，为团队引入RxJava并进行代码重构，为Android团队引入Kotlin，使用扩展函数减少模板代码，更丰富的dsl支持，提高开发效率。
+  \item 熟练掌握Java语言，对JVM有一些了解，使用SpringBoot、WebService等，了解jni工作原理，部分Android项目有使用ndk进行开发。
+  \item 了解Python等脚本语言，具备一些脚本编写能力，使用PyQt写过端口扫瞄器、爬虫、安全报文工具。
+  \item 多年的Linux使用经验，熟练掌握GNU/Linux 基本操作，会编写脚本以及使用crontab和iptables等工具进行日常维护和防火墙的配置。了解一些HA服务器机制以及虚拟化，了解docker、lxc的工作原理，会使用docker，编写dockerfile以及简单使用k8s。喜欢操作系统相关，研究过Hackintosh，ACPI反汇编，kext/kernel的bin-patch等。
+  \item 了解Android逆向知识，出于破解和注入代码的目的逆向过Android应用apk文件，能解读smali语法，进行过静态分析。
+  \item 了解网络安全相关知识、Web 安全相关知识、加密相关知识，使用tcpdump/wireshark数据包分析以及burpsuite、nmap、nc、sqlmap工具等。
+\end{itemize}
+
+%\section{\faHeartO\ 获奖情况}
+%\datedline{\textit{第一名}, xxx 比赛}{2013 年6 月}
+%\datedline{其他奖项}{2015}
+
+\section{\faInfo\ 其他}
+% increase linespacing [parsep=0.5ex]
+\begin{itemize}[parsep=0.5ex]
+  \item 个人博客: https://fioneragh.github.io/
+  \item 线上简历: https://fioneragh.github.io/resume/
+  \item 语言: 英语 - 熟练(CET6)
+\end{itemize}
+
+%Powered By \XeLaTeX\
+%% Reference
+%\newpage
+%\bibliographystyle{IEEETran}
+%\bibliography{mycite}
+\end{document}
