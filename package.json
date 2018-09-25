@@ -16,11 +16,11 @@
     "hexo-renderer-ejs": "^0.3.1",
     "hexo-renderer-marked": "^0.3.2",
     "hexo-renderer-stylus": "^0.3.0",
-    "hexo-server": "^0.3.2"
+    "hexo-server": "^0.3.3"
   },
   "devDependencies": {
     "fsevents": "^1.2.4",
     "marked": "^0.3.19",
-    "uglify-js": "^3.3.25"
+    "uglify-js": "^3.4.9"
   }
 }
