@@ -25,6 +25,7 @@ Android 4.3甚至4.4对BLE的支持始终比较弱，默认不能作为外围设
 
 参考链接：
 
-[https://github.com/iDevicesInc/SweetBlue/wiki/Android-BLE-Issues](https://github.com/iDevicesInc/SweetBlue/wiki/Android-BLE-Issues)[https://github.com/AltBeacon/android-beacon-library/issues/301](https://github.com/AltBeacon/android-beacon-library/issues/301)
+[https://github.com/iDevicesInc/SweetBlue/wiki/Android-BLE-Issues](https://github.com/iDevicesInc/SweetBlue/wiki/Android-BLE-Issues)
+[https://github.com/AltBeacon/android-beacon-library/issues/301](https://github.com/AltBeacon/android-beacon-library/issues/301)
 
 这个问题到现在依然没有解决，因为它就是这样一种行为，无法从app层面去处理，想要最省事的方式在这种手机上拿到扫描结果，就是开启Location Service。
