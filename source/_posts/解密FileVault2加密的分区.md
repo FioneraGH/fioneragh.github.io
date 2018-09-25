@@ -20,6 +20,8 @@ APFS的出现对黑苹果用户来讲可不见得是好事,High Sierra默认已�
 
 为什么要阻止转换成APFS呢,一个是前面说的SSD兼容问题,一个是黑苹果导致的一些乱七八糟的问题,比如刚开始APFS出现导致Clover识别不到APFS分区,后来是Clover通过实现加载macOS安装镜像的apfs.efi来读取APFS,但是APFS在hackintosh上的问题远不止这些.
 
+<!--more-->
+
 ### 0x83 CoreStorage
 
 前面说了APFS这么多和FileVault有什么关系呢?

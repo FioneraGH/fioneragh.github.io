@@ -13,6 +13,8 @@ tags: [Android,Activity]
 看名字就能知道，ActivityAlias就是别名的意思，是Google官方为方便开发为Activity设置别名的时候提供的方便方法。
 利用别名这个技术可以实现很多蹩脚的需求，比如这个动态更换Launcher图标，在比如wxapi的回调。
 
+<!--more-->
+
 ### 0x83 ActivityAlias 的简单利用
 
 1. 别名基本功能——为一个Activity设置别名

@@ -22,6 +22,8 @@ import android.graphics.RectF;
 
 android.graphics包中包含了View绘制所需的类。
 
+<!--more-->
+
 ### 0x83 Path 的简单使用
 
 1. 初始化Paint

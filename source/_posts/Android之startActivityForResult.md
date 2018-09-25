@@ -29,6 +29,8 @@ public void startActivity(Intent intent, @Nullable Bundle options) {
 
 很明显，startActivity调用了Activity的startActvityForResult这个方法，并向其中传递了值为-1的requestCode，这个我们最常用的方法其实就是一个简单的封装，视为语法糖也无可厚非，我一我们重点来看startActvityForResult这个方法。
 
+<!--more-->
+
 ### 0x83 startActivityForResult
 
 方法的代码不多，直接贴了：

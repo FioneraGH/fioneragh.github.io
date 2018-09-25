@@ -21,6 +21,8 @@ ThreadPoolExecutor(int corePoolSize, // 核心线程数
 * Api <= 19 coreSize = 5; // 意味着维护着5个活跃线程，即使任务结束
 * Api >= 20 coreSize = `CPU_COUNT` + 1 // 按CPU核心数量
 
+<!--more-->
+
 ### 0x83 为什么一定要在UI线程创建AsyncTask？
 
 在Api > 21 时，AsyncTask里的Handler使用的是主线程的Looper：

@@ -16,6 +16,8 @@ FragmentTransaction 在调用`commit()`时，其意图是执行某种操作，�
 这一重要变化意味着什么，系统回收Activity从原本的onPause回调前都不可能被杀掉转变为部分版本（新版本）能保证onStop回调之前不被杀掉，而其他版本（旧版本）在onPause到onStop这段时间会被系统回收。
 这个时候Support Library不得不根据状况兼容不同的版本——允许onPause到onStop之间的StateLoss。
 
+<!--more-->
+
 ### 0x83 StateLoss 的避免
 
 尽量避免在除了onCreate之外的生命周期回调中调用`commit()`方法。如果想在onResume中调用，由于某些特殊情况这一回调会在Activity恢复之前被调用，最好放在`FragmentActivity#onResumeFragments`或`Activity#onPostResume`中。

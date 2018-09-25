@@ -17,6 +17,8 @@ share操作符是Observable的一个方法，它实际上就是调用了publish�
 
 我们先来了解一个概念，ConnectableObservable（在RxJava 1.x中名字为ConnectedObservable）又叫作可连接的Observable，根据官方文档解释，这种Observable即使有再多的Observer订阅，它也不会发送事件，只有在调用了connect方法之后，这个Observable才开始发送事件。基于以上这种状况，我们通常认为这种Observable相比于普通的Observable是不活跃的，称为“冷”Observable。
 
+<!--more-->
+
 ### 0x83 publish 操作符
 
 和它的名字一样，把一个Observable发布，这样源Observable将被转换为ConnectableObservable并等待订阅和连接，这样你如果有多个订阅者，你可以等他们都订阅完成再调用connect方法：

@@ -122,6 +122,8 @@ final void attach(Context context, ActivityThread aThread,
 
 当然对于某些特殊需求，你可能完全在当前Affinity栈为空的情况下启动一个新的Actvity，这个时候你需要为你的Intent设置一个`Context.FLAG_ACTIVITY_NEW_TASK`来表示在必要的时候开启一个新的任务栈。
 
+<!--more-->
+
 ### 0x83 startActivity在Activity中的实现
 
 我们用开发工具追溯一下：

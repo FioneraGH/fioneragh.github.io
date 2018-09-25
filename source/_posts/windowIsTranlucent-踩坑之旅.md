@@ -20,6 +20,8 @@ tags: [Android,Theme]
 
 以上是AOSP的默认行为，意为只要目标Acitivitytranslucent的那源Acitivity就不会调用onStop，是个别的ROM自己实现了多窗口，可能第二种状况也会用onStop，所以要注意onStop中调用逻辑的可靠性。
 
+<!--more-->
+
 ### 0x83 Activity转场动画失效
 
 这个问题是个很棘手的问题，我分别在preL(4.4)和aboveL(8.0)上做了很多的测试，发现如果你的Application中指定的Theme是translucent的并且没有为Activity指定特定的Theme，也就是说你的所有Activity都是透明的，这样就带来一个问题，那就是通过以下方法指定的转场动画全部失效：

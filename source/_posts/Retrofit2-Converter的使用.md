@@ -50,6 +50,8 @@ Observable<BaseEntity<Empty>> addToCart(@Body Map<String, String> info);
 
 这个和上面的GET差不多，只不过注解变成了@POST，参数是@Body，返回值是然被转换成POJO，泛型中的Empty表示我不在意返回内容是什么，我只需要通过返回的规约code进行判断。这一切都工作的很好，知道我发现了有的接口的返回值是没办法通过Gson转换成POJO的，这时候我们需要原始的响应结果。
 
+<!--more-->
+
 ### 0x83 如何更好的处理返回结果
 
 最开始的时候我在想，GsonConverter也是根据Type做的转换，那我使用Observable<String>作为返回值是不是就可以拿到原始的原始响应的字符串，后来发现是我想多了。

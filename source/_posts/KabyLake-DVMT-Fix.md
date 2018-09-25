@@ -16,6 +16,8 @@ DVMT，全称Dynamic video memory technology，意为动态显存技术，这个
 
 在比较新的硬件平台上(Broadwell+)，比如我现在使用的KabyLake，也就是7代英特尔CPU，在安装macOS时如果不进行相应的patch，就会导致对应的Framerbuffer程序crash从而导致kernel panic，这是个很致命的问题，因为这个过程发生在你刚引导家在进入系统的时候。究其原因，是因为macOS对于新硬件平台申请了至少64m的prealloc空间，而大部分笔记本设备厂商出厂都设置在32m，当系统想要申请比其大的空间时必然失败，就跟我们平时编程遇到的allocation memory failed是类似的情况，知道问题就知道对应的解决方案了。
 
+<!--more-->
+
 ### 0x83 minStolenSize patch
 
 macOS的Framebuffer中有一个非常magic的值——minStolenSize，论坛上叫这个名字我也没有去细查，这个值只要从76修改到EB即能规避DVMT不足的问题，但是貌似他只是修改了检查，而实际上binary向系统申请的值仍然是原值，只是申请这么大空间不一定用得到这么大空间，所以反正能用。

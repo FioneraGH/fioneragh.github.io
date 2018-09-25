@@ -31,6 +31,8 @@ private static <T> Observable<T> wrapObservable(Observable<BaseEntity<T>> observ
 
 该方法将Retrofit返回的Observable经过`wrapObservable()`方法转换成一个新的Observable，在订阅后Subscriber将接受经过转换的原始数据。
 
+<!--more-->
+
 ### 0x83 使用Transformer
 
 Transformer是一个很好用的东西，上面的操作方式虽然封装了操作，但不符合RxJava链式写法处理数据流的规范，因此便有了Transformer这一大杀器。

@@ -70,6 +70,8 @@ public void setRotationTo(float rotationDegree) {
 
 这么做的好处就是可以让你完全感知不到Attacher的存在，更加方便实用者，而那些复杂的矩阵操作依然存在于Attacher当中。
 
+<!--more-->
+
 ### 0x83 2.0.0的好处
 
 虽然你仍可以显示的使用PhotoViewAttacher，但是我并不推荐这样。在我使用1.x版本的时候遇到过一个问题，其实PhotoView继承自ImageView做了一些适配以保证Attacher的操作不会存在兼容性问题，如果使用ImageView会出现图片显示不如你所想的那样。

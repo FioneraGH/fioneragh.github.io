@@ -21,6 +21,8 @@ dataBinding {
 
 但是DataBinding所依赖的支持库可能和你的配置存在差异。
 
+<!--more-->
+
 ### 0x83 使用用法
 
 1. 布局文件xml的变化

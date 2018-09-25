@@ -31,6 +31,8 @@ lpdf是一种特殊的bundle,和app文件类似,里面存放了一系列签名�
 
 既然如此,那也就是说明pkg安装并不是释放了一个特殊的配置文件来实现接收beta更新这件事情,只有可能是安装脚本(postScript)了,关于pkg文件结构我们后面在分析.
 
+<!--more-->
+
 ### 0x83 seedutil 控制更新enroll
 
 其实Apple提供了Seeding框架来干预macOS的更新,而pkg文件其实也就是执行了一段seedutil脚本,pkg的主要作用在于让用户阅读并同意软件协议而已,而偏好设置里的取消更新也是使用seedutil取消了更新的接收.

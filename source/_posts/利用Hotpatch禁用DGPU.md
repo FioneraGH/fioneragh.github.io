@@ -22,6 +22,8 @@ macOS由于自身独特的封闭性，所以对传统laptop的DGPU并没有提�
 
 之前禁用独立显卡的方法仍然有效，但是在引导安装器阶段可能会遇到问题，于是RehabMan出了篇教程[[FIX] "Window Server Service only ran for 0 seconds" with dual-GPU](https://www.tonymacx86.com/threads/fix-window-server-service-only-ran-for-0-seconds-with-dual-gpu.233092/)就是解决这个问题。这篇教程通过DeviceSpecificMethod注入了一些属性，其实作用和Clover的Devices/AddProperties作用类似，有机会做个对比。
 
+<!--more-->
+
 ### 0x83 SSDT-DDGPU.dsl
 
 这时候Hotpatch大放异彩，我们只需要写一个简单的dsl文件并将它编译后的aml文件置入@EFI/EFI/Clover/ACPI/patched当中就可以起到禁用DGPU的作用。

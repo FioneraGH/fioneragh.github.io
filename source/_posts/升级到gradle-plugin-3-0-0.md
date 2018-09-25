@@ -12,6 +12,8 @@ tags: [Android,Gradle]
 
 3.0其实完全可以看作是2.5 preview3改名字而来，整合了gradle-plugin 2.5的特性，使用了最新的构建工具Gradle 4.0，因为存在broken api所以干脆将Major版本提到了3，gradle-plugin 3.0.0 alpha1的出现需要我们做一些工程级别的更改，同时跟上的Gradle 4.0也废弃了很多API（其实很多API在3.4就已经标记为废弃了，并提示在4.0很可能会移除）。除此之外，就是为IDEA Android Support Plugin添加了Kotlin支持，例如在我们创建Activity时可以选择Source Type为Kotlin，Kotlin的主要功能仍要依靠JetBrains的Kotlin插件。还有一个很重要的变化，启动画面变漂亮了。
 
+<!--more-->
+
 ### 0x83 Migrate to the New Plugin
 
 标题就是Google官方文档的标题，随着gradle-plugin 3.0.0 alpha1的推出，文档也随之更新。本篇主要根据官方文档调整各build.gradle文件，以确保插件能正确的运行。

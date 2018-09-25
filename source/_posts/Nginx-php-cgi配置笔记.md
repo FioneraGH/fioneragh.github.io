@@ -19,6 +19,8 @@ Nginx 是一个服务器引擎，其基本作用类似于Apache，支持单进�
 
 在本例中，Nginx就相当于代理服务器，而php-cgi就是真正用于解析php脚本的后端。
 
+<!--more-->
+
 ### 0x83 Nginx的安装
 
 1. Nginx的安装（deb）：`apt-get install nginx` OR `nginx-extras`

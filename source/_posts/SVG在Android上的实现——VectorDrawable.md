@@ -16,6 +16,8 @@ SVG由Path描述，通过PathData控制究竟如何渲染显示图形，SVG的�
 在Lolipop（Android 5.0）之后，Google官方引入了对矢量图的支持，虽然支持有限（兼容性问题），但是官方支持总是好的。
 并且谷歌提供了支持库（Support Library）用于提供向后兼容。
 
+<!--more-->
+
 ### 0x83 VectorDrawable
 
 VectorDrawable继承自Drawable，它可以像类似ShapeDrawable一样用xml的格式表示一张图片。

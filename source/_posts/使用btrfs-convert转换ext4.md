@@ -20,6 +20,8 @@ btrfs-convert是一个转换工具,使用方式很简单,看它的[Manpage](http
 
 转换工具使用就一句命令:`btrfs-convert /dev/sda2`,需要注意的是我们通常在live环境下执行,因为你无法转换一个已被挂载或正在使用的文件系统.以ext4为例,经过不确定时间的转换,原本的数据会以subvolume的形式保存,名字为ext2_saved.
 
+<!--more-->
+
 ### 0x83 rollback
 
 如果你后悔了,btrfs的快照功能也恰巧保证了回滚特性的支持,如上所说的ext2_saved子卷便是用于回滚的数据备份,因此如果我们想回滚,千万不能执行`btrfs balance`命令来平衡空间刷新metadata,否则回滚将会失败.

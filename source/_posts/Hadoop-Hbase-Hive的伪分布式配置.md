@@ -77,6 +77,8 @@ Hadoop提供三种配置方式:单机模式,伪分布式模式和完全分布式
 1. 启动hadoop
     `hadoop-2.6.5/sbin`中提供了启动脚本,其中startall.sh可以直接启动hadoop,但是该脚本已被视为废弃,官方推荐使用start-dfs.sh和start-yarn.sh来启动NameNode,DataNode和Node/ResourceManager.
 
+<!--more-->
+
 ### 0x83 在HDFS上配置HBase
 
 1. 下载hbase的tar包
@@ -103,3 +105,5 @@ Hadoop提供三种配置方式:单机模式,伪分布式模式和完全分布式
     hbase的启动方式也很简单,但有一个重要前提是hadoop的hdfs必须处于启动状态,调用`hbase-1.3.1/bin/start-hbase.sh`脚本即可启动HMaster,HRegionServer和HQuorumPeer.
 
 ### 0x84 在HDFS上配置Hive
+
+鸽了

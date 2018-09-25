@@ -12,6 +12,8 @@ tags: [Nexus5]
 
 可以用`busybox`的`ifconfig`命令修改MAC地址，但是这种方式在5.0之后貌似失效了。因此经过查阅发现Nexus5的`/persist`存有蓝牙和Wifi的配置，不过persist区做为Google为手机设置的DRM，系统启动时会从这里读取一些硬件信息，修改它很有可能带来非常大的风险，毕竟这里是刷新都不会去修改的地方。不过，为达目的仍要进行尝试，方法其实很简单，只要修改`/persist/wifi/.macaddr`文件就行。
 
+<!--more-->
+
 ### 0x83 实践
 
 `/persist/wifi/.macaddr`文件是2进制文件，直接用文本编辑器编辑是不可以的。因此我们借用Android平台的HexEditor进行编辑，通过对6个字节的16进制数据进行修改，修改结果就是对应的MAC地址。

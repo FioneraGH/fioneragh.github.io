@@ -16,6 +16,8 @@ tags: [Linux,Makefile]
 
 Makefile是一个描述文件，也可以视为配置文件，就像webpack的webpack.config.js文件，它描述了构建任务所需的必要参数和构建过程。通常make工具会自己搜寻目录下的描述文件，如makefile、Makefile等，我们只需要在工程目录下创建相应的文件即可。
 
+<!--more-->
+
 ### 0x83 Makefile 基本原则
 
 如果你只是进行非常普通的人力重复的构建任务，那Makefile再适合不过了，对于这种状况Makefile的书写也非常简单：

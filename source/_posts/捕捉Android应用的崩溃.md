@@ -55,6 +55,8 @@ public class CrashHandler
 
 因为虚拟机一旦发生异常通常会有try-catch捕捉走异常，而像空指针这种异常就不一定了，因此我们实现异常处理器并设定为线程默认未捕捉异常处理器`Thread.setDefaultUncaughtExceptionHandler(this)`，之后调用系统Api关闭进程`android.os.Process.killProcess(android.os.Process.myPid())`，这样也能实现MIUI等三方ROM的效果。`System.exit(1)`意为虚拟机以non-zero退出，表示不正常退出通常会自动尝试启动应用。
 
+<!--more-->
+
 ### 0x83 合适的异常捕捉
 
 前面的处理方法其实仅仅是将系统的FC弹窗去掉，用户体验上依然不好，那我们是不是在处理回调中不要关闭程序就行了？答案当然是否定的，既然程序已经抛出了异常，如果不加处理那我们的发生异常的线程就已经退出了，而对于上面的状况则有可能整个进程没有一个正常运行的线程，最终就是ANR。

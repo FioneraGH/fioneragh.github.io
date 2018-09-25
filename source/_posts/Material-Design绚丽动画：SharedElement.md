@@ -21,6 +21,8 @@ startActivity(new Intent(context, ImageDetailActivity.class)
 
 其中，`R.string.share_image`是`gankDayGirlHolder.iv_girl`的transitionName，不需要任何其他的东西便可以开始一个共享元素的转场，你只需要保证目标Activity也有这样一个元素。
 
+<!--more-->
+
 ### 0x83 手动控制转场
 
 主要是两个API，`postponeEnterTransition()`暂停目标Activity入场，`startPostponedEnterTransition()`还原被暂停的入场。

@@ -27,6 +27,8 @@ HttpPost httpPost = new HttpPost(url);
     httpPost.setEntity(new URLEncoderFormEntity(parameters,"UTF-8"));
 ```
 
+<!--more-->
+
 ### 0x83 HttpResponse
 
 ```Java
@@ -90,4 +92,4 @@ HttpResponse httpResponse = client.execute(httpGet/Post);
     }
 ```
 
-> 上方即是简单的多线程下载，可以用SharedPreference或文件保存当前下载进度以便下载异常恢复下载。
+上方即是简单的多线程下载，可以用SharedPreference或文件保存当前下载进度以便下载异常恢复下载。

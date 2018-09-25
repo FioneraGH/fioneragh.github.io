@@ -21,6 +21,8 @@ Activity是Android四大组件之一，是View的承载者和控制者。Android
 
 这其中PhoneWindow是系统对Window的唯一实现类，DecorView就是我们getDecorView方法获取的部分，contentLayout的FrameLayout就是`android.R.id.content`对应的空间，它们都不是我们设置的View，setContentView实际上是经历了Window->WindowManager最终把View添加到了contentLayout里，可以看一下除了使用`getWindow().setContentView(layoutResID);`添加View之外（在Framework刚构造出Activity时创建了Window这些东西），还调用了`initWindowDecorActionBar();`，这里以后有机会也记录一下～
 
+<!--more-->
+
 ### 0x83 Activity的调用
 
 下面两个是Context和Activity有不同实现的方法[（这里有速记）](https://fioneragh.github.io/2017/03/21/Android之startActivity "Android之startActivity")：

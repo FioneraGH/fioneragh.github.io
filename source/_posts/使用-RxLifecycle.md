@@ -32,6 +32,8 @@ compile 'com.trello:rxlifecycle-components:1.0' [3]
 
 其中`[1]`是基础库，`[2]`是对Android支持，`[3]`是RxActivity、RxFragment等组件。
 
+<!--more-->
+
 ### 0x83 RxLifecycle 使用
 
 RxLifecycle 是一个比较简单明了的库，因为它的定位足够单纯，像张白纸一样——在特定的生命周期钩子“解除订阅”。

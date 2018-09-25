@@ -32,6 +32,8 @@ public void startScroll(int startX, int startY, int dx, int dy, int duration) {
 
 我们可以看到实际上这个方法仅仅是保存了一下你传进去的值，并没有进行动画的相关代码。
 
+<!--more-->
+
 ### 0x83 fling 方法
 
 fling方法与startScroll方法类似，只不过这个方法是基于一个fling的手势的，它接收8个参数，其中前四的是比较重要的，分别表示滚动开起点坐标和初始速度。

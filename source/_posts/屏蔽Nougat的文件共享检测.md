@@ -32,6 +32,8 @@ try {
 
 代码也很简单，利用反射取出StrictMode的disableDeathOnFileUriExposure方法，然后调用就可以了。
 
+<!--more-->
+
 ### 0x83 微信文件API传图
 
 我们知道锤子OS3.0发布的时候由一个OneStep的重大特性，其中有一点就是摆脱微信分享的API限制，直接批量发送图片到微信，当然其实这也是微信的组件实现的，使用方法很简单：

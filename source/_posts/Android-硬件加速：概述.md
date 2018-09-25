@@ -55,6 +55,8 @@ void invalidate(boolean invalidateCache) {
 
 于是在Android3.0之后，Google把使用GPU进行硬件加速的绘制方式正式提上了台面，使用硬件加速的方法其实也很简单。
 
+<!--more-->
+
 ### 0x83 开启硬件加速
 
 最简单的配置硬件加速的方法就是在清单文件AndroidManifest.xml中进行配置：

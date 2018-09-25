@@ -23,6 +23,8 @@ ProcessRecord{52a99eb0 3493:com.android.gallery3d/u0a57}
 
 ErrorTrace说得很明白，`com.android.gallery3d`尝试开启FileProvider但是权限被拒绝从而触发了安全异常。
 
+<!--more-->
+
 ### 0x83 问题分析
 
 没错，我们的APP在清单文件中声明的FileProvider的exported属性是false，这意味着其他应用确实不能直接访问这个组件。

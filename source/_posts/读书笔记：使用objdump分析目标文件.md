@@ -57,6 +57,8 @@ int main(void) {
 
 目标文件大小为1344个字节，接下来我们使用objdump工具分析目标文件内容。
 
+<!--more-->
+
 ### 0x83 objdump分析基本信息
 
 objdump来自于包binutils，隶属于GNU Development Tools，它的主要功能就是分析出目标文件的各种信息，比如`objdump -h SimpleSection.o`：

@@ -37,6 +37,8 @@ if (typeof vuxConfig.options.isWebpack2 !== 'undefined') {
 
 上面这种判断方式导致会出现一个问题，就是webpack2其实为了兼容性仍旧保留了loaders语法，如果不是使用webpack2推荐的方式进行配置，就可能导致vux-loader认为开发者使用的是webpack1从而配置失败。
 
+<!--more-->
+
 ### 0x83 use和loader对options/query的影响
 
 之前我们提到，webpack1当中的loader配置是确定性的，因此如果想要链式loader就需要我们使用`loader1!loader2`式的语法进行输出传递，而在webpack2当中换用了`use:[]`来配置多个loader的状况。webpack2的改变导致了一种结果，原本的options/query配置不能在rules层级配置，否则会导致`Error: options/query provided without loader.`错误，正确的处理方式是将选项配置在loader上，即：

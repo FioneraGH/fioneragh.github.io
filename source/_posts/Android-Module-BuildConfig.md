@@ -40,6 +40,8 @@ public final class BuildConfig {
 
 可以看到DEBUG值为true，那为什么会不打印呢，只能调试程序看这个变量到底是什么，不用猜也知道，肯定是false。
 
+<!--more-->
+
 ### 0x83 问题原因
 
 Module中BuildConfig在最终打包后（即使是Debug包）都会是Release包，也就是说无论编译时BuildConfig生成值是什么，最终DEBUG值都为false。

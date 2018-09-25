@@ -12,6 +12,8 @@ Google在之前的GoogleIO大会上宣布了全新的Android布局组件——Co
 
 约束布局存在于support包中，向后兼容大部分版本，对于布局的描述和更改。Google为我们提供了一套API，今天我们就来看看ConstraintSet这个类。
 
+<!--more-->
+
 ### 0x83 ConstraintSet使用
 
 1. 获取布局属性

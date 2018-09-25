@@ -30,6 +30,8 @@ location /forum/ {
 }
 ```
 
+<!--more-->
+
 ### 0x83 负载均衡
 
 负载均衡：使用upstream模块，即上游服务器

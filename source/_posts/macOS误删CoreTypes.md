@@ -18,6 +18,8 @@ tags: [macOS]
 
 依然是那一个目的，为了给予Xcode10一个相对干净的工作环境，我决定去Receipts下找到经过pkginstaller安装的相关Xcode文件并删除，然后手动安装Xcode10里提供的pkg文件，bom文件里的内容非常多，但是主要集中在`/Library/Developer`和`/System/Library/PrivateFrameworks`下。
 
+<!--more-->
+
 ### 0x83 悲剧的开始
 
 bom文件位置：`/System/Library/Receipts`，我们主要关注`com.apple.pkg.MobileDevice.bom`、`com.apple.pkg.MobileDeviceDevelopment.bom`和`com.apple.pkg.XcodeSystemResources.bom`这三个文件，这个目录下是系统组件的信息，有一些其他的组件感兴趣的可以自己看看。

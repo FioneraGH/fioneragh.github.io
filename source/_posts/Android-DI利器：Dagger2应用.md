@@ -71,6 +71,8 @@ public class AppModule {
 
 Module的最简单用法就是这样，当然它本身就是这么简单，当你理解了Scope，你就能了解到Dagger2的奇妙之处了。
 
+<!--more-->
+
 ### 0x83 全局唯一——AppComponent
 
 Component很简单，它是一个接口，Dagger为我们生成的辅助类DaggerXXX就是实现了这个接口。

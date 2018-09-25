@@ -12,6 +12,8 @@ tags: [Android,Multidex,Proguard]
 
 出现这种问题时完整的错误信息通常是`Can't read [\build\intermediates\transforms\jarMerging\debug\jars\1\1f\xxx.jar] (Can't process class [xxx/xxx/xxx/a$b$c.class] (Unknown verification type [xx] in stack map frame))`,其根源是某个jar在做jarMerge操作时某个类的StackMapTable attributes有问题,通常的做法是我们需要修正这个被混淆的jar包的问题,但是某些第三方库的jar包我们时不可控的,因此我们只能让Proguard自己忽略掉StackMapTable的问题.
 
+<!--more-->
+
 ### 0x83 Patch Proguard
 
 [Use a custom ProGuard build with Gradle](http://innodroid.com/blog/post/use-a-custom-proguard-build-with-gradle)中提到了如何在早期Android Studio中使用一个自定义的Proguard,我们参考这种方式在AS中用自定义的Proguard进行打包.

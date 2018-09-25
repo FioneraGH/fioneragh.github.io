@@ -28,6 +28,8 @@ Dagger使用Scope来规范对象的实例化，要做到单例的管理，有两
 
 Scope的原理明白了，使用起来就很容易了，它本身就是一个标记告诉Dagger如何维护实例，但是具体的情况还要看@Inject注入的状况。
 
+<!--more-->
+
 ### 0x83 自定义Scope
 
 我们先为GankFragment创建FragmentScope注解：

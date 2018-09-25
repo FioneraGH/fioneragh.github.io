@@ -16,6 +16,8 @@ TensorFlow是一个机器学习的开源库，出自Google之手，它的核心�
 
 [Bazel](https://bazel.build/)，一个构建系统，根据它官网的描述，Bazel是Google使用的构建系统。Bazel现在仍然是beta版本，但不可否认的，它是一个快速可靠可扩展的构建系统，你可以根据自己的需要书写构建规则。
 
+<!--more-->
+
 ### 0x83 编译Bazel
 
 要使用Bazel构建TensorFlow，首先我们要编译Bazel。由于官方只对Ubuntu和macOS提供二进制文件支持，如果我们使用的是其他发行版，就需要我们自己从源码编译可用的二进制文件，编译很简单。当然官方也提供了installer，如果有需要可以自行下载。

@@ -26,6 +26,8 @@ YCM提供了基于python的编译脚本，一般情况下，安装好依赖直�
 
 PS：根据官方README的描述，如果YCM更新了，要使用新的特性，需要重新编译。
 
+<!--more-->
+
 ### 0x83 Vundle
 
 [Vundle, the plug-in manager for Vim](https://github.com/VundleVim/Vundle.vim)

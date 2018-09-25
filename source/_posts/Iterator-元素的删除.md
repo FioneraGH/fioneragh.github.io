@@ -25,6 +25,8 @@ for (RequirementBean requirementBean : requirementBeanList) {
 
 首先我们要明白forE的遍历机制，其实它的内部实现就是通过迭代器Iterator实现的，也就是说它本身也是Collection.iterator()后使用iterator.next()的方式遍历元素。关于Iterator网上的解释是`Iterator 是工作在一个独立的线程中，并且拥有一个 mutex 锁。Iterator 被创建之后会建立一个指向原来对象的单链索引表，当原来的对象数量发生变化时，这个索引表的内容不会同步改变，所以当索引指针往后移动的时候就找不到要迭代的对象，所以按照 fail-fast 原则 Iterator 会马上抛出 java.util.ConcurrentModificationException 异常。`
 
+<!--more-->
+
 ### 0x83 解决办法
 
 最简单的办法就是使用index逆序遍历删除元素，之所以逆序是因为这样可以忽略列表本身的变化导致的index变化。还有一种变法是新建一个待删除列表，把要删除的元素存入这个列表，最终调用removeAll删除元素。当然，forE是基于Iterator的，如果我们使用Iterator该如何避免这个异常？

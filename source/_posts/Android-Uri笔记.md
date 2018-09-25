@@ -25,6 +25,8 @@ query-string: t=test
 fragment: top
 ```
 
+<!--more-->
+
 ### 0x83 Uri提供的方法
 
 Uri提供了parse方法将一个字符串解析成可用的Uri对象，我们便可以使用这个对象取出Uri字符串中的每一部分。

@@ -47,6 +47,8 @@ Typeface typeFace = ResourcesCompat.getFont(context, R.font.number_font);
 setTypeface(typeFace);
 ```
 
+<!--more-->
+
 ### 0x83 ResourceCompat
 
 这个类提供了兼容API的方式获取资源，其中部分方法与ContextCompat类似但他们大都废弃了，基本上这个类就是专门为Font服务的，getFont最终调用了loadFont，源码很简单：

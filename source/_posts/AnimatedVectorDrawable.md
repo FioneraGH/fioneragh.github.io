@@ -27,6 +27,8 @@ AnimatedVectorDrawable通过`ObjectAnimator`和`AnimatorSet`两组API对VectorDr
 
 `<target></target>`子标签指定矢量图中哪一部分需要执行哪一个动画。
 
+<!--more-->
+
 ### 0x83 动画文件
 
 动画文件就是Animator，除了一般的objectAnimator设置scale、rotation外，AnimatedVectorDrawable还支持对path作动画。

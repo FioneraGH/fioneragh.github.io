@@ -57,6 +57,8 @@ notificationManager.notify(NOTIFICATION_ID, builder.build());
 
 其中第一个Intent因为众所周知的原因必须带有Flag：`Intent.FLAG_ACTIVITY_NEW_TASK`，后面的Intent便不是必须的，最后一个Intent的Activity会被作为primary key，整个行为和startActivities一致。
 
+<!--more-->
+
 ### 0x83 TaskStackBuilder
 
 除了使用多Intent来开启多个Activity，我们还可以使用TaskStackBuilder，其中v4包中有做了相应兼容的实现的TaskStackBuilder可以使用。仔细阅读TaskStackBuilder的源码，代码不多，其实它也支持startActivities方法，获取PendingIntent时也就是做了一些封装，v4包里的代码因为考虑到更好的兼容性所以在使用API时有更全面的检查，这其实是我们编写代码所应学习的地方，写健壮鲁棒的代码是编码猴子的基本素养。

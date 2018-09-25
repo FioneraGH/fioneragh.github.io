@@ -12,6 +12,8 @@ Transition Framework是Android Kitkat开始添加的动画框架，在Lolipop才
 
 Scene中文意为场景，就是将当前页面（或者说Activity，亦或者可以视为一个场景的View）以及其子View的状态抽象为一个场景，而它们的位置大小可视状态就是场景里的元素。TransitionManager就是负责将View从一个场景转变为另一个场景，而变换的方式就是Transition。
 
+<!--more-->
+
 ### 0x83 生成一个场景
 
 场景的生成官方提供了标准API，直接调用即可：

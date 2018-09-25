@@ -67,6 +67,8 @@ tags: [Weex,Vue]
 
 和一般的包依赖配置一样，"script"下是npm命令脚本别名，"dependencies"和"devDependencies"分别是一般依赖和开发依赖。一般依赖主要是Vue和Weex，开发依赖主要是Babel翻译器和Webpack的Loader。
 
+<!--more-->
+
 ### 0x83 Gif加载图标的支持
 
 我们有时候会使用一张旋转的gif作为加载内容的占位图，但Webpack可能会不识别Gif文件，这个时候我们需要添加"file-loader"到工程依赖，并在webpack.config.js中配置：

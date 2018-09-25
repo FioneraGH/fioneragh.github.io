@@ -13,6 +13,8 @@ Linux 内核的操作系统支持多种多样的文件系统，而它的文件�
 
 > `<file system> <mount point> <type> <options> <dump> <pass>`
 
+<!--more-->
+
 ### 0x83 文件系统
 
 需要配置的存储设备或文件系统：

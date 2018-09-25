@@ -19,6 +19,8 @@ node.js旨在搭建高性能的web服务用于处理并发数万的连接，但�
 可通过tarball方式编译安装 debian系安装非常容易 `apt-get install nodejs npm`即可。  
 nodejs 是解释器 npm 是nodejs包管理工具。
 
+<!--more-->
+
 ### 0x83 nodejs权限
 
 若要开启端口绑定服务器80443需要root权限，可以sudo也可以运行时提权。  

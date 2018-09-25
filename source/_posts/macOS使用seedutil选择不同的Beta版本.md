@@ -30,6 +30,8 @@ DisableSeedOptOut: NO
 
 仔细看其实CatalogURL与之前10.13的时候不一样了，没错，这是Mojave配置的地址，其实更新获取的参照就是这个链接，用浏览器打开链接我们会发现它的内容和plist差不多，定义了需要增量更新的标识。
 
+<!--more-->
+
 ### 0x83 seedutil 影响的配置文件
 
 我们都知道，macOS的配置文件主要存放在三个位置：`/S*/L*/Preferences`、`/L*/Preferences`和`~/L*/Preferences`，这三个目录分别存放了系统基本设置、系统软件扩展设置和用户个人设置，而控制获取更新Catalog的文件就是`/Library/Preferences/com.apple.SoftwareUpdate.plist`：

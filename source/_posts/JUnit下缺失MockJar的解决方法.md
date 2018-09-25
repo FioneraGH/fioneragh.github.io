@@ -22,6 +22,8 @@ tags: [JUnit,Mock]
 
 * `gradle mockableAndroidJar --rerun-tasks` 重新执行生成任务
 
+<!--more-->
+
 ### 0x83 "xxx" is not mocked method
 
 在执行单元测试时还有可能遇到一个很奇葩的问题,某某类的某个方法没有被mock,对于这种状况其实也可以理解,某些情况下不存在模拟的普适性就不会被模拟,mockable默认只能保证不会出点ClassNotDefined异常,任何实例方法的调用都将导致`"Method x in a.b.c.D not mocked. See http://g.co/androidstudio/not-mocked for details."`.

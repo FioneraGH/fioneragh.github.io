@@ -12,6 +12,8 @@ tags: [Java,DecimalFormat,RoundingMode]
 
 这个问题其实比较常见，但是如果遇到取小于当前数字的最大整数这种状况，我们有的时候会对数字提前进行floor/round操作，然后再格式化输出该数字，其实DecimalFormat本身提供RoundingMode来满足我们的这些需求。还有一种状况，很多人可能遇见过，就是对于x.5这种状况，格式化后的数字有时候总是偶数，也就是说整数位是奇数会入，整数位是偶数则会舍，其实这都是RoundingMode决定的。
 
+<!--more-->
+
 ### 0x83 RoundingMode
 
 Math#round操作也是我们日常开发中比较常用的操作，而RoundingMode也就是决定了精度取舍方式，毕竟中西方在某些问题的处理上观念是不一样的，RoundingMode提供了很多种选项来应对不同的场景：

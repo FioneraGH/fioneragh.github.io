@@ -30,6 +30,8 @@ spring.datasource.password=root
 
 这样就能保证插入的中文不会乱码了。
 
+<!--more-->
+
 ### 0x83 单元测试的坑
 
 工程使用的是Mybatis，在Service中最终使用DAO将数据插入数据库时没有任何问题，但是当我在JUnit中使用SqlSession进行测试时，发现插入的中文一直都是“？”。直到后来我才发现，单元测试的@SetUp我使用的Mybatis的配置文件是mybatis-config.xml：

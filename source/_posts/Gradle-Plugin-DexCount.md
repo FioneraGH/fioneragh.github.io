@@ -16,6 +16,8 @@ DexCount用于统计项目中所有的方法数，
 如果很不幸，或者说大项目必然的结果，你的方法数超过了65535，就要对你的APK进行分包处理，以保证APK能在设备上正确的安装。
 至于会触发的`dexopt exception`和`linearalloc`限制，我们之后再谈。
 
+<!--more-->
+
 ### 0x83 DexCount的使用
 
 按照README的介绍，共三步
