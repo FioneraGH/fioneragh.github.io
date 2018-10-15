@@ -4,6 +4,10 @@ date: 2017-05-13 14:21:04
 tags: [速记,Java]
 ---
 
+### Example
+
+#### 括号匹配
+
 ```Java
 import java.util.Scanner;
 import java.util.Stack;
@@ -62,6 +66,8 @@ public class BracketMatch {
     }
 }
 ```
+
+#### 魔数
 
 ```Java
 import java.util.Arrays;
