@@ -10,7 +10,7 @@ Vue在升级到2.x之后,仍然提供了比较灵活的组件间通信机制,父
 
 ### 0x82 Store
 
-Vuex和Redux一样,是针对js的一种全局状态管理,他们都扮演状态控制中心的角色.Vuex使用action作为状态通知的唯一触发者,mutation作为状态的接受者,state则存储了我们需要管理的SPA的状态,通常情况下我们也会使用types来规约action.
+Vuex和Redux一样,是针对js的一种全局状态管理,他们都扮演状态控制中心的角色.Vuex使用action作为状态通知的唯一触发者,mutation作为状态的接受者,state则存储了我们需要管理的SPA的状态,通常情况下我们也会使用types来规约action.
 
 在平时的的开发过程中,为了保证各模块或各功能的相对低耦合,我们会把有关的actions/mutations/state组合起来作为一个store,供给vuex进行统一管理.
 

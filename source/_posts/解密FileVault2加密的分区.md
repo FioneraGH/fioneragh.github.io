@@ -12,13 +12,13 @@ tags: [macOS,FileVault]
 
 ### 0x82 APFS
 
-APFS,全程APple FileSystem,译作苹果文件系统,很多人坚持它由ZFS发展而来,但是这不重要.APFS支持COW,对SSD友好,支持SSD的Trim特性以增高IO吞吐,更重要的是它支持逻辑卷管理.正因为APFS支持这些新特性,Apple终于决定换掉用了十几二十年的HFS(+J),从iOS,tvOS,watchOS到macOS都采用了这一文件系统.
+APFS,全称Apple FileSystem,译作苹果文件系统,很多人坚持它由ZFS发展而来,但是这不重要.APFS支持COW,对SSD友好,支持SSD的Trim特性以增高IO吞吐,更重要的是它支持逻辑卷管理.正因为APFS支持这些新特性,Apple终于决定换掉用了十几二十年的HFS(+J),从iOS,tvOS,watchOS到macOS都采用了这一文件系统.
 
 APFS的出现对黑苹果用户来讲可不见得是好事,High Sierra默认已经将APFS作为默认的文件系统,在升级或安装若检测到你的硬盘是固态硬盘,将会在升级或安装过程中进行APFS的转换,要注意这个转换是不可逆的.纵然如此,我们仍可以干涉macOS的升级进程,既然升级过程是从HFS+转换到APFS的,说明这个过程是使用标志位控制的,在这个过程中有一个转换操作.
 
 仔细研究过macOS升级过程的小伙伴应该都了解用于安装的app文件里有个非常庞大的dmg文件,dmg文件我们都了解就是磁盘映像文件,和iso/img文件类似,而dmg文件内是一些pkg安装文件和plist或xml配置文件,安装过程首先就是释放这些安装程序和配置文件,我们只需要把配置文件中的ConvertToApfs设置为false就可以阻止转换过程.
 
-为什么要阻止转换成APFS呢,一个是前面说的SSD兼容问题,一个是黑苹果导致的一些乱七八糟的问题,比如刚开始APFS出现导致Clover识别不到APFS分区,后来是Clover通过实现加载macOS安装镜像的apfs.efi来读取APFS,但是APFS在hackintosh上的问题远不止这些.
+为什么要阻止转换成APFS呢,一个是前面说的SSD兼容问题,一个是黑苹果导致的一些乱七八糟的问题,比如刚开始APFS出现导致Clover识别不到APFS分区,后来是Clover通过实现加载macOS安装镜像的apfs.efi来读取APFS,但是APFS在hackintosh上的问题远不止这些.
 
 <!--more-->
 
