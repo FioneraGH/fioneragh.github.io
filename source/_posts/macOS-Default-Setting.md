@@ -31,4 +31,7 @@ defaults read -g AppleFontSmoothing
 # 设置语言首选项
 defaults write com.apple.Safari AppleLanguages '(zh-CN)'
 defaults read com.apple.Safari
+
+# 开启AppStore调试菜单
+defaults write com.apple.appstore ShowDebugMenu -bool true
 ```
