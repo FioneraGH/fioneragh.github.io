@@ -34,4 +34,13 @@ defaults read com.apple.Safari
 
 # 开启AppStore调试菜单
 defaults write com.apple.appstore ShowDebugMenu -bool true
+
+# No more Finder pop up when iDevice connects
+defaults write com.apple.AMPDevicesAgent dontAutomaticallySyncIPods -bool YES
+
+# Disable iDevice management in Finder
+defaults write "Apple Global Domain" ignore-devices -bool YES
+
+# Carrier testing（Catalina）
+defaults write com.apple.AMPDevicesAgent carrier-testing -bool YES
 ```
