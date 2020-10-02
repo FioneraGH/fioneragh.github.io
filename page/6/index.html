@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Return To Innocence">
+<meta property="og:url" content="https://fioneragh.github.io/page/6/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Return To Innocence">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-使用lsof查看端口占用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/16/使用lsof查看端口占用/" class="article-date">
+  <time datetime="2017-05-16T10:48:31.000Z" itemprop="datePublished">2017-05-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/16/使用lsof查看端口占用/">使用lsof查看端口占用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-lsof的作用"><a href="#0x81-lsof的作用" class="headerlink" title="0x81 lsof的作用"></a>0x81 lsof的作用</h3><p>我们都知道ls命令是Linux发行版系统最常用的命令之一，它用于列出指定目录的文件系统信息，帮助我们快速定位文件。而lsof命令的作用是什么，根据manual的解释，lsof是list open files的意思，它的作用就是列出那些被操作系统进程打开的文件，由于Linux上一切皆文件，我们可以通过这个工具找出占用某个文件的进程。</p>
+<h3 id="0x82-react-native的packager启动失败"><a href="#0x82-react-native的packager启动失败" class="headerlink" title="0x82 react-native的packager启动失败"></a>0x82 react-native的packager启动失败</h3><p>一年多以前在学习RN的跨平台开发的时候，那个时候RN还是0.2x的版本，现如今都到0.44了依然没有发布正式版，fresco都1.3.0了。当然1.0也就是个版本号没什么实际意义，无非就是开发人员认为bug少到了可以放出一个正式版了而已。React-Native自退出之时受到了很多开发者的青睐，但是它对iOS的支持要远优于Android是事实，当初抱着复习js并进一步学习跨平台开发的想法，也踩了不少的坑（最大的坑就是之前写的demo由于后来有了太多的broken changes，在新版本上直接编不过，一气之下就删掉了工程）。</p>
+<p>RN的调试状态是通过一个本地的packager服务推送新的jsbundle到设备并渲染运行的，曾经packager没有使用一个单独的shell起，就出现了packager启动失败的现象，原因就是默认的8081被占用。端口占用其实时很常见的一件事，我们在电脑上跑一个tomcat很有可能就占用了8080，如果你想再起一个使用8080端口的程序，就会提示你端口正在被使用。而packager的8081端口我可以确信时没有其他程序占用的，也就是说是它自己占用了，另一个实例起不来。其实发生这种状况的原因就是我用run-android命令调试RN应用，而这个命令会判断是否启动了packager，如果没有就会启动，但是它可能会判断失误，现在我不清楚是否有这个问题，而我后来都是手动起一个packager，就算出了问题也可以直接关掉重启。</p>
+<p>那如果端口被占用了，我们还不知道是谁占用的怎么办？RN的文档也提到了解决办法，一是修改packager端口，这种适合8081是必须被其他程序占用的情况；另一种就是lsof了，命令很简单，输入<code>sudo lsof -n -i4TCP:8081 | grep LISTEN</code>就可以找到占用8081端口的进程，kill掉进程id即可。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/05/16/使用lsof查看端口占用/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/05/16/使用lsof查看端口占用/" data-id="ckfsdx7cp002hr49z8b0wghpo" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lsof/">lsof</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-安装weex-toolkit小记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/15/安装weex-toolkit小记/" class="article-date">
+  <time datetime="2017-05-15T10:45:06.000Z" itemprop="datePublished">2017-05-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/15/安装weex-toolkit小记/">安装weex-toolkit小记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-权限问题"><a href="#0x81-权限问题" class="headerlink" title="0x81 权限问题"></a>0x81 权限问题</h3><p>其实这个问题由来已久，在很久之前第一次尝试使用Weex的时候遇到过这个问题，当时按照提示解决了之后便抛于脑后，直到前一段时间我在Home目录下执行了清理命令（rm -rf * :P），当我意识到部分工具坏掉了，不得不重新进行一些工具的重装，所以我再一次遇到了权限问题。</p>
+<h3 id="0x82-解决方案"><a href="#0x82-解决方案" class="headerlink" title="0x82 解决方案"></a>0x82 解决方案</h3><p>其实权限的问题是最容易解决的，但也是最容易忽略和出问题的。我们使用npm的-g参数全局安装weex-toolkit的时候，如果不使用类似sudo的命令提权，后出现npm没有权限像/usr/lib/node_modules目录写入文件的问题。通常的处理办法都是使用sudo再去执行命令，但是这样有一个问题，npm命令执行写入的文件的权限信息是nobody组user用户的：</p>
+<p><img src="/images/2017_05_15_01.png" alt="npm全局安装的权限信息"></p>
+<p>而安装weex-toolkit的时候，有一个脚本会向/root目录写入.xtoolkit文件夹，而/root目录的权限是550，显然会写入失败。于是我尝试手动创建了.xtoolkit文件夹，这简直异想天开，这个错误我犯了两次，原因就是我对Linux的权限控制仍然理解不透彻。不得已我放开了/root的权限到777，安装完之后再改回550，这样weex-toolkit就可以安装成功，/root目录下npm相关的权限信息是user组和user用户，这样.xtoolkit就能写入文件了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/05/15/安装weex-toolkit小记/" data-id="ckfsdx7d3002wr49z0phw2n1f" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Weex/">Weex</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/npm/">npm</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Java-Algorithm" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/13/Java-Algorithm/" class="article-date">
+  <time datetime="2017-05-13T06:21:04.000Z" itemprop="datePublished">2017-05-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/13/Java-Algorithm/">Java Algorithm</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><h4 id="括号匹配"><a href="#括号匹配" class="headerlink" title="括号匹配"></a>括号匹配</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 括号匹配方案</span></span><br><span class="line"><span class="comment"> * 合法的括号匹配序列被定义为:</span></span><br><span class="line"><span class="comment"> * 1. 空串""是合法的括号序列</span></span><br><span class="line"><span class="comment"> * 2. 如果"X"和"Y"是合法的序列,那么"XY"也是一个合法的括号序列</span></span><br><span class="line"><span class="comment"> * 3. 如果"X"是一个合法的序列,那么"(X)"也是一个合法的括号序列</span></span><br><span class="line"><span class="comment"> * 4. 每个合法的括号序列都可以由上面的规则生成</span></span><br><span class="line"><span class="comment"> * 例如"", "()", "()()()", "(()())", "(((())))"都是合法的。 东东现在有一个合法的括号序列s,</span></span><br><span class="line"><span class="comment"> * 一次移除操作分为两步:</span></span><br><span class="line"><span class="comment"> * 1. 移除序列s中第一个左括号</span></span><br><span class="line"><span class="comment"> * 2. 移除序列s中任意一个右括号.保证操作之后s还是一个合法的括号序列</span></span><br><span class="line"><span class="comment"> * 东东现在想知道使用上述的移除操作有多少种方案可以把序列s变为空</span></span><br><span class="line"><span class="comment"> * 如果两个方案中有一次移除操作移除的是不同的右括号就认为是不同的方案。</span></span><br><span class="line"><span class="comment"> * 例如: s = "()()()()()",输出1, 因为每次都只能选择被移除的左括号所相邻的右括号.</span></span><br><span class="line"><span class="comment"> * s = "(((())))",输出24, 第一次有4种情况, 第二次有3种情况, ... ,依次类推, 4 * 3 * 2 * 1 = 24</span></span><br><span class="line"><span class="comment"> * 输入描述:</span></span><br><span class="line"><span class="comment"> * 输入包括一行,一个合法的括号序列s,序列长度length(2 ≤ length ≤ 20).</span></span><br><span class="line"><span class="comment"> * 输出描述:</span></span><br><span class="line"><span class="comment"> * 输出一个整数,表示方案数</span></span><br><span class="line"><span class="comment"> * 输入例子1:</span></span><br><span class="line"><span class="comment"> * (((())))</span></span><br><span class="line"><span class="comment"> * 输出例子1:</span></span><br><span class="line"><span class="comment"> * 24</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 思路：遍历字符串，每次把左括号都压入栈，每次遇到右括号，先统计栈中有几个左括号，统计数与上次统计数相乘</span></span><br><span class="line"><span class="comment"> * 接着弹出栈中的一个左括号</span></span><br><span class="line"><span class="comment"> * 直到遍历结束，结果即为方案数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BracketMatch</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Scanner sc = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">        String s = sc.next();</span><br><span class="line"></span><br><span class="line">        Stack&lt;Character&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> result = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">char</span> c;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length(); i++) &#123;</span><br><span class="line">            c = s.charAt(i);</span><br><span class="line">            <span class="keyword">if</span> (c == <span class="string">'('</span>) &#123;</span><br><span class="line">                stack.push(c);</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (c == <span class="string">')'</span>) &#123;</span><br><span class="line">                <span class="keyword">int</span> size = stack.size();</span><br><span class="line">                result *= size;</span><br><span class="line">                stack.pop();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="魔数"><a href="#魔数" class="headerlink" title="魔数"></a>魔数</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 神奇数</span></span><br><span class="line"><span class="comment"> * 东东在一本古籍上看到有一种神奇数,如果能够将一个数的数字分成两组,其中一组数字的和等于另一组数字的和,</span></span><br><span class="line"><span class="comment"> * 我们就将这个数称为神奇数。例如242就是一个神奇数,我们能够将这个数的数字分成两组,分别是&#123;2,2&#125;以及&#123;4&#125;,</span></span><br><span class="line"><span class="comment"> * 而且这两组数的和都是4.东东现在需要统计给定区间中有多少个神奇数,即给定区间[l, r],统计这个区间中有多</span></span><br><span class="line"><span class="comment"> * 少个神奇数,请你来帮助他。</span></span><br><span class="line"><span class="comment"> * 输入描述:</span></span><br><span class="line"><span class="comment"> * 输入包括一行,一行中两个整数l和r(1 ≤ l, r ≤ 10^9, 0 ≤ r - l ≤ 10^6),以空格分割</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 输出描述:</span></span><br><span class="line"><span class="comment"> * 输出一个整数,即区间内的神奇数个数</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 输入例子1:</span></span><br><span class="line"><span class="comment"> * 1 50</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 输出例子1:</span></span><br><span class="line"><span class="comment"> * 4</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MagicNumber</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 首先判断数组能否被平分，即数组分割问题，</span></span><br><span class="line"><span class="comment">     * dp[i][j]</span></span><br><span class="line"><span class="comment">     * 表示数组前 i</span></span><br><span class="line"><span class="comment">     * 个数字能否求和得到 j</span></span><br><span class="line"><span class="comment">     * 则</span></span><br><span class="line"><span class="comment">     * dp[i][j]=dp[i−1][j]||dp[i−1][j−array[i]]</span></span><br><span class="line"><span class="comment">     * 其中||是逻辑或运算。</span></span><br><span class="line"><span class="comment">     * 优化：</span></span><br><span class="line"><span class="comment">     * 1、若sum（array）为奇数，直接返回false</span></span><br><span class="line"><span class="comment">     * 2、使用逆序循环将dp数组简化为一维数组</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isMagic</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.length;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (sum % <span class="number">2</span> != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> mid = sum / <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[] dp = <span class="keyword">new</span> <span class="keyword">int</span>[mid + <span class="number">1</span>];</span><br><span class="line">        dp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = mid; j &gt; <span class="number">0</span>; j--) &#123;</span><br><span class="line">                <span class="keyword">if</span> (j &gt;= nums[i] &amp;&amp; nums[i] != -<span class="number">1</span>)</span><br><span class="line">                    dp[j] = Math.max(dp[j], dp[j - nums[i]]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (dp[mid] &gt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Scanner sc = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">        <span class="keyword">int</span> l = sc.nextInt();</span><br><span class="line">        <span class="keyword">int</span> r = sc.nextInt();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = l; i &lt;= r; i++) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> num = i;</span><br><span class="line">            <span class="keyword">int</span>[] nums = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">            <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">            Arrays.fill(nums, -<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span> (num &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">int</span> temp = num % <span class="number">10</span>;</span><br><span class="line">                nums[index++] = temp;</span><br><span class="line">                sum += temp;</span><br><span class="line">                num = num / <span class="number">10</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (isMagic(nums, sum)) &#123;</span><br><span class="line">                result++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/05/13/Java-Algorithm/" data-id="ckfsdx7ba0013r49z27bk5gh2" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/速记/">速记</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Java-Core" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/13/Java-Core/" class="article-date">
+  <time datetime="2017-05-13T06:21:04.000Z" itemprop="datePublished">2017-05-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/13/Java-Core/">Java Core</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h3><p>早期的ArrayList是使用数组完成的列表功能，内部关键数组 Object[] elementData和计数值size。</p>
+<p>ArrayList的容量是动态扩充的，newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1)，即增加50%。</p>
+<p>容量扩充使用copyarray的方式，向index位置添加元素也是同一道理，只是需要将对应位置元素全部后移。</p>
+<p>添加新元素都要进行容量检查，容量不足时进行容量扩充，再进行具体的增加元素操作。</p>
+<p>序列化反序列化自行实现writeObject和readObject方法，不以容量数组践行序列化，而是以实际数组进行序列化，序列化writeObject先写入size，同理readObject先读出size，再进行对应的序列化反序列化操作。该操作可能导致并发异常，比如序列化时添加内容导致size不一致。</p>
+<p>Vector与ArrayList类似，对应操作方法由synchronized修饰保证线程安全，因此效率相对较低。</p>
+<h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><p>双向链表：HEAD NULL &lt;- prev E next <-> prev E next <-> prev E -&gt; NULL END  </-></-></p>
+<p>新增add实际调用linkLast，元素叫做Node，linkLast做三件事——生成新的Node、关联prev、关联next。LinkedList有一个last变量用于记录最后一个元素，如果为空，则新增的元素为第一个元素<code>first = newNode</code>，否则关联原本的last.next为新的Node。</p>
+<p>查询采用折半，index小于size的1/2从HEAD开始，否则从END开始，因为没有明显的顺序数组关系，只能遍历，复杂度O(n/2)。</p>
+<h3 id="HashMap-JDK7"><a href="#HashMap-JDK7" class="headerlink" title="HashMap-JDK7"></a>HashMap-JDK7</h3><p>数组和链表，容量和负载因子确定了扩容策略，默认容量16～0.75</p>
+<p>新增Element调用put方法，key通过hash得到HashCode，根据数组长度取模作为数组index。</p>
+<p>位运算效率通常高于除模运算，因此HashMap内的数组长度通常为2^n，然后使用2^n - 1做位运算，运算方式是hashcode &amp; (2^n - 1) = hashcode % 2^n</p>
+<p>至于hash后取模冲突，则通过链表处理，table[index]为链表。</p>
+<p>获取Element与put类似，key通过hash算出index，如果连标志有一个元素则就是这个元素，否则遍历链表。。</p>
+<p>红黑树-JDK8，遍历链表是一个极为低效的行为，红黑树能将复杂度从O(n)提升到O(logn)</p>
+<p>红黑树仅仅在某个index下元素个数达到阈值（8）才会替代链表。</p>
+<p>建议单线程使用，否则可能死循环，多线程并发环境使用ConcurrentHashMap。</p>
+<h3 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h3><p>里面有一个transient的HashMap和一个dummy Object PRESENT，add方法以E为key、PRESENT为value写入HashMap。</p>
+<p>key的不重复性保证了HashSet中Element的不重复性。</p>
+<h3 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h3><p>HashMap是无序的，LinkedHashMap是有序的。</p>
+<p>与LinkedList有相似的顺序记录功能，通过双向链表实现。</p>
+<p>根据写入/访问顺序排序。</p>
+<p>存储方式仍是HashMap，通过继承HashMap的Entry添加before和after两个变量来记录顺序。</p>
+<p>重写了主要方法以支持顺序。</p>
+<h3 id="MultiThread"><a href="#MultiThread" class="headerlink" title="MultiThread"></a>MultiThread</h3><p>单核心分配时间片切换线程需要做上下文切换，即保存现场，十分低效，但远比等待一个IO高效。</p>
+<p>安全的多线程有两个条件：互相独立（没有共享变量，数据分离）和加锁。</p>
+<p>尽量避免创建过的线程，线程池是一个很好的方案。</p>
+<p>一个线程只获取一个锁（占用一个资源）来避免死锁。</p>
+<p>原子性、可见性（volatile）、顺序性。</p>
+<h4 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h4><p>同步锁，用于多线程安全，修饰实例方法锁对象，修饰静态方法锁Class，修饰代码块需指定锁对象。</p>
+<p>JVM 进入退出Monitor实现同步，monitor.enter/exit，锁的获取和释放是低效的。</p>
+<p>JDK1.6引入偏向锁，使用Compare And Swap更新锁对象的Mark Word为ThreadID，解锁时会暂停锁线程判断锁对象Mark Word设置无锁或降级轻量锁，这一时刻发生在全局安全点（无字节码运行）。</p>
+<h4 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h4><p>重入锁，线程获得锁可以重新加锁，使用加锁计数确定锁状态，自己不会阻塞自己，基于AQS（抽象队列同步）。</p>
+<p>非公平锁不会像公平锁一样判断队列是否有其他线程，而是直接获取锁。</p>
+<h4 id="ConcurrentHashMap-JDK7"><a href="#ConcurrentHashMap-JDK7" class="headerlink" title="ConcurrentHashMap-JDK7"></a>ConcurrentHashMap-JDK7</h4><p>rehash的HashMap线程不安全，可能在get时死循环。</p>
+<p>并发安全的原因是数组使用Segment，Segment继承ReentrantLock，通过锁控制。HashEntry中的value使用volatile保证可见性。</p>
+<p>提前扩容，HashMap插入数据后扩容。</p>
+<p>JDK8中使用CAS和synchronized保证并发安全，HashEntry直接改为Node。</p>
+<h3 id="内存划分"><a href="#内存划分" class="headerlink" title="内存划分"></a>内存划分</h3><p>方法区、堆、虚拟机栈、本地方法栈、程序计数器，前两者线程共享。</p>
+<p>虚拟机栈由栈帧组成，每调用一次方法都会产生。</p>
+<p>堆，垃圾回收器工作区域，分代回收。</p>
+<p>方法区（永久代）主要是常量、静态变量等。</p>
+<p>类加载双亲委派模型：Bootstrap - Extension - Application - Custom，类加载先交由父加载器，无法加载再降级。这有利于像Object这种类在加载中唯一。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/05/13/Java-Core/" data-id="ckfsdx7bb0014r49zrfnllh3g" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/速记/">速记</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Mysql命令速记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/13/Mysql命令速记/" class="article-date">
+  <time datetime="2017-05-13T06:21:04.000Z" itemprop="datePublished">2017-05-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/13/Mysql命令速记/">Mysql命令速记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x80-前言"><a href="#0x80-前言" class="headerlink" title="0x80 前言"></a>0x80 前言</h3><p>该篇文章主要用于记录我进行一系列mysql操作的命令笔记，会随着使用不断增加。</p>
+<p>在Fedora上使用MariaDB进行测试。</p>
+<h3 id="0x81-命令"><a href="#0x81-命令" class="headerlink" title="0x81 命令"></a>0x81 命令</h3><p>其中无前缀的是bash命令，以’:’开头的是mycli命令或全局SQL语句，以’[‘和’]’包裹的是术语，以’;’开始的为SQL语句或部分SQL语句。</p>
+<p>systemctl start mariadb // 开启mariadb service<br>systemctl stop mariadb // 关闭mariadb service<br>mycli -u root -p {password} // 以管理员登录mysql</p>
+<p>[ACID] // 原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）、持久性（Durability）</p>
+<p>:SHOW ENGINES // 显示支持的数据库引擎，InnoDB是MySql5.5.5后默认的支持事务的引擎，InnoDB支持行锁定和外键<br>:SHOW DATABASES // 显示所有的数据库<br>:USE {database} // 选择数据库<br>:SHOW CREATE DATABASE {database} // 查看数据库定义<br>:SHOW VARIABLES LIKE ‘storage_engine’ // 查看正在使用的数据库存储引擎<br>:SELECT @@GLOBAL.sql_mode ~ SELECT @@sql_mode // 查看sql_mode，比如only_full_group_by模式的的设置<br>:SET GLOBAL sql_mode=’ONLY_FULL_GROUP_BY’ // 直接指定sql_mode<br>[ONLY_FULL_GROUP_BY] // 新版本mysql添加的特性，用于和oracle特性相符，对于select target list 不出现在group by list的不具有单调性的元素，server拒绝查询</p>
+<ol>
+<li>Structure</li>
+</ol>
+<p>:SHOW TABLES // 显示当前数据库下的表<br>;PRIMARY KEY(key,kye,eky) // 设定key,kye,eky为联合主键<br>[参照完整性、引用完整性] // 一个表的外键约束，其外键值可为空，若不为空则必然有对应约束表的主键与之相等<br>;CONSTRAINT {name} FOREIGN KEY(key) REFERENCES tb_main(id) // 外键约束<br>;DESC {table} // 查看表定义<br>;SHOW CREATE TABLE {table} // 查看表定义DSL描述<br>;SHOW CREATE TABLE {table}\G // 查看表定义DSL语句</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/05/13/Mysql命令速记/" data-id="ckfsdx7bf001cr49zg995gzn9" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mysql/">Mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/速记/">速记</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Android-DI利器：Dagger2-Scope" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/13/Android-DI利器：Dagger2-Scope/" class="article-date">
+  <time datetime="2017-05-13T02:18:56.000Z" itemprop="datePublished">2017-05-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/13/Android-DI利器：Dagger2-Scope/">Android DI利器：Dagger2 Scope</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-Singleton注解"><a href="#0x81-Singleton注解" class="headerlink" title="0x81 Singleton注解"></a>0x81 Singleton注解</h3><p>在两个月前的一篇文章<a href="https://fioneragh.github.io/2017/03/08/Android-DI%E5%88%A9%E5%99%A8%EF%BC%9ADagger2%E5%BA%94%E7%94%A8/">Android DI利器：Dagger2应用</a>中，我书写了关于Module、Component的简单用法，其中有一个注解@Singleton用在了@Provide的模块和Component当中，表示它们是单例的。我们看下Singleton注解：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Scope</span><br><span class="line">@Documented</span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">public @interface Singleton &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>什么也没有，就是一个Scope注解，加了Singleton注解，并不是说它就单例了，实际上它规约了一种Scope，其表示的是同一Scope下它是单例的，因此如果我们只在一个地方进行初始化，那它就是单例的，而这个注解名也起到一定的标记作用。</p>
+<h3 id="0x82-Scope"><a href="#0x82-Scope" class="headerlink" title="0x82 Scope"></a>0x82 Scope</h3><p>Dagger使用Scope来规范对象的实例化，要做到单例的管理，有两个前提条件：</p>
+<ol>
+<li><p>Scope注解必须用在Module的provide方法上，否则并不能达到局部单例的效果。</p>
+</li>
+<li><p>如果Module的provide方法使用了Scope注解，那么Component就必须使用同一个注解，否则编译会失败。（从逻辑上也是不合理的）</p>
+</li>
+</ol>
+<p>Scope的原理明白了，使用起来就很容易了，它本身就是一个标记告诉Dagger如何维护实例，但是具体的情况还要看@Inject注入的状况。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/05/13/Android-DI利器：Dagger2-Scope/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/05/13/Android-DI利器：Dagger2-Scope/" data-id="ckfsdx7a20003r49zc6taz1b0" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Dagger/">Dagger</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Realm：使用Realm存储数据" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/11/Realm：使用Realm存储数据/" class="article-date">
+  <time datetime="2017-05-11T10:12:31.000Z" itemprop="datePublished">2017-05-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/11/Realm：使用Realm存储数据/">Realm：使用Realm存储数据</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-Realm简单使用"><a href="#0x81-Realm简单使用" class="headerlink" title="0x81 Realm简单使用"></a>0x81 Realm简单使用</h3><p>昨天我写了如何在Android上启用Realm数据库<a href="https://fioneragh.github.io/2017/05/10/%E5%9C%A8Android%E4%B8%AD%E4%BD%BF%E7%94%A8Realm/">在Android中使用Realm</a>，并举了一个小例子来演示Realm操纵数据库最简单的办法，并且提到了我们的主角——事务。</p>
+<h3 id="0x82-Realm事务"><a href="#0x82-Realm事务" class="headerlink" title="0x82 Realm事务"></a>0x82 Realm事务</h3><p>先看昨天的例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Realm.init(context);</span><br><span class="line">Realm realm = Realm.getDefaultInstance();</span><br><span class="line">realm.beginTransaction();</span><br><span class="line">RealmResults&lt;GankItem&gt; items = realm.where(GankItem.class).findAll(); <span class="comment">// 查询</span></span><br><span class="line">realm.copyToRealmOrUpdate(gankItem); <span class="comment">// 插入或更新</span></span><br><span class="line">items.deleteAllFromRealm(); <span class="comment">// 删除</span></span><br><span class="line">realm.commitTransaction();</span><br><span class="line">realm.close();</span><br></pre></td></tr></table></figure>
+<p>先初始化后获取了Realm的默认实例，之后启用一个事务，进行增删改查等操作。</p>
+<p>通过上面的例子，我们会发现，Realm的事务机制和Fragment等事务的处理方式类似，启用事务进行操作，最后提交事务更新数据。这是事务的一种基本写法，当然这种开闭式的写法会让代码显得一块一块的，所以Realm提供一种类似回调式的写法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Realm realm = Realm.getDefaultInstance();</span><br><span class="line">realm.executeTransaction(<span class="keyword">new</span> Realm.Transaction() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Realm realm)</span> </span>&#123;</span><br><span class="line">        gankDayResults.cascadeDelete();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 引用自官网文档</span></span><br><span class="line">Realm realm = Realm.getDefaultInstance();</span><br><span class="line">realm.executeTransactionAsync(<span class="keyword">new</span> Realm.Transaction() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Realm bgRealm)</span> </span>&#123;</span><br><span class="line">        Dog dog = bgRealm.where(Dog.class).equals(<span class="string">"age"</span>, <span class="number">1</span>).findFirst();</span><br><span class="line">        dog.setAge(<span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;, <span class="keyword">new</span> Realm.Transaction.OnSuccess() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSuccess</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Original queries and Realm objects are automatically updated.</span></span><br><span class="line">        puppies.size(); <span class="comment">// =&gt; 0 because there are no more puppies younger than 2 years old</span></span><br><span class="line">        managedDog.getAge();   <span class="comment">// =&gt; 3 the dogs age is updated</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这两种方式分别代表同步事务和异步事务，后者不会阻塞线程并通过回调通知事务完成。</p>
+<h3 id="0x83-RealmObject的持久性"><a href="#0x83-RealmObject的持久性" class="headerlink" title="0x83 RealmObject的持久性"></a>0x83 RealmObject的持久性</h3><p>引用官方文档的说法RealmObject是“Auto-Updating Objects”，意为自动更新，其含义就是通过Realm查询出来的同一对象，比如它们的主键相同，对任何一个对象进行修改，所有的结果都会发生变化。既然这里提到了主键不得不说说Realm创建数据的方法，最简单的方法是使用<code>Realm#createObject</code>方法，它返回一个RealmObject对象，这个对象是自动更新的，还可以使用<code>Realm#copyToRealm</code>方法像Realm数据库表中插入数据，此时若RealmObject存在主键，还可以使用<code>Realm#copyToRealmOrUpdate</code>插入新数据或更新旧数据，当然如果没有主键，将会出现异常。</p>
+<p>如果RealmObject存在主键，不推荐使用<code>Realm#createObject</code>方法创建数据对象，因为该方法使用默认值创建对象很有可能引起对象冲突，这种状况使用new对象并更新到Realm的方法创建数据。</p>
+<p>关于数据存储的部分就先说这么多，后面写一下如何在Realm中完成一对多，多对多这种常用的数据库关系。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/05/11/Realm：使用Realm存储数据/" data-id="ckfsdx7bk001mr49zsx6xs16j" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Realm/">Realm</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Realm：在Android中使用Realm" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/10/Realm：在Android中使用Realm/" class="article-date">
+  <time datetime="2017-05-10T11:01:56.000Z" itemprop="datePublished">2017-05-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/10/Realm：在Android中使用Realm/">Realm：在Android中使用Realm</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-Realm是什么"><a href="#0x81-Realm是什么" class="headerlink" title="0x81 Realm是什么"></a>0x81 Realm是什么</h3><p>Realm是一个移动数据库，它可运行于手机、平板等移动设备，它的目的是取代SQLite。正是因为Realm并不是SQLite的封装，所以它不同于GreenDao、Suger这些ORM框架。Realm为Android平台提供支持，使用Realm Java Api管理数据库。</p>
+<h3 id="0x82-安装Realm支持"><a href="#0x82-安装Realm支持" class="headerlink" title="0x82 安装Realm支持"></a>0x82 安装Realm支持</h3><p>根据官方文档，Realm为Gradle依赖构建提供完美的支持，我们只需要在Project级的build.gradle配置文件中配置Realm插件：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">buildscript &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        classpath <span class="string">'com.android.tools.build:gradle:2.4.0-alpha7'</span></span><br><span class="line">        classpath <span class="string">'io.realm:realm-gradle-plugin:3.1.4'</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// <span class="doctag">NOTE:</span> Do not place your application dependencies here; they belong</span></span><br><span class="line">        <span class="comment">// in the individual module build.gradle files</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在需要的Module的build.gradle文件中应用插件即可使用Realm Java Api：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apply <span class="string">plugin:</span> <span class="string">'com.android.application'</span></span><br><span class="line">apply <span class="string">plugin:</span> <span class="string">'realm-android'</span></span><br></pre></td></tr></table></figure>
+<h3 id="0x83-简单使用"><a href="#0x83-简单使用" class="headerlink" title="0x83 简单使用"></a>0x83 简单使用</h3><p>Realm的数据表默认对应一个POJO类，和GreenDao这些ORM框架的<code>@Table</code>注解类似，一个POJO类只要继承RealObject类即可在数据库中生成与之对应的表，各个成员变量作为表的列。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GankItem</span></span></span><br><span class="line"><span class="class">        <span class="keyword">extends</span> <span class="title">RealmObject</span> </span>&#123;</span><br><span class="line">    <span class="meta">@PrimaryKey</span></span><br><span class="line">    <span class="meta">@SerializedName</span>(<span class="string">"_id"</span>)</span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line">    <span class="keyword">private</span> String type;</span><br><span class="line">    <span class="keyword">private</span> String desc;</span><br><span class="line">    <span class="keyword">private</span> String who;</span><br><span class="line">    <span class="keyword">private</span> String url;</span><br><span class="line">    <span class="meta">@Ignore</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; images;</span><br><span class="line">    <span class="keyword">private</span> String createdAt;</span><br><span class="line">    <span class="keyword">private</span> String publishedAt;</span><br><span class="line"></span><br><span class="line">    ......</span><br></pre></td></tr></table></figure>
+<p>上述代码中，有几个常见的注解，其中<code>@PrimaryKey</code>注解表示该字段为主键，<code>@SerializedName(&quot;_id&quot;)</code>表示在序列化时的字段名，<code>@Ignore</code>表示不在表中生成该列，这三个注解比较常见。</p>
+<blockquote>
+<p>PS：Realm默认支持基本类型及包装类型，boolean、byte、byte []、long（short、int、long都被映射为long）、float、double、String、Date以及RealmObject子类。</p>
+</blockquote>
+<p>如何使用Realm查询数据呢？需要使用RealmInstance执行事务Transaction：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GankItem gankItem = <span class="keyword">new</span> GankItem();</span><br><span class="line">gankItem.setId(<span class="string">"cz89a7s4ehsjkf"</span>);</span><br><span class="line"></span><br><span class="line">Realm.init(context);</span><br><span class="line">Realm realm = Realm.getDefaultInstance();</span><br><span class="line">realm.beginTransaction();</span><br><span class="line">RealmResults&lt;GankItem&gt; items = realm.where(GankItem.class).findAll(); <span class="comment">// 查询</span></span><br><span class="line">realm.copyToRealmOrUpdate(gankItem); <span class="comment">// 插入或更新</span></span><br><span class="line">items.deleteAllFromRealm(); <span class="comment">// 删除</span></span><br><span class="line">realm.commitTransaction();</span><br><span class="line">realm.close();</span><br></pre></td></tr></table></figure>
+<p>Realm简单使用就是这样，后面我会写写具体的操作以及事务。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/05/10/Realm：在Android中使用Realm/" data-id="ckfsdx7bl001nr49ztrro9ngs" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Realm/">Realm</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Nexus5-Swap-Boom" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/09/Nexus5-Swap-Boom/" class="article-date">
+  <time datetime="2017-05-09T11:02:51.000Z" itemprop="datePublished">2017-05-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/09/Nexus5-Swap-Boom/">Nexus5 Swap Boom</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-Android的Swap支持"><a href="#0x81-Android的Swap支持" class="headerlink" title="0x81 Android的Swap支持"></a>0x81 Android的Swap支持</h3><p>所幸这一次没有那么糟糕了，唯一麻烦的就是去找一个支持Swap功能的内核。我们都知道交换分区是诸多Linux发行版上的一个常见的功能，绝大部分Linux在安装时都会让你创建Swap分区以提高操作系统运行性能，亦或者是提供一个swapfile来作为交换区域。交换分区可以理解为Windows上的虚拟内存的概念，它旨在提供足够的内存空间以弥补物理内存的不足，在Linux上可以使用swapiness参数来控制内核对交换分区使用的积极性，0为尽量不使用交换分区。Android运行在Linux内核之上，并且该内核的版本通常在出厂后就不会再更改了，比如我的老伴侣Nexus5的内核版本是3.4.0，既然Android运行在Linux内核之上，那应该也是支持Swap的，但是很遗憾，由于手机闪存的特殊性，持续性读写同一个位置会对闪存的寿命存在一定的影响，因此Android的内核通常是已除了这一特性的，在挂载swapfile时会告诉你内核没有对该功能进行实现，当然想要开启我们只需要找一个支持Swap的内核刷如就可以了。</p>
+<h3 id="0x82-开启Swap内存"><a href="#0x82-开启Swap内存" class="headerlink" title="0x82 开启Swap内存"></a>0x82 开启Swap内存</h3><p>得益于Nexus5这个不再亲的亲儿子，我在XDA上找了Franco Kernel，它支持的特性非常多，用TWRP刷入后正常开机，按照在Linux上开启的方式开启即可：</p>
+<ol>
+<li><p>创建swapfile<br> <code>dd if=/dev/zero of=swapfile bs=4m count=100</code></p>
+<p> 使用dd命令创建一个块大小是4m的400m交换文件。</p>
+</li>
+<li><p>转换swap格式<br> <code>mkswap swapfile</code></p>
+<p> 使用mkswap命令将空文件转换成swap支持的组织格式，执行完毕会返回转换的基本信息。</p>
+</li>
+<li><p>挂载swapfile<br> <code>swapon swapfile</code></p>
+<p> 这次使用swapon程序就不会提示没有实现了，成功启用后在free命令中就可以看到效果了</p>
+</li>
+</ol>
+<p>Nexus5用了快3年了，这个手机只有2G的内存，但是由于我使用力度不大，它现在仍然能满足我的使用需求，唯一不足的地方就是电池不耐用了。这款2013年10月发布的手机真的是物超所值，性价比也很高，用它我实验和学习了不少东西，不过这么高性价比的手机Google估计是不会再发布了，Pixel代替了Nexus产品线走向高端，而社区的热度仍旧不高，也许折腾Android的搞机之路也该停下了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/05/09/Nexus5-Swap-Boom/" data-id="ckfsdx7bh001fr49z1ibz24p9" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nexus5/">Nexus5</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-捕捉Android应用的崩溃" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/08/捕捉Android应用的崩溃/" class="article-date">
+  <time datetime="2017-05-08T09:49:01.000Z" itemprop="datePublished">2017-05-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/08/捕捉Android应用的崩溃/">捕捉Android应用的崩溃</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-ForceClose"><a href="#0x81-ForceClose" class="headerlink" title="0x81 ForceClose"></a>0x81 ForceClose</h3><p>做过Android开发或Java开发的都知道，对于这样一个面向对象的语言，用null来表示一个对象为空再常见不过了，而空指针错误也变成了最让人诟病的错误。我每次在做完一个功能开始调试的时候，Android一个”ForceClose”的弹窗让我直接想骂娘，看StackTrace是NullPointerException更是让我想砸键盘。这种情况真的比较常见，缺少空判断可能会出现这种问题，而如果我们对代码中抛出的异常加以处理，那默认的异常处理器就是通知系统弹出FC框，在用户点击确定后退出进程。</p>
+<h3 id="0x82-以前的崩溃处理方法"><a href="#0x82-以前的崩溃处理方法" class="headerlink" title="0x82 以前的崩溃处理方法"></a>0x82 以前的崩溃处理方法</h3><p>出现”ForceClose”是非常烦人的，这种阻断式的弹窗提醒不但没什么卵用，还会增加用户的厌恶感，因此iOS系统通常是直接闪退，一些国产Android定制厂商的产品如MIUI、Bugme等也效仿去掉Android原生的错误弹窗。</p>
+<p>当然了，事情都有两面性，iOS的调试功能我感觉非常强大，而Android可能受限于调试器的笨重（反正我是只有需要具体分析的时候才适用附加调试，通常APP崩溃都会保留栈跟踪信息），在程序崩溃时Logcat会打印StackTrace，但是Logcat为了避免log太多，重新启动进程时即使是同一个应用也会清除之前的栈追踪信息，给我带来很大的困扰，当然添加过滤器或者用一些第三方的Logcat工具可以很好的解决这个问题。</p>
+<p>为了能更直接的控制应用崩溃，比如在崩溃时将信息写入文件然后在下次启动应用时上传服务器等等需求，我们可以自己实现异常处理器来完成这个事情：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CrashHandler</span></span></span><br><span class="line"><span class="class">        <span class="keyword">implements</span> <span class="title">UncaughtExceptionHandler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> UncaughtExceptionHandler mDefaultHandler;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">CrashHandler</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CrashHandler <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CrashHandler();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();</span><br><span class="line">        Thread.setDefaultUncaughtExceptionHandler(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">uncaughtException</span><span class="params">(Thread thread, Throwable ex)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!handleException(ex) &amp;&amp; mDefaultHandler != <span class="keyword">null</span>) &#123;</span><br><span class="line">            mDefaultHandler.uncaughtException(thread, ex);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            android.os.Process.killProcess(android.os.Process.myPid());</span><br><span class="line">            System.exit(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">handleException</span><span class="params">(Throwable ex)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (ex == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        ex.printStackTrace();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为虚拟机一旦发生异常通常会有try-catch捕捉走异常，而像空指针这种异常就不一定了，因此我们实现异常处理器并设定为线程默认未捕捉异常处理器<code>Thread.setDefaultUncaughtExceptionHandler(this)</code>，之后调用系统Api关闭进程<code>android.os.Process.killProcess(android.os.Process.myPid())</code>，这样也能实现MIUI等三方ROM的效果。<code>System.exit(1)</code>意为虚拟机以non-zero退出，表示不正常退出通常会自动尝试启动应用。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/05/08/捕捉Android应用的崩溃/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/05/08/捕捉Android应用的崩溃/" data-id="ckfsdx7d7002zr49zificir55" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/5/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/7/">下一页 &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

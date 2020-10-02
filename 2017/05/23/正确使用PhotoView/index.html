@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>正确使用PhotoView | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 PhototViewPhotoView是一个多功能图片库，它为开发者提供了方便的图片缩放支持，大量的APP使用该开源库。引用它的方式很简单，在build.gradle文件中做好配置即可： 12345678allprojects &amp;#123;    repositories &amp;#123;        maven &amp;#123; url &quot;https://jitpack.io&quot; &amp;#125;">
+<meta name="keywords" content="Android,PhotoView">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正确使用PhotoView">
+<meta property="og:url" content="https://fioneragh.github.io/2017/05/23/正确使用PhotoView/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 PhototViewPhotoView是一个多功能图片库，它为开发者提供了方便的图片缩放支持，大量的APP使用该开源库。引用它的方式很简单，在build.gradle文件中做好配置即可： 12345678allprojects &amp;#123;    repositories &amp;#123;        maven &amp;#123; url &quot;https://jitpack.io&quot; &amp;#125;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.205Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="正确使用PhotoView">
+<meta name="twitter:description" content="0x81 PhototViewPhotoView是一个多功能图片库，它为开发者提供了方便的图片缩放支持，大量的APP使用该开源库。引用它的方式很简单，在build.gradle文件中做好配置即可： 12345678allprojects &amp;#123;    repositories &amp;#123;        maven &amp;#123; url &quot;https://jitpack.io&quot; &amp;#125;">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-正确使用PhotoView" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/23/正确使用PhotoView/" class="article-date">
+  <time datetime="2017-05-23T10:34:37.000Z" itemprop="datePublished">2017-05-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      正确使用PhotoView
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-PhototView"><a href="#0x81-PhototView" class="headerlink" title="0x81 PhototView"></a>0x81 PhototView</h3><p><a href="https://github.com/chrisbanes/PhotoView" target="_blank" rel="noopener">PhotoView</a>是一个多功能图片库，它为开发者提供了方便的图片缩放支持，大量的APP使用该开源库。引用它的方式很简单，在build.gradle文件中做好配置即可：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        maven &#123; url <span class="string">"https://jitpack.io"</span> &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">    compile <span class="string">'com.github.chrisbanes:PhotoView:2.0.0'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最新版本的PhotoView已经升级到了2.0.0，根据发布日志PhotoViewAttacher已经不再是多数情况下需要维护的实例，它的大部分功能都能使用PhotoView自身调用。因为涉及到一些覆盖测试的东西，目前我还没有向新版本迁移，仍然使用的1.3.x版本。</p>
+<h3 id="0x82-使用PhotoView"><a href="#0x82-使用PhotoView" class="headerlink" title="0x82 使用PhotoView"></a>0x82 使用PhotoView</h3><p>起初图片变换我是自定义的ImageView，然后手动控制矩阵，但是有了更好的轮子，没必要再浪费时间自己造轮子，去学习一个完善的轮子也许可以学到更多。因为PhotoView 2.0.0版本的PhotoView完成了近乎所有事情，已经不再需要Attacher，因此它的使用也变得和ImageView一样简单：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">com.github.chrisbanes.photoview.PhotoView</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:id</span>=<span class="string">"@+id/photo_view"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PhotoView photoView = (PhotoView) findViewById(R.id.photo_view);</span><br><span class="line">photoView.setImageResource(R.drawable.image);</span><br></pre></td></tr></table></figure>
+<p>而1.x版本也就是需要我们手动创建Attacher并使用它完成一些功能：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PhotoViewAttacher photoViewAttacher = <span class="keyword">new</span> PhotoViewAttacher(imageView);</span><br><span class="line">photoViewAttacher.setRotationBy(<span class="number">180f</span>);</span><br></pre></td></tr></table></figure>
+<p>为什么2.0.0不再需要Attacher了呢，其实查看源码，它依然初始化了Attacher，并且所有的原本在Attacher中的操作看似是PhotoView，实则都是PhotoView内的Attacher完成的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">PhotoView</span><span class="params">(Context context, AttributeSet attr, <span class="keyword">int</span> defStyle)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(context, attr, defStyle);</span><br><span class="line">    init();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    attacher = <span class="keyword">new</span> PhotoViewAttacher(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">super</span>.setScaleType(ScaleType.MATRIX);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setImageResource</span><span class="params">(<span class="keyword">int</span> resId)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.setImageResource(resId);</span><br><span class="line">    attacher.update();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setRotationTo</span><span class="params">(<span class="keyword">float</span> rotationDegree)</span> </span>&#123;</span><br><span class="line">    attacher.setRotationTo(rotationDegree);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这么做的好处就是可以让你完全感知不到Attacher的存在，更加方便实用者，而那些复杂的矩阵操作依然存在于Attacher当中。</p>
+<a id="more"></a>
+<h3 id="0x83-2-0-0的好处"><a href="#0x83-2-0-0的好处" class="headerlink" title="0x83 2.0.0的好处"></a>0x83 2.0.0的好处</h3><p>虽然你仍可以显示的使用PhotoViewAttacher，但是我并不推荐这样。在我使用1.x版本的时候遇到过一个问题，其实PhotoView继承自ImageView做了一些适配以保证Attacher的操作不会存在兼容性问题，如果使用ImageView会出现图片显示不如你所想的那样。</p>
+<p>用过Matrix矩阵API变换图形的都知道，ScaleType这个坑真的是说不完，Matrix提供的功能很多，根据数学知识更是能做很多有意思的事情，我曾经是以为Attacher就是执行些手势对应的矩阵操作，所以在ViewPager中显示的是普通的ImageView并使用PhotoViewAttacher关联，于是出现了图片总是显示在左上角，触摸一下就会回到中间，而ImageView的ScaleType我设置的是fitCenter。我实验了很多方法都没有办法很好的解决显示问题，比如缩小后回到左上角、缩放锚点不跟手等，当然这些都在我把ImageView换成了PhotoView后就不再出问题了。最终工作的比较好的用法是这样：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">uk.co.senab.photoview.PhotoView</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:background</span>=<span class="string">"@color/black"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> PhotoViewAttacher photoViewAttacher;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> View <span class="title">onCreateView</span><span class="params">(LayoutInflater inflater, ViewGroup container,</span></span></span><br><span class="line"><span class="function"><span class="params">                         Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    <span class="keyword">return</span> inflater.inflate(R.layout.fragment_image_gallery, container, <span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onViewCreated</span><span class="params">(View view, @Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onViewCreated(view, savedInstanceState);</span><br><span class="line">    ImageView imageView = (ImageView) view;</span><br><span class="line">    ImageUtil.loadImage(getArguments().getString(<span class="string">"url"</span>), imageView);</span><br><span class="line">    photoViewAttacher = <span class="keyword">new</span> PhotoViewAttacher(imageView);</span><br><span class="line">    photoViewAttacher.setRotatable(<span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDestroyView</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onDestroyView();</span><br><span class="line">    <span class="keyword">if</span> (photoViewAttacher != <span class="keyword">null</span>) &#123;</span><br><span class="line">        photoViewAttacher.cleanup();</span><br><span class="line">        photoViewAttacher = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里PhotoView我用的是带有旋转手势的<a href="https://github.com/ChenSiLiang/RotatePhotoView" target="_blank" rel="noopener">RotatePhotoView
+</a>，虽然效果不是特别好，但还是感谢作者开源这个库节约了我的时间。</p>
+<p>所以2.0.0将PhotoViewAttacher做的不透明，无论是易用性还是歧义上我觉得都是更加合理的，我有时也在想如果一开始就是这样也许我就不会偷懒到在普通的ImageView上加PhotoViewAttacher来用它:P。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/05/23/正确使用PhotoView/" data-id="ckfsdx7dd0036r49zr0b5tzwe" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PhotoView/">PhotoView</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/25/Retrofit2的url控制/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          Retrofit2的url控制
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/22/UnitTest插入Mysql数据中文乱码/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">UnitTest插入Mysql数据中文乱码</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

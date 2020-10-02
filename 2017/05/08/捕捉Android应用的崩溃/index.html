@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>捕捉Android应用的崩溃 | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 ForceClose做过Android开发或Java开发的都知道，对于这样一个面向对象的语言，用null来表示一个对象为空再常见不过了，而空指针错误也变成了最让人诟病的错误。我每次在做完一个功能开始调试的时候，Android一个”ForceClose”的弹窗让我直接想骂娘，看StackTrace是NullPointerException更是让我想砸键盘。这种情况真的比较常见，缺少空判断可">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="捕捉Android应用的崩溃">
+<meta property="og:url" content="https://fioneragh.github.io/2017/05/08/捕捉Android应用的崩溃/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 ForceClose做过Android开发或Java开发的都知道，对于这样一个面向对象的语言，用null来表示一个对象为空再常见不过了，而空指针错误也变成了最让人诟病的错误。我每次在做完一个功能开始调试的时候，Android一个”ForceClose”的弹窗让我直接想骂娘，看StackTrace是NullPointerException更是让我想砸键盘。这种情况真的比较常见，缺少空判断可">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.202Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="捕捉Android应用的崩溃">
+<meta name="twitter:description" content="0x81 ForceClose做过Android开发或Java开发的都知道，对于这样一个面向对象的语言，用null来表示一个对象为空再常见不过了，而空指针错误也变成了最让人诟病的错误。我每次在做完一个功能开始调试的时候，Android一个”ForceClose”的弹窗让我直接想骂娘，看StackTrace是NullPointerException更是让我想砸键盘。这种情况真的比较常见，缺少空判断可">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-捕捉Android应用的崩溃" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/08/捕捉Android应用的崩溃/" class="article-date">
+  <time datetime="2017-05-08T09:49:01.000Z" itemprop="datePublished">2017-05-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      捕捉Android应用的崩溃
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-ForceClose"><a href="#0x81-ForceClose" class="headerlink" title="0x81 ForceClose"></a>0x81 ForceClose</h3><p>做过Android开发或Java开发的都知道，对于这样一个面向对象的语言，用null来表示一个对象为空再常见不过了，而空指针错误也变成了最让人诟病的错误。我每次在做完一个功能开始调试的时候，Android一个”ForceClose”的弹窗让我直接想骂娘，看StackTrace是NullPointerException更是让我想砸键盘。这种情况真的比较常见，缺少空判断可能会出现这种问题，而如果我们对代码中抛出的异常加以处理，那默认的异常处理器就是通知系统弹出FC框，在用户点击确定后退出进程。</p>
+<h3 id="0x82-以前的崩溃处理方法"><a href="#0x82-以前的崩溃处理方法" class="headerlink" title="0x82 以前的崩溃处理方法"></a>0x82 以前的崩溃处理方法</h3><p>出现”ForceClose”是非常烦人的，这种阻断式的弹窗提醒不但没什么卵用，还会增加用户的厌恶感，因此iOS系统通常是直接闪退，一些国产Android定制厂商的产品如MIUI、Bugme等也效仿去掉Android原生的错误弹窗。</p>
+<p>当然了，事情都有两面性，iOS的调试功能我感觉非常强大，而Android可能受限于调试器的笨重（反正我是只有需要具体分析的时候才适用附加调试，通常APP崩溃都会保留栈跟踪信息），在程序崩溃时Logcat会打印StackTrace，但是Logcat为了避免log太多，重新启动进程时即使是同一个应用也会清除之前的栈追踪信息，给我带来很大的困扰，当然添加过滤器或者用一些第三方的Logcat工具可以很好的解决这个问题。</p>
+<p>为了能更直接的控制应用崩溃，比如在崩溃时将信息写入文件然后在下次启动应用时上传服务器等等需求，我们可以自己实现异常处理器来完成这个事情：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CrashHandler</span></span></span><br><span class="line"><span class="class">        <span class="keyword">implements</span> <span class="title">UncaughtExceptionHandler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> UncaughtExceptionHandler mDefaultHandler;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">CrashHandler</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CrashHandler <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CrashHandler();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();</span><br><span class="line">        Thread.setDefaultUncaughtExceptionHandler(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">uncaughtException</span><span class="params">(Thread thread, Throwable ex)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!handleException(ex) &amp;&amp; mDefaultHandler != <span class="keyword">null</span>) &#123;</span><br><span class="line">            mDefaultHandler.uncaughtException(thread, ex);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            android.os.Process.killProcess(android.os.Process.myPid());</span><br><span class="line">            System.exit(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">handleException</span><span class="params">(Throwable ex)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (ex == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        ex.printStackTrace();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为虚拟机一旦发生异常通常会有try-catch捕捉走异常，而像空指针这种异常就不一定了，因此我们实现异常处理器并设定为线程默认未捕捉异常处理器<code>Thread.setDefaultUncaughtExceptionHandler(this)</code>，之后调用系统Api关闭进程<code>android.os.Process.killProcess(android.os.Process.myPid())</code>，这样也能实现MIUI等三方ROM的效果。<code>System.exit(1)</code>意为虚拟机以non-zero退出，表示不正常退出通常会自动尝试启动应用。</p>
+<a id="more"></a>
+<h3 id="0x83-合适的异常捕捉"><a href="#0x83-合适的异常捕捉" class="headerlink" title="0x83 合适的异常捕捉"></a>0x83 合适的异常捕捉</h3><p>前面的处理方法其实仅仅是将系统的FC弹窗去掉，用户体验上依然不好，那我们是不是在处理回调中不要关闭程序就行了？答案当然是否定的，既然程序已经抛出了异常，如果不加处理那我们的发生异常的线程就已经退出了，而对于上面的状况则有可能整个进程没有一个正常运行的线程，最终就是ANR。</p>
+<p>最简单的验证方法，我们直接在点击事件中抛出异常，我们预想的状况是不退出进程而是打开一个新的页面：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">btnCreateCrash.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Exception by us"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;).start();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+<p>我们启动一个新的线程只用来抛出异常，这样是没有问题的，页面也能正常跳转；但是如果去掉外面那层Thread，这样就会导致ANR，页面无法跳转。其实这很好理解，子线程死亡并不会影响页面的跳转，但是主线程抛出了异常，那整个消息队列停滞，页面停止渲染，也就是ANR了。</p>
+<h3 id="0x84-恢复主线程的消息循环"><a href="#0x84-恢复主线程的消息循环" class="headerlink" title="0x84 恢复主线程的消息循环"></a>0x84 恢复主线程的消息循环</h3><p>我们做开发的都知道，主线程是不同于我们直接创建的子线程的，它负责的事情非常多，其中有一个很重要的东西——Looper。我们如果要在子线程做主线程才能做的事情，比如弹出一个Toast，则必须经历三个步骤：<code>Looper.prepare()</code>、<code>Toast.show()</code>和<code>Looper.loop()</code>。消息循环是极为重要的东西，而主线程之所以不需要是因为操作系统已经为我们建立了一个MainLooper，因此按正常Looper的使用逻辑推测，一旦主线程抛出异常，那就是loop被阻断了，因此我们要做的就是再次调用<code>Looper.loop()</code>。</p>
+<p>最终Handler代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SuppressWarnings</span>(<span class="string">"InfiniteLoopStatement"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultCrashHandler</span></span></span><br><span class="line"><span class="class">        <span class="keyword">implements</span> <span class="title">UncaughtExceptionHandler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Context mContext;</span><br><span class="line">    <span class="keyword">private</span> UncaughtExceptionHandler mDefaultHandler;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">DefaultCrashHandler</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> DefaultCrashHandler <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DefaultCrashHandler();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        mContext = context;</span><br><span class="line">        mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();</span><br><span class="line">        Thread.setDefaultUncaughtExceptionHandler(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Handler(Looper.getMainLooper()).post(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="comment">/*</span></span><br><span class="line"><span class="comment">                Here is a main loop for main thread message queue.</span></span><br><span class="line"><span class="comment">                If the main thread is dead, it will loop it again to maintain message queue.</span></span><br><span class="line"><span class="comment">                 */</span></span><br><span class="line">                <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        Looper.loop();</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">                        uncaughtException(Looper.getMainLooper().getThread(), e);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">uncaughtException</span><span class="params">(Thread thread, Throwable ex)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!handleException(ex) &amp;&amp; mDefaultHandler != <span class="keyword">null</span>) &#123;</span><br><span class="line">            mDefaultHandler.uncaughtException(thread, ex);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (mContext != <span class="keyword">null</span>) &#123;</span><br><span class="line">                String crashInfo = ex.getMessage();</span><br><span class="line">                <span class="keyword">if</span> (TextUtils.isEmpty(crashInfo)) &#123;</span><br><span class="line">                    crashInfo = ex.getCause().getMessage();</span><br><span class="line">                &#125;</span><br><span class="line">                mContext.startActivity(<span class="keyword">new</span> Intent(mContext, CrashFallbackActivity.class)</span><br><span class="line">                        .putExtra(<span class="string">"crash_info"</span>, crashInfo));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">handleException</span><span class="params">(Throwable ex)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (ex == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        ex.printStackTrace();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样无论是子线程还是主线程发生异常我们都可以做合适的处理了，当然这种用法不知道会不会带来什么副作用，具体的效果还有待考证，需要研究一下比较成熟的崩溃统计是如何处理的。</p>
+<p>实践代码：<a href="https://github.com/FioneraGH/CrashTracker.git," title="FioneraGH/CrashTracker" target="_blank" rel="noopener">CrashTracker
+</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/05/08/捕捉Android应用的崩溃/" data-id="ckfsdx7d7002zr49zificir55" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/09/Nexus5-Swap-Boom/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          Nexus5 Swap Boom
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/06/屏蔽Nougat的文件共享检测/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">屏蔽Nougat的文件共享检测</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

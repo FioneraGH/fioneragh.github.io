@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Vim的Python配置——YouCompleteMe | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 YouCompleteMeYouCompleteMe: a code-completion engine for Vim 正如它的README所说的，YCM是一个用于Vim自动补全的插件。它的功能十分强大，支持非常多的编程语言补全。  Clang 为C/C++/OC/OC++提供补全支持 Jedi 为Python2/Python3提供补全支持 OmniSharp 为C#提供补全支持 Go">
+<meta name="keywords" content="Vim,YCM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vim的Python配置——YouCompleteMe">
+<meta property="og:url" content="https://fioneragh.github.io/2017/03/06/Vim的Python配置——YouCompleteMe/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 YouCompleteMeYouCompleteMe: a code-completion engine for Vim 正如它的README所说的，YCM是一个用于Vim自动补全的插件。它的功能十分强大，支持非常多的编程语言补全。  Clang 为C/C++/OC/OC++提供补全支持 Jedi 为Python2/Python3提供补全支持 OmniSharp 为C#提供补全支持 Go">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.181Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vim的Python配置——YouCompleteMe">
+<meta name="twitter:description" content="0x81 YouCompleteMeYouCompleteMe: a code-completion engine for Vim 正如它的README所说的，YCM是一个用于Vim自动补全的插件。它的功能十分强大，支持非常多的编程语言补全。  Clang 为C/C++/OC/OC++提供补全支持 Jedi 为Python2/Python3提供补全支持 OmniSharp 为C#提供补全支持 Go">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Vim的Python配置——YouCompleteMe" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/06/Vim的Python配置——YouCompleteMe/" class="article-date">
+  <time datetime="2017-03-06T09:54:35.000Z" itemprop="datePublished">2017-03-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Vim的Python配置——YouCompleteMe
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-YouCompleteMe"><a href="#0x81-YouCompleteMe" class="headerlink" title="0x81 YouCompleteMe"></a>0x81 YouCompleteMe</h3><p><a href="https://github.com/Valloric/YouCompleteMe" target="_blank" rel="noopener">YouCompleteMe: a code-completion engine for Vim</a></p>
+<p>正如它的README所说的，YCM是一个用于Vim自动补全的插件。它的功能十分强大，支持非常多的编程语言补全。</p>
+<ul>
+<li>Clang 为C/C++/OC/OC++提供补全支持</li>
+<li>Jedi 为Python2/Python3提供补全支持</li>
+<li>OmniSharp 为C#提供补全支持</li>
+<li>Gocode、Godef 为Golang提供支持</li>
+<li>TSServer、Tern 分别为TypeScript和JavaScript提供支持</li>
+<li>Racer 支持Rust</li>
+<li>其他补全支持</li>
+</ul>
+<h3 id="0x82-ycm-core的编译使用"><a href="#0x82-ycm-core的编译使用" class="headerlink" title="0x82 ycm_core的编译使用"></a>0x82 ycm_core的编译使用</h3><p>YCM提供了基于python的编译脚本，一般情况下，安装好依赖直接执行install.py脚本文件就可以了，用户还可以出入不同的参数以提供不同的补全支持。</p>
+<p>对于我的DST-Fedora 25，需要先使用dnf包管理工具安装基本的构建工具<code>sudo dnf install automake gcc gcc-c++ kernel-devel cmake</code>，还需要安装python的头文件<code>sudo dnf install python-devel python3-devel</code>，处理完这些依赖便可以进行编译工作了。</p>
+<p>PS：根据官方README的描述，如果YCM更新了，要使用新的特性，需要重新编译。</p>
+<a id="more"></a>
+<h3 id="0x83-Vundle"><a href="#0x83-Vundle" class="headerlink" title="0x83 Vundle"></a>0x83 Vundle</h3><p><a href="https://github.com/VundleVim/Vundle.vim" target="_blank" rel="noopener">Vundle, the plug-in manager for Vim</a></p>
+<p>Vim的插件管理器，简单易用扩展性好，使用YCM我们需要使用该工具加载YCM插件，以获得良好的补全支持。</p>
+<p>.vimrc文件中关于Python支持的配置如下：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> nocompatible              <span class="comment">" be iMproved, required</span></span><br><span class="line"><span class="keyword">filetype</span> off                  <span class="comment">" required</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" set the runtime path to include Vundle and initialize</span></span><br><span class="line"><span class="keyword">set</span> <span class="keyword">shell</span>=/bin/bash</span><br><span class="line"><span class="keyword">set</span> rtp+=~/.<span class="keyword">vim</span>/bundle/Vundle.<span class="keyword">vim</span></span><br><span class="line"><span class="keyword">call</span> vundle#begin()</span><br><span class="line"><span class="comment">" alternatively, pass a path where Vundle should install plugins</span></span><br><span class="line"><span class="comment">"call vundle#begin('~/some/path/here')</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" let Vundle manage Vundle, required</span></span><br><span class="line">Plugin <span class="string">'VundleVim/Vundle.vim'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" All of your Plugins must be added before the following line</span></span><br><span class="line">Plugin <span class="string">'tmhedberg/SimpylFold'</span></span><br><span class="line">Plugin <span class="string">'scrooloose/syntastic'</span></span><br><span class="line">Plugin <span class="string">'scrooloose/nerdtree'</span></span><br><span class="line">Plugin <span class="string">'kien/ctrlp.vim'</span></span><br><span class="line">Plugin <span class="string">'vim-scripts/indentpython.vim'</span></span><br><span class="line">Plugin <span class="string">'Valloric/YouCompleteMe'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">call</span> vundle#end()            <span class="comment">" required</span></span><br><span class="line"><span class="keyword">filetype</span> plugin <span class="built_in">indent</span> <span class="keyword">on</span>    <span class="comment">" required</span></span><br><span class="line"><span class="comment">" To ignore plugin indent changes, instead use:</span></span><br><span class="line"><span class="comment">"filetype plugin on</span></span><br><span class="line"><span class="comment">"</span></span><br><span class="line"><span class="comment">" Brief help</span></span><br><span class="line"><span class="comment">" :PluginList       - lists configured plugins</span></span><br><span class="line"><span class="comment">" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate</span></span><br><span class="line"><span class="comment">" :PluginSearch foo - searches for foo; append `!` to refresh local cache</span></span><br><span class="line"><span class="comment">" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal</span></span><br><span class="line"><span class="comment">"</span></span><br><span class="line"><span class="comment">" see :h vundle for more details or wiki for FAQ</span></span><br><span class="line"><span class="comment">" Put your non-Plugin stuff after this line</span></span><br></pre></td></tr></table></figure>
+<p>其中的Plugin决定了Vundle需要加载的插件，在启动Vim时使用<code>:PluginInstall</code>或<code>:PluginUpdate</code>命令对插件进行同步安装和更新。各插件都有自己的配置选项，可以根据自己的需求进行配置。</p>
+<h3 id="0x84-补全的使用及可能存在的问题"><a href="#0x84-补全的使用及可能存在的问题" class="headerlink" title="0x84 补全的使用及可能存在的问题"></a>0x84 补全的使用及可能存在的问题</h3><p>插件编译完成并配置完毕后，打开.py文件应该就能感受YCM到提供的即时补全弹窗了，当然，我们也有可能遇到问题。</p>
+<p>由于YCM的Python补全是基于Jedi的，而Jedi的具体使用是<a href="https://github.com/Valloric/ycmd" target="_blank" rel="noopener">ycmd-server:A code-completion &amp; code-comprehension server</a>启动了<a href="https://github.com/vheon/JediHTTP" target="_blank" rel="noopener">JediHTTP</a>。这种补全具体的模式我的水平不够还看不懂，但这种模式无疑是极大的增加了扩展性，而我之前遇到的补全无效的问题也是由于JediHTTP服务启动失败，虽然我在<code>:YcmDebugInfo</code>中看到它是正常启动的，但是在/tmp下的log文件中显示该服务一直链接失败，解决了这个问题就能使用补全了。</p>
+<blockquote>
+<p>YCM有很多SubModule，个别找不到依赖的错误可能是子模块没有检出，使用<code>git submodule update --init --recursive</code>可能解决问题。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/03/06/Vim的Python配置——YouCompleteMe/" data-id="ckfsdx7br001vr49z4d7tldmz" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vim/">Vim</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/YCM/">YCM</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/07/Android-DI利器：Dagger2初探/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          Android DI利器：Dagger2初探
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/02/Openstack快速安装：packstack/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">Openstack快速安装：packstack</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

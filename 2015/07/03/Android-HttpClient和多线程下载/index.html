@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Android HttpClient和多线程下载 | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="[迁移]0x80 HttpClient虽然HttpClient类已被抛弃，Google官方推荐使用HttpUrlConnection代替，但是它的用法依然对于网络操作的使用有所帮助。HttpClient是Apache封装的一个网页客户端模拟类，其中封装了一些方法用于简化Http操作。 0x81 GET用法1HttpGet httpGet = new HttpGet(&quot;http://host:por">
+<meta name="keywords" content="HttpClient">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android HttpClient和多线程下载">
+<meta property="og:url" content="https://fioneragh.github.io/2015/07/03/Android-HttpClient和多线程下载/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="[迁移]0x80 HttpClient虽然HttpClient类已被抛弃，Google官方推荐使用HttpUrlConnection代替，但是它的用法依然对于网络操作的使用有所帮助。HttpClient是Apache封装的一个网页客户端模拟类，其中封装了一些方法用于简化Http操作。 0x81 GET用法1HttpGet httpGet = new HttpGet(&quot;http://host:por">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.159Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android HttpClient和多线程下载">
+<meta name="twitter:description" content="[迁移]0x80 HttpClient虽然HttpClient类已被抛弃，Google官方推荐使用HttpUrlConnection代替，但是它的用法依然对于网络操作的使用有所帮助。HttpClient是Apache封装的一个网页客户端模拟类，其中封装了一些方法用于简化Http操作。 0x81 GET用法1HttpGet httpGet = new HttpGet(&quot;http://host:por">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android-HttpClient和多线程下载" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/07/03/Android-HttpClient和多线程下载/" class="article-date">
+  <time datetime="2015-07-03T13:44:22.000Z" itemprop="datePublished">2015-07-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android HttpClient和多线程下载
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="迁移"><a href="#迁移" class="headerlink" title="[迁移]"></a>[迁移]</h2><h3 id="0x80-HttpClient"><a href="#0x80-HttpClient" class="headerlink" title="0x80 HttpClient"></a>0x80 HttpClient</h3><p>虽然HttpClient类已被抛弃，Google官方推荐使用<code>HttpUrlConnection</code>代替，但是它的用法依然对于网络操作的使用有所帮助。<br>HttpClient是Apache封装的一个网页客户端模拟类，其中封装了一些方法用于简化Http操作。</p>
+<h3 id="0x81-GET用法"><a href="#0x81-GET用法" class="headerlink" title="0x81 GET用法"></a>0x81 GET用法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HttpGet httpGet = <span class="keyword">new</span> HttpGet(<span class="string">"http://host:port/index.php?username="</span> + URLEncoder.encode(username,<span class="string">"UTF-8"</span>) + <span class="string">"&amp;password="</span> + URLEncoder.encode(password,<span class="string">"UTF-8"</span>));</span><br></pre></td></tr></table></figure>
+<h3 id="0x82-POST用法"><a href="#0x82-POST用法" class="headerlink" title="0x82 POST用法"></a>0x82 POST用法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HttpPost httpPost = <span class="keyword">new</span> HttpPost(url);</span><br><span class="line">    List parameters = <span class="keyword">new</span> ArryList();</span><br><span class="line">    parameters.add(<span class="keyword">new</span> BasicNameValuePair(<span class="string">"username"</span>,username));</span><br><span class="line">    parameters.add(<span class="keyword">new</span> BasicNameValuePair(<span class="string">"password"</span>,password));</span><br><span class="line">    httpPost.setEntity(<span class="keyword">new</span> URLEncoderFormEntity(parameters,<span class="string">"UTF-8"</span>));</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="0x83-HttpResponse"><a href="#0x83-HttpResponse" class="headerlink" title="0x83 HttpResponse"></a>0x83 HttpResponse</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HttpResponse httpResponse = client.execute(httpGet/Post);</span><br><span class="line">    <span class="keyword">int</span> code = httpResponse.getStatusLine().getStatusCode();</span><br><span class="line">    <span class="keyword">if</span>(<span class="number">200</span> == code)&#123;</span><br><span class="line">        InputStream is = response.getEntity().getContent();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0x84-多线程下载思路"><a href="#0x84-多线程下载思路" class="headerlink" title="0x84 多线程下载思路"></a>0x84 多线程下载思路</h3><ol>
+<li>本地创建一个相同大小的临时文件</li>
+<li>分配线程下载并计算各线程下载位置（<code>(tid - 1) * block -- tid * block - 1</code>）</li>
+<li>各线程分别下载各自内容</li>
+</ol>
+<h3 id="0x85-简单实例"><a href="#0x85-简单实例" class="headerlink" title="0x85 简单实例"></a>0x85 简单实例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">Url url = <span class="keyword">new</span> Url(<span class="string">"http://host:port/test"</span>);</span><br><span class="line">HttpUrlConnection conn = (HttpUrlConnection)url.openConnection(); <span class="comment">//打开链接</span></span><br><span class="line">conn.setConnectionTimeout(<span class="number">5000</span>); <span class="comment">// 设置超时</span></span><br><span class="line">conn.setRequestMethod(<span class="string">"GET"</span>); <span class="comment">// 设置访问方式为GET</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> length = conn.getContentLength(); <span class="comment">// 获取文件长度</span></span><br><span class="line">RandomAccessFile raf = <span class="keyword">new</span> RandomAccessFile(<span class="string">"/sdcard/test"</span>,<span class="string">"rwd"</span>);</span><br><span class="line">raf.setLength(length); <span class="comment">// 创建同大小临时空文件</span></span><br><span class="line">raf.close();</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> blockSize = length / <span class="number">3</span>; <span class="comment">// 计算块大小</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> threadId = <span class="number">0</span>; threadId &lt; <span class="number">3</span>; threadId ++)&#123;</span><br><span class="line">    <span class="keyword">int</span> startIndex = (i - <span class="number">1</span>) * blockSize;</span><br><span class="line">    <span class="keyword">int</span> endIndex = (i) * blockSize - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(<span class="number">2</span> == i)&#123;</span><br><span class="line">        endIndex = length; <span class="comment">// 若是最后一个线程，负责下载完所有剩余内容</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">new</span> DownloadThread(path,threadId,startIndex,endIndex).run(); <span class="comment">// 启动线程下载</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 下载线程类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DownloadThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> threadId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> startIndex;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> endIndex;</span><br><span class="line">    <span class="keyword">private</span> String path;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        conn.setRequestProperty(<span class="string">"Range"</span>,<span class="string">"bytes="</span> + startIndex + <span class="string">"-"</span> + <span class="string">"endIndex"</span>);</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">206</span> == conn.getResponseCode())&#123; <span class="comment">// 此处部分下载返回状态码206</span></span><br><span class="line">            InputStream is = conn.getInputStream(); <span class="comment">// 获取下载文件流</span></span><br><span class="line">            RandomAccessFile raf = <span class="keyword">new</span> RandomAccessFile(<span class="string">"/sdcard/test"</span>,<span class="string">"rwd"</span>); <span class="comment">// "rwd"是数据内容变化立即写入而不等待缓存</span></span><br><span class="line">            raf.seek(startIndex); <span class="comment">// 将文件指针挪到指定位置</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">byte</span>[] buffer =<span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">            <span class="keyword">while</span>((len = is.read(buffer)) != -<span class="number">1</span>)&#123;</span><br><span class="line">                raf.write(buffer,<span class="number">0</span>,len);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上方即是简单的多线程下载，可以用SharedPreference或文件保存当前下载进度以便下载异常恢复下载。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2015/07/03/Android-HttpClient和多线程下载/" data-id="ckfsdx7a90007r49zmkbx7d23" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HttpClient/">HttpClient</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/07/05/有关基本正则表达式的简易笔记/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          有关基本正则表达式的简易笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/07/03/有关LibGDX-TrueTypeFont处理的简易笔记/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">有关LibGDX TrueTypeFont处理的简易笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

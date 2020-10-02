@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Return To Innocence">
+<meta property="og:url" content="https://fioneragh.github.io/page/2/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Return To Innocence">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-设置CrossOver的LANGENV" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/14/设置CrossOver的LANGENV/" class="article-date">
+  <time datetime="2018-05-14T12:48:21.000Z" itemprop="datePublished">2018-05-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/14/设置CrossOver的LANGENV/">设置CrossOver的LANGENV</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-CrossOver"><a href="#0x81-CrossOver" class="headerlink" title="0x81 CrossOver"></a>0x81 CrossOver</h3><p>CrossOver是CodeWeaver对Wine稳定版本的一种定制打包。Wine means Wine Is Not an Emulator，意为Wine本身不是一个模拟器，正如其所说的Wine确实不是一个模拟器或虚拟机，它是一个<em>nix兼容层，兼容Windows应用，其主要工作是将Windows系统调用转换为</em>nix系统调用，从而做到在非Windows平台上运行Windows软件。</p>
+<p>Wine是开源且免费的，而CrossOver提供的软件服务不是，CrossOver对常见的Windows软件的运行环境做了预配置，以保证用户进行最少的配置便可以比较稳定的运行软件，但是由于它依赖核心组件Wine，因此通常来讲Wine上游存在的问题它都或多或少地存在。</p>
+<h3 id="0x82-macOS下中文运行环境配置"><a href="#0x82-macOS下中文运行环境配置" class="headerlink" title="0x82 macOS下中文运行环境配置"></a>0x82 macOS下中文运行环境配置</h3><p>其实CrossOver的配置方法有很多，甚至于即使在英文环境下生成的Launcher都可以通过修改plist的方式修改它的运行环境，而今天要说的是通过修改它内置的wine启动脚本来做到这件事情。</p>
+<p>方法很简单，首先找到CrossOver内置Wine的启动脚本位置<code>/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin -&gt; /Applications/CrossOver.app/Contents/SharedSupport/CrossOver/CrossOver-Hosted Application</code>，这个目录下有大量的启动脚本，打开wine的perl脚本：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Start Wine</span></span><br><span class="line"><span class="keyword">if</span> ($log <span class="keyword">or</span> CXLog::is_on())</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">print</span> STDERR <span class="string">"\n** "</span>,<span class="keyword">scalar</span>(<span class="keyword">localtime</span>(<span class="keyword">time</span>)),<span class="string">"\n"</span>;</span><br><span class="line">    <span class="keyword">print</span> STDERR <span class="string">"Starting '"</span>,<span class="keyword">join</span>(<span class="string">"' '"</span>,$cmd,@wine_args),<span class="string">"'\n"</span>;</span><br><span class="line">    <span class="keyword">print</span> STDERR <span class="string">"'"</span>,<span class="keyword">join</span>(<span class="string">"' '"</span>,@args),<span class="string">"'\n\n"</span>;</span><br><span class="line">&#125;</span><br><span class="line">$ENV<span class="string">&#123;LANG&#125;</span> = <span class="string">"zh_CN.UTF-8"</span>;</span><br><span class="line"><span class="keyword">exec</span> $cmd, @wine_args, @args</span><br><span class="line"><span class="keyword">or</span> cxerr(<span class="string">"unable to start '$cmd': $!\n"</span>);</span><br><span class="line"><span class="keyword">exit</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<p>其中在试用exec执行外部命令之前，添加一句<code>$ENV{LANG} = &quot;zh_CN.UTF-8&quot;;</code>便可以讲LANGENV设置为”zh_CN.UTF-8”，之后启动CrossOver并启动对应的Windows应用时，便会通过wine脚本正确的启动到对应的语言环境。不过这里我遇到一个问题，对于中文的显示没什么问题，但是导出到剪贴板的中文会全部乱码，应该还是字符集的问题，找个时间扒扒原因，ANSI下的Windows字符真的很不友好。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/05/14/设置CrossOver的LANGENV/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2018/05/14/设置CrossOver的LANGENV/" data-id="ckfsdx7dk003fr49z2eg045qi" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CrossOver/">CrossOver</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macOS/">macOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-霓虹之行" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/10/霓虹之行/" class="article-date">
+  <time datetime="2018-05-10T13:37:08.000Z" itemprop="datePublished">2018-05-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/10/霓虹之行/">霓虹之行</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x80-劳累的旅行"><a href="#0x80-劳累的旅行" class="headerlink" title="0x80 劳累的旅行"></a>0x80 劳累的旅行</h3><p>其实这场旅行的收获很大，虽然很累（每天2万多步对我来说几乎是一周的步量）但是足够充实。</p>
+<p>自从3月份辞职以来，我一直全身心的投入到新的工作生活当中去，每天都是加班加点地工作，想着既然重新出来闯，出来跟着他们创业本身就是一件十分有挑战性的事情。新公司寄于大CML庇护之下，努力萌发自己的产品，当然无尽的工作压力也在蚕食我的健康，但拼一拼才会知道自己的极限在哪里。</p>
+<p>算一算有接近两个月的时间没有记录一下学习工作生活了，Github也荒了一段时间（虽然大部分都是刷README:P），出于工作比较累的原因，仅有的一天周末休息时间也几乎全用来睡觉，所以51小假期一来便果断请了两天假，飞去日本感受了一下奢靡的资本主义生活。</p>
+<p>不得不说岛国的空气是真的好，至少比青岛好太多，大清早的起床整个街道上给人的感觉就不一样。去日本这几天住在领导她哥家，省了不少钱不说，这种在外居家的感觉绝对是酒店给不了的，羡慕小别墅=。=</p>
+<h3 id="0x79-风雾纪实"><a href="#0x79-风雾纪实" class="headerlink" title="0x79 风雾纪实"></a>0x79 风雾纪实</h3><p>此程感悟最大的不是去时日本的万里晴空和归时青岛的阴雨连绵，而是错综复杂的日本铁路网，什么乱七八糟的私铁、地铁、JR高铁线搞得我晕头转向。第一天晚上做SkyLiner站内再购票差点就留在成田机场，回来那天的京成本线也是强行等了半个小时以为会赶不上飞机，说真的，京都和成天机场隔得还是有点远的。。。不过玩的这几天只依靠铁路交通工具的感觉还是很微妙的，没有去不到的地方，对比刚通2/3/11号线地铁轻轨的青岛尤为明显。</p>
+<p>还有，女人买东西是真的可怕😨，遇到免税、折扣这种东西，的确省了很多钱，但是不得不说一次性买那么多以至于担心行李超重我之前是确实想不到的，不过我领导最后给我剩了1000日元，因为所有的药妆基本都是刷的卡😊，然后，药妆店如松本清全特么是中国人。</p>
+<p>于我而言，我什么也没买，只买了个微小的Switch，免税加Union的折扣大约等于白送了个新星同盟，当然其实还买了林克传说，好了先到这我去找呀哈哈了～</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2018/05/10/霓虹之行/" data-id="ckfsdx7dn003jr49zyqfdt0tr" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ordinary/">Ordinary</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-利用Hotpatch禁用DGPU" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/24/利用Hotpatch禁用DGPU/" class="article-date">
+  <time datetime="2018-03-24T07:12:53.000Z" itemprop="datePublished">2018-03-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/24/利用Hotpatch禁用DGPU/">利用Hotpatch禁用DGPU</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-Clover-Hotpatch"><a href="#0x81-Clover-Hotpatch" class="headerlink" title="0x81 Clover-Hotpatch"></a>0x81 Clover-Hotpatch</h3><p>Hackintosh，这应该是这个系列的第一篇，黑苹果的折腾笔记绝对可以写本书，只是拿不出这么多的时间来做这件事情。</p>
+<p>Clover，一个强大的引导工具，基于rEFInd魔改而来，提供强大的驱动注入和二进制patch的功能，<a href="https://github.com/RehabMan" target="_blank" rel="noopener">@RehabMan</a>等大牛的参与更是为Clover带来更加强大的诸如AutoMerge等功能，让Clover可以为黑苹果工作的更好。</p>
+<p>Hotpatch，字面意思热补丁，主要是对于Clover强大的ACPI修改功能的支持，将hackintosh复杂而繁琐的ACPI修改中解放出来，从而实现patch像DSDT设备改名等功能。Hotpatch能做到DSDT/SSDT对象命名，插入补丁，方法重定向，方法重写等功能，通过灵活的扩展SSDT文件，我们只要自己学会ACPI汇编的语法从而会阅读aml文件经过iasl反汇编的dsl源文件，便可以完成自己想做的任何事。当然这个过程看起来容易，往往需要大量的基础知识和充分的测试才能写出能够使用的Hotpatch文件。</p>
+<h3 id="0x82-High-Sierra-对WindowServer的修改"><a href="#0x82-High-Sierra-对WindowServer的修改" class="headerlink" title="0x82 High Sierra 对WindowServer的修改"></a>0x82 High Sierra 对WindowServer的修改</h3><p>macOS由于自身独特的封闭性，所以对传统laptop的DGPU并没有提供足够的支持，尤其是nVidia显卡。纵使nVidia官方提供了macOS可用的WebDriver来驱动我们的GT显卡，但是这些驱动往往是提供给桌面级独立GPU使用的。</p>
+<p>在10.13之前，包括10.12，我们可以通过nv_diable参数禁用macOS对DGPU显卡进行驱动，当然这样也只是禁止了驱动的加载，在设备上电时仍会消耗电池资源。真正正确的做法是对SSDT/DSDT进行修改，通过_OFF方法禁用显卡，这种修改方式有一个很棘手的问题，就是EC，大量的笔记本（Lenovo几乎全系）有EmbeddedController，通过它来进行设备的电源管理。在我们在调用_OFF方法时EC可能还没准备好，因此我们需要将代码段里的方法转移到REG（具体的我没仔细研究）中来保证正常的工作。</p>
+<p>到了10.13，系统底层做了大量的修改，尤其是显卡驱动部分，就像10.11的USB栈重写，nv_disable参数已经失效，系统在监测到设备会尝试进行驱动，由于根本无法驱动DGPU，所以WindowServer会出现“Window Server Service only ran for 0 seconds”的提示，其实如果能看到完整的log你就会发现WindowServer的确起不来，服务运行0s也就说得通了。</p>
+<p>之前禁用独立显卡的方法仍然有效，但是在引导安装器阶段可能会遇到问题，于是RehabMan出了篇教程<a href="https://www.tonymacx86.com/threads/fix-window-server-service-only-ran-for-0-seconds-with-dual-gpu.233092/" target="_blank" rel="noopener">[FIX] “Window Server Service only ran for 0 seconds” with dual-GPU</a>就是解决这个问题。这篇教程通过DeviceSpecificMethod注入了一些属性，其实作用和Clover的Devices/AddProperties作用类似，有机会做个对比。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/03/24/利用Hotpatch禁用DGPU/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2018/03/24/利用Hotpatch禁用DGPU/" data-id="ckfsdx7ct002nr49ztsife67l" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ACPI/">ACPI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Clover/">Clover</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hackintosh/">Hackintosh</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hotpatch/">Hotpatch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macOS/">macOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-辞工作的日子" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/20/辞工作的日子/" class="article-date">
+  <time datetime="2018-03-20T11:45:15.000Z" itemprop="datePublished">2018-03-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/20/辞工作的日子/">辞工作的日子</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x80-迷途不知返"><a href="#0x80-迷途不知返" class="headerlink" title="0x80 迷途不知返"></a>0x80 迷途不知返</h3><p>转眼一看年都过去一个月了，这半个月来的生活真的是相当不容易。去年没有总结，但去年算是学习的一年（每一年都在学习=。=），随着2018的到来，事情也逐渐多了起来。</p>
+<p>说句实在话，之前呆的公司自始至终都不是我想要的，它没有向我想象的方向发展，也没有给到我应得的东西。在公司我最看重的就是自己所在的团队，自己虽然非常努力维护团队的利益，努力营造一个足够好的学术氛围，即使是在面试上招人上都尽可能的谨慎，，但有时候对于人员的流失仍然感到无能为力，我为的不是别的，我热爱我所在的团队，我感动于团队成员每一个人的付出和带来的欢乐。</p>
+<p>说句直接点的话，金钱本身无法起到决定性作用，留在这里并努力着很大一部分原因是因为这个团队的存在。公司主力业务是人头外包，虽然也努力开拓其他业务，但明眼人都知道这种人力输出最难的是留住技术人才，最难的就是将技术沉淀，从而成为自己的技术积累以备用到自己的产品上来。我是一直梦想着公司有一天可以做自己的产品，公司能在某个行业上有一定的话语权，从而创造一定的价值，但现实告诉我我很年轻，公司虽然有进行很多尝试，但都收效甚微。不得不承认，当前这个情境之下想做活一个产品并非易事，因为所有的念想和计划最终都会碍于成本而最终放弃，甚至是压根不敢于开始。</p>
+<p>前段时间公司上市，说真的我不是很理解这个点，融资的确重要，有人投资才会有更多的钱做更多的事情从而产生更多的价值，但是如何保证投资人的利益，如何保证股东的利益都成了必须面临的问题。员工技术储备不够，公司整体技术沉淀不够牢固，这都是面上的话，其实就是公司并没有办法留住人才，看着曾经一起奋斗的同事相继离职，我真觉得这是一种悲哀，感到一股悲凉。</p>
+<p>我感觉在这段迷途上走了很久，从15年初开始，由于基本修完了大学的专业课程，通过老师找到这里，开始了长达三年的工作。这种迷茫感从我16年毕业开始涌现，女票想追求更高的学术造诣，不满于在饿了么ESRC做运营决定在母校保研读研，我也静下心来决定努力改变点什么，但自己的能力自己清楚，绵薄之力无以覆天，大部分人只是想要一份工作而已，能生活就足够了。慢慢的这种迷茫感越来越浓厚，也让自己开始安于现状。</p>
+<p>现在，我从之前的公司离职了，说实话有些不舍，但更多的是对未来的憧憬，经过几年的磨练我在某些事情上更加处之泰然，也懂得了为人处事的一些道理，比起老生常谈的“你读读研究生其实更好”不再有所质疑，因为很多东西是学校里学不到的，海大教给了我很多，但是社会可以教给我更多。目前我仍然在不停地学习，虽然有的时候会被工作、生活等种种状况所打扰、搁置，但是我仍然在尽可能的坚持着，学习这件事情是万万不能放下的。</p>
+<p>路还有很长，路要慢慢走，一步一个脚印，坚持做的事情要坚持下去。忙过了这一阵，我想应该可以静下心来沉淀沉淀，如果有可能的话，我想补偿一下过去的自己，也想弥补一下先前未做的事，虽然时间不能重来，但是我可以努力去完善现在。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2018/03/20/辞工作的日子/" data-id="ckfsdx7dm003ir49zi9bmuv80" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ordinary/">Ordinary</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-使用btrfs-convert转换ext4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/06/使用btrfs-convert转换ext4/" class="article-date">
+  <time datetime="2018-02-06T13:00:25.000Z" itemprop="datePublished">2018-02-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/06/使用btrfs-convert转换ext4/">使用btrfs-convert转换ext4</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-btrfs"><a href="#0x81-btrfs" class="headerlink" title="0x81 btrfs"></a>0x81 btrfs</h3><p>前面提到APFS的时候,涉及到一个很棒的特性–COW(Copy On Write),即写时复制,它的工作原理不在这里展开,通俗的讲,就是复制或使用副本时不会真正的创建副本,而是藉由操作系统的支持,共享数据资源,而当有程序有写入需求时,此时不能再公用同一资源,因此要进行真正的复制.</p>
+<p>其中High Sierra在Mac设备上默认启用的APFS自然支持这一特性,从而减少一些资源在使用时的占用空间,那Linux是否有文件系统支持这一特性呢?出于实验COW特性和做一些测试的目的,我找到了之前被诟病极不稳定的btrfs.</p>
+<p>btrfs算是比较年轻的文件系统,但算起它最开始进入kernel stage也有一段时间了,并且btrfs的维护者声称它目前已经足够稳定以投入生产使用甚至专门为SSD进行了优化,良好的trim支持让用户不必担心ext4”烧盘”的问题,虽然我在ext4下使用discard参数使用了很久也没出现很严重的性能问题或损坏,但我还是再次尝试了这一文件系统.</p>
+<p>原则上讲,我们使用btrfs最好是从头开始,但是碍于自己在折腾了arch后实在是不想在重新安装并配置各种环境并且根挂载点是在单独的小分区上,我便决定直接转换ext4到btrfs,而转换时使用的工具就是btrfs-convert.</p>
+<h3 id="0x82-btrfs-convert"><a href="#0x82-btrfs-convert" class="headerlink" title="0x82 btrfs-convert"></a>0x82 btrfs-convert</h3><p>btrfs-convert是一个转换工具,使用方式很简单,看它的<a href="https://btrfs.wiki.kernel.org/index.php/Manpage/btrfs-convert" target="_blank" rel="noopener">Manpage</a>,wiki里写到他可以转换ext2/3/4和reiserfs到btrfs.</p>
+<p>转换工具使用就一句命令:<code>btrfs-convert /dev/sda2</code>,需要注意的是我们通常在live环境下执行,因为你无法转换一个已被挂载或正在使用的文件系统.以ext4为例,经过不确定时间的转换,原本的数据会以subvolume的形式保存,名字为ext2_saved.</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/02/06/使用btrfs-convert转换ext4/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2018/02/06/使用btrfs-convert转换ext4/" data-id="ckfsdx7cn002er49zql6dwri4" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/btrfs/">btrfs</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-解密FileVault2加密的分区" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/05/解密FileVault2加密的分区/" class="article-date">
+  <time datetime="2018-02-05T11:41:05.000Z" itemprop="datePublished">2018-02-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/05/解密FileVault2加密的分区/">解密FileVault2加密的分区</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-FileVault"><a href="#0x81-FileVault" class="headerlink" title="0x81 FileVault"></a>0x81 FileVault</h3><p>像Windows的BitLocker一样,Apple也为macOS(最早应该是OSX Lion开始支持)提供了全盘加密的支持,它就是FileVault,目前该项技术名字叫做FileVault2.当你第一次进入macOS的配置向导,或是从某一次重要的更新重新配置你的mac时,FileVault2会有很大的几率露脸,询问你是否要启用加密特性来保护你的个人数据安全.</p>
+<p>当然,所有的安全特性包括磁盘加密都会带来性能损失,因为从安全的角度上讲,你的数据要保证安全加密是必须的,而当你要使用这些数据时,就需要通过验证并解密才能成为程序可读的数据.不过话说回来,操作系统会尽可能正确的权衡性能与安全的比重,尤其是Apple整个新产品线都采用nvme的固态硬盘以及使用专门的硬件模块来保证性能.但是第三方SSD就不见得能更好的配合这些为原生苹果硬件提供的特性了,比如臭名昭著的黑苹果,几乎大部分硬件都是fake来得.</p>
+<h3 id="0x82-APFS"><a href="#0x82-APFS" class="headerlink" title="0x82 APFS"></a>0x82 APFS</h3><p>APFS,全称Apple FileSystem,译作苹果文件系统,很多人坚持它由ZFS发展而来,但是这不重要.APFS支持COW,对SSD友好,支持SSD的Trim特性以增高IO吞吐,更重要的是它支持逻辑卷管理.正因为APFS支持这些新特性,Apple终于决定换掉用了十几二十年的HFS(+J),从iOS,tvOS,watchOS到macOS都采用了这一文件系统.</p>
+<p>APFS的出现对黑苹果用户来讲可不见得是好事,High Sierra默认已经将APFS作为默认的文件系统,在升级或安装若检测到你的硬盘是固态硬盘,将会在升级或安装过程中进行APFS的转换,要注意这个转换是不可逆的.纵然如此,我们仍可以干涉macOS的升级进程,既然升级过程是从HFS+转换到APFS的,说明这个过程是使用标志位控制的,在这个过程中有一个转换操作.</p>
+<p>仔细研究过macOS升级过程的小伙伴应该都了解用于安装的app文件里有个非常庞大的dmg文件,dmg文件我们都了解就是磁盘映像文件,和iso/img文件类似,而dmg文件内是一些pkg安装文件和plist或xml配置文件,安装过程首先就是释放这些安装程序和配置文件,我们只需要把配置文件中的ConvertToApfs设置为false就可以阻止转换过程.</p>
+<p>为什么要阻止转换成APFS呢,一个是前面说的SSD兼容问题,一个是黑苹果导致的一些乱七八糟的问题,比如刚开始APFS出现导致Clover识别不到APFS分区,后来是Clover通过实现加载macOS安装镜像的apfs.efi来读取APFS,但是APFS在hackintosh上的问题远不止这些.</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/02/05/解密FileVault2加密的分区/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2018/02/05/解密FileVault2加密的分区/" data-id="ckfsdx7dh003cr49z3pa4s5ro" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FileVault/">FileVault</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macOS/">macOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-获取macOS的DeveloperBeta更新" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/31/获取macOS的DeveloperBeta更新/" class="article-date">
+  <time datetime="2018-01-31T10:32:34.000Z" itemprop="datePublished">2018-01-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/31/获取macOS的DeveloperBeta更新/">获取macOS的DeveloperBeta更新</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-常规的获取更新方式"><a href="#0x81-常规的获取更新方式" class="headerlink" title="0x81 常规的获取更新方式"></a>0x81 常规的获取更新方式</h3><p>按道理来讲,我们如果想获得beta更新,只要注册AppleId为Developer账号就可以了,这样我们便可以获取beta更新工具从而配置我们的电脑为接收beta更新,即可下载并更新.但是Apple得开发者验证并不是随便就能申请的,他需要我们拥有可付费的应用或有接收支付的账户信息才能享受完整的开发者功能支持,而实际上成为一个真正的Apple开发者的年费也是不菲的.我作为一个称职的国内Android开发者,平时使用XCode也就是看看iOS应用源码或者是构建一些macOS应用及扩展.</p>
+<p>受限于开发者账号的不完整性,我们没办法正常接收beta更新,那我们就没办法了么?其实原本的beta更新和Google释出的Android开发者镜像一样,是用于给开发者提前做应用适配的,后来为了让普通用户也能参与到测试当中来,Apple开启了PublicBeta众测计划,和Microsoft的Insider一样,每一个参与的用户都可以为系统的问题提交反馈.</p>
+<p>我们从Apple开发者官网下载<code>macOSHighSierraPublicBetaAccessUtility</code>,运行工具同意协议输入密码后便可以加入PublicBeta,之后我们便可以在AppStore检查到beta更新.</p>
+<h3 id="0x82-AccessUtility实际做的事情"><a href="#0x82-AccessUtility实际做的事情" class="headerlink" title="0x82 AccessUtility实际做的事情"></a>0x82 AccessUtility实际做的事情</h3><p>具有开发精神的我们肯定会思考,这个工具到底做了什么从而我们的macOS可以接受beta更新,并且一旦我们可以接收更新,在AppStore的偏好设置里便多出了不接收更新的选项,此时若我们取消接收,它实际上做了什么.</p>
+<p>首先,安装过的pkg文件会释放bom文件到系统目录,Apple自家的通常在<code>/S/L/Receipts</code>目录下,第三方通常在<code>/var/db/receipts</code><br>目录下,其中完整的安装历史在<code>/Library/Receipts/InstallHistory.plist</code>文件当中,其中记录了安装时间,pkg包名以及安装方式等.</p>
+<p>对于bom文件,我们可以使用<code>lsbom</code>命令直接查看,当然我们也可以不在意bom文件的具体位置,直接使用<code>pkgutil --files ${PKG_NAME}</code>来查看pkg文件到底创建了那些文件(Payload中有那些文件),通过分析结果我们不难发现其实pkg文件只释放了一个lpdf文件:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Library</span><br><span class="line">Library/Documentation</span><br><span class="line">Library/Documentation/Beta License.lpdf</span><br></pre></td></tr></table></figure>
+<p>lpdf是一种特殊的bundle,和app文件类似,里面存放了一系列签名配置信息,当然也有我们熟悉的<code>Library/Documentation/Beta License.lpdf/Contents/Resources/zh_CN.lproj/Beta License.pdf</code>普通pdf文件.</p>
+<p>既然如此,那也就是说明pkg安装并不是释放了一个特殊的配置文件来实现接收beta更新这件事情,只有可能是安装脚本(postScript)了,关于pkg文件结构我们后面在分析.</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/01/31/获取macOS的DeveloperBeta更新/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2018/01/31/获取macOS的DeveloperBeta更新/" data-id="ckfsdx7dh003br49zmn78ee0w" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macOS/">macOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-使用Vuex的namespace管理状态" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/25/使用Vuex的namespace管理状态/" class="article-date">
+  <time datetime="2018-01-25T12:37:29.000Z" itemprop="datePublished">2018-01-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/25/使用Vuex的namespace管理状态/">使用Vuex的namespace管理状态</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-Vue组件通信"><a href="#0x81-Vue组件通信" class="headerlink" title="0x81 Vue组件通信"></a>0x81 Vue组件通信</h3><p>Vue在升级到2.x之后,仍然提供了比较灵活的组件间通信机制,父向子组件的prop[broadcast],子向父组件的emit冒泡,但是如果我想子组件与子组件通信甚至是跨多组件通信,用这种关联的机制虽然能够做到,但是却极为麻烦.在这种情况下,我们可以使用Vue官方推荐的状态管理工具Vuex来统一控制整个SPA的状态.</p>
+<h3 id="0x82-Store"><a href="#0x82-Store" class="headerlink" title="0x82 Store"></a>0x82 Store</h3><p>Vuex和Redux一样,是针对js的一种全局状态管理,他们都扮演状态控制中心的角色.Vuex使用action作为状态通知的唯一触发者,mutation作为状态的接受者,state则存储了我们需要管理的SPA的状态,通常情况下我们也会使用types来规约action.</p>
+<p>在平时的的开发过程中,为了保证各模块或各功能的相对低耦合,我们会把有关的actions/mutations/state组合起来作为一个store,供给vuex进行统一管理.</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/01/25/使用Vuex的namespace管理状态/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2018/01/25/使用Vuex的namespace管理状态/" data-id="ckfsdx7cb002cr49zuy1tijzf" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue/">Vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vuex/">Vuex</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-用efibootmgr修改UEFI引导项" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/26/用efibootmgr修改UEFI引导项/" class="article-date">
+  <time datetime="2017-12-26T02:18:49.000Z" itemprop="datePublished">2017-12-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/26/用efibootmgr修改UEFI引导项/">用efibootmgr修改UEFI引导项</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-efibootmgr的作用"><a href="#0x81-efibootmgr的作用" class="headerlink" title="0x81 efibootmgr的作用"></a>0x81 efibootmgr的作用</h3><p>相比校传统的MBR引导方式,Intel坚持的UEFI则更加可控,灵活和自由.UEFI又叫通用嵌入式固件接口,近几年的主板BIOS通常都实现了UEFI支持,可以运行EFI程序.早期出于好奇,我试用了非常多的Linux发行版,而这些版本由于采用传统的MBR引导方式安装,基本每一次fresh install都能清理掉就的引导记录.在某次偶然的机会将硬盘转换为了GPT分区表后,便不能使用传统的安装方式,借助grub2-efi的支持,在GPT分区上使用EFI分区内的efi引导程序进行系统的引导.</p>
+<p>在使用EFI后,大约过了一年半的时间,期间因为各种问题也切换过发行版,后来在一次清理中发现了好几个残留的UEFI引导项,到这时候才意识到之前的选项都没有删掉,于是便找到了efibootmgr这个工具,它可以管理UEFI的引导项.</p>
+<p>efibootmgr支持引导项的查看,添加,修改和删除,功能比较强大,但是操作时尤其是删除操作要极为慎重,不小心删掉的硬件引导(比如网卡引导)可不太容易恢复.</p>
+<h3 id="0x82-使用efibootmgr修改EFI"><a href="#0x82-使用efibootmgr修改EFI" class="headerlink" title="0x82 使用efibootmgr修改EFI"></a>0x82 使用efibootmgr修改EFI</h3><ol>
+<li><p>查看引导项</p>
+<p> 使用efibootmgr可以直接查看当前固件里的引导项:</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fionera@fionera:~|⇒  efibootmgr</span><br><span class="line">BootCurrent: 0003</span><br><span class="line">Timeout: 2 seconds</span><br><span class="line">BootOrder: 0003,0008,0009,0005</span><br><span class="line">Boot0003* fedora</span><br><span class="line">Boot0005  Windows Boot Manager</span><br><span class="line">Boot0008* UEFI: IP4 Realtek PCIe FE Family Controller</span><br><span class="line">Boot0009* UEFI: IP6 Realtek PCIe FE Family Controlle</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除引导项</p>
+<p> efibootmgr提供删除参数-B(–delete-bootnum),该参数后接要删除的项编号,使用该指令可以删除Windows Boot Manager:</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">efibootmgr -B -b 0005 // 0005 为bootnum</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>新增引导项</p>
+<p> 如果要新增一个引导项,我们需要进行多个参数的组合,包括名称和EFI路径等,下面的指令可以为<code>p{EFI}/EFI/CLOVER/CLOVERX64.efi</code>添加一个引导项:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">efibootmgr -c -w -L &quot;Clover&quot; -d /dev/sda -p 1 -l \\EFI\\CLOVER\\CLOVERX64.efi</span><br></pre></td></tr></table></figure>
+<p> 上述指令中各参数的意义:</p>
+<ul>
+<li>[-c] 创建一条引导</li>
+<li>[-w] 这一次创建会写入EFI引导信息</li>
+<li>[-L] 引导项的Label</li>
+<li>[-d] 指定使用的物理硬盘描述符</li>
+<li>[-p] 分区号,从1开始默认为1</li>
+<li>[-l] EFI文件位置,’/‘位置代表前面指定的根分区,由于通用性考虑,命令使用’\‘代表文件路径分隔符</li>
+</ul>
+</li>
+<li><p>编辑引导项</p>
+<p> 在未知时创造是困难的,在已知时修改是可控的,与删除类似,efibootmgr提供了很多参数来修改引导项或整个引导过程:</p>
+<ul>
+<li>[-a] 激活某一条引导</li>
+<li>[-A] 反激活</li>
+<li>[-o] 对bootnum排序</li>
+<li>[-O] 删除bootnum排序</li>
+<li>[-t] 设置EFI超时时间</li>
+<li>[-T] 删除EFI超时时间</li>
+</ul>
+</li>
+</ol>
+<p>efibootmgr的常用操作差不多就这些,man手册其实写的很明白,这里主要是记录一下添加一条新引导的方式,方便自己灵活控制系统加载,比如用来Clover来引导Hachintosh:P.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/12/26/用efibootmgr修改UEFI引导项/" data-id="ckfsdx7dg003ar49z9uiabsfa" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/UEFI/">UEFI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/efibootmgr/">efibootmgr</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-使用inobounce移除iOS的bounce效果" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/16/使用inobounce移除iOS的bounce效果/" class="article-date">
+  <time datetime="2017-11-16T10:11:30.000Z" itemprop="datePublished">2017-11-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/16/使用inobounce移除iOS的bounce效果/">使用inobounce移除iOS的bounce效果</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-问题来源"><a href="#0x81-问题来源" class="headerlink" title="0x81 问题来源"></a>0x81 问题来源</h3><p>iOS的浏览器有个让开发人员非常诟病的地方–Bounce效果,从用户的角度讲,这个效果的观感对用户来说体验确实还不错,但是会出现页面整体滚走的状况,导致页面内的滚动失效.</p>
+<h3 id="0x82-inobounce"><a href="#0x82-inobounce" class="headerlink" title="0x82 inobounce"></a>0x82 inobounce</h3><p>inobounce是一个解决这种弹簧效果的库,这个库的代码很简单,进行的工作也很纯,就是判断在满足某些条件的时候,监听’touchmove’事件并阻止该滚动事件的发生.</p>
+<p>inobounce.js:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Enable by default if the browser supports -webkit-overflow-scrolling</span></span><br><span class="line"><span class="comment">// Test this by setting the property with JavaScript on an element that exists in the DOM</span></span><br><span class="line"><span class="comment">// Then, see if the property is reflected in the computed style</span></span><br><span class="line"><span class="keyword">var</span> testDiv = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line"><span class="built_in">document</span>.documentElement.appendChild(testDiv);</span><br><span class="line">testDiv.style.WebkitOverflowScrolling = <span class="string">'touch'</span>;</span><br><span class="line"><span class="keyword">var</span> scrollSupport = <span class="string">'getComputedStyle'</span> <span class="keyword">in</span> <span class="built_in">window</span> &amp;&amp; <span class="built_in">window</span>.getComputedStyle(testDiv)[<span class="string">'-webkit-overflow-scrolling'</span>] === <span class="string">'touch'</span>;</span><br><span class="line"><span class="built_in">document</span>.documentElement.removeChild(testDiv);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (scrollSupport) &#123;</span><br><span class="line">    enable();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码主要创建了一个testDiv去验证浏览器是否支持’-webkit-overflow-scrolling=touch’这一特性,如果支持则启用事件监听:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> enable = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// Listen to a couple key touch events</span></span><br><span class="line">    <span class="built_in">window</span>.addEventListener(<span class="string">'touchstart'</span>, handleTouchstart, <span class="literal">false</span>);</span><br><span class="line">    <span class="built_in">window</span>.addEventListener(<span class="string">'touchmove'</span>, handleTouchmove, <span class="literal">false</span>);</span><br><span class="line">    enabled = <span class="literal">true</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>handleTouchmove方法就是监听事件的具体处理方法:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> scrolling = style.getPropertyValue(<span class="string">'-webkit-overflow-scrolling'</span>);</span><br><span class="line"><span class="keyword">var</span> overflowY = style.getPropertyValue(<span class="string">'overflow-y'</span>);</span><br><span class="line"><span class="keyword">var</span> height = <span class="built_in">parseInt</span>(style.getPropertyValue(<span class="string">'height'</span>), <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Determine if the element should scroll</span></span><br><span class="line"><span class="keyword">var</span> isScrollable = scrolling === <span class="string">'touch'</span> &amp;&amp; (overflowY === <span class="string">'auto'</span> || overflowY === <span class="string">'scroll'</span>);</span><br><span class="line"><span class="keyword">var</span> canScroll = el.scrollHeight &gt; el.offsetHeight;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (isScrollable &amp;&amp; canScroll) &#123;</span><br><span class="line">    <span class="comment">// Get the current Y position of the touch</span></span><br><span class="line">    <span class="keyword">var</span> curY = evt.touches ? evt.touches[<span class="number">0</span>].screenY : evt.screenY;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Determine if the user is trying to scroll past the top or bottom</span></span><br><span class="line">    <span class="comment">// In this case, the window will bounce, so we have to prevent scrolling completely</span></span><br><span class="line">    <span class="keyword">var</span> isAtTop = (startY &lt;= curY &amp;&amp; el.scrollTop === <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">var</span> isAtBottom = (startY &gt;= curY &amp;&amp; el.scrollHeight - el.scrollTop === height);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Stop a bounce bug when at the bottom or top of the scrollable element</span></span><br><span class="line">    <span class="keyword">if</span> (isAtTop || isAtBottom) &#123;</span><br><span class="line">        evt.preventDefault()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码也很简单,去除DOM元素的属性判断它是能滚动的,然后计算它是否在顶部或底部,如果满足条件就禁止原本的事件,如此递归地处理所有节点便完成了禁止滚动的作用.</p>
+<h3 id="0x83-缺陷与不足"><a href="#0x83-缺陷与不足" class="headerlink" title="0x83 缺陷与不足"></a>0x83 缺陷与不足</h3><p>inobounce能解决大部分状况,但是有的时候仍然会出现失败的情况,目前还没有更好的解决办法.但是使用了inobounce后又一个不足,就是webkit内核的’-webkit-overflow-scrolling’特性在处于文档顶和尾的时候都会失效,比如我们有个单页应用,它始终是填满viewport的,这时候页面内有个横向滑动的tab,当inobounce生效时,它将失去滑动的能力,解决办法就是为节点添加标记属性并忽略它们:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ignore data-scroll</span></span><br><span class="line"><span class="keyword">if</span>(el.getAttribute(<span class="string">'data-scroll'</span>) !== <span class="literal">null</span>)&#123;</span><br><span class="line">  <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>前端适配的问题非常的多,当你在浏览器中行为正常,在移动端微信内嵌的WebView当中很可能就适配不好,要不断的调试和调整,微信端的问题还远不止这些,像Android上很多WebView版本过低不支持一些特性则更是让人头疼.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/11/16/使用inobounce移除iOS的bounce效果/" data-id="ckfsdx7co002fr49zhhwt4lzk" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue/">Vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/inobounce/">inobounce</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/3/">下一页 &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

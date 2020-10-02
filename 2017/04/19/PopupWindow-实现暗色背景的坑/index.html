@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>PopupWindow 实现暗色背景的坑 | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 PopupWindowPopupWindow是一个比较特殊的类，它不继承任何类，是一个相对而言比较独立而又非常具有依赖性的东西。独立自然指的就是它不像Dialog那样继承并实现了很多东西，而具有依赖性则正是因为它不像Dialog那样具有自己的Window，所以我们要操作Window时操作的是它所在的Activity的Window。出于这些原因，PopupWindow有些时候虽然非常实用和">
+<meta name="keywords" content="Android,PopupWindow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PopupWindow 实现暗色背景的坑">
+<meta property="og:url" content="https://fioneragh.github.io/2017/04/19/PopupWindow-实现暗色背景的坑/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 PopupWindowPopupWindow是一个比较特殊的类，它不继承任何类，是一个相对而言比较独立而又非常具有依赖性的东西。独立自然指的就是它不像Dialog那样继承并实现了很多东西，而具有依赖性则正是因为它不像Dialog那样具有自己的Window，所以我们要操作Window时操作的是它所在的Activity的Window。出于这些原因，PopupWindow有些时候虽然非常实用和">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.177Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PopupWindow 实现暗色背景的坑">
+<meta name="twitter:description" content="0x81 PopupWindowPopupWindow是一个比较特殊的类，它不继承任何类，是一个相对而言比较独立而又非常具有依赖性的东西。独立自然指的就是它不像Dialog那样继承并实现了很多东西，而具有依赖性则正是因为它不像Dialog那样具有自己的Window，所以我们要操作Window时操作的是它所在的Activity的Window。出于这些原因，PopupWindow有些时候虽然非常实用和">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-PopupWindow-实现暗色背景的坑" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/19/PopupWindow-实现暗色背景的坑/" class="article-date">
+  <time datetime="2017-04-19T10:48:58.000Z" itemprop="datePublished">2017-04-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      PopupWindow 实现暗色背景的坑
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-PopupWindow"><a href="#0x81-PopupWindow" class="headerlink" title="0x81 PopupWindow"></a>0x81 PopupWindow</h3><p>PopupWindow是一个比较特殊的类，它不继承任何类，是一个相对而言比较独立而又非常具有依赖性的东西。独立自然指的就是它不像Dialog那样继承并实现了很多东西，而具有依赖性则正是因为它不像Dialog那样具有自己的Window，所以我们要操作Window时操作的是它所在的Activity的Window。出于这些原因，PopupWindow有些时候虽然非常实用和简便，我们却有可能遇到一些让人匪夷所思的问题，比如向下事件传递等。</p>
+<h3 id="0x82-PopupWindow-暗色背景实现"><a href="#0x82-PopupWindow-暗色背景实现" class="headerlink" title="0x82 PopupWindow 暗色背景实现"></a>0x82 PopupWindow 暗色背景实现</h3><p>要实现暗色背景，我们有时候会在PopupWindow的ContentView中使用占有整个屏幕的画布，整个背景是半透明的，而我们真正需要的View只占据了一小部分，这样实现出来的效果和Activity差不多，我们还可以通过处理外部的View点击事件来达到点击外部区域关闭PopupWindow的效果。但是这种用法又一个坏处，当我们使用一个比较缓慢的动画开启它时，会发现背景也跟着参与动画，这样视觉体验就会大打折扣。</p>
+<p>在平时的开发当中，PopupWindow出现的几率虽然不是很高，因为有很多中办法可以实现差不多的效果，但是既然Google提供了它，哪怕用的再少我们也要明白如何去用它。无论是网上查阅资料还是参看别人的源码，我们还会看到一种特殊的设置暗色背景的方法，这个方法其是有点trick的意思，没错，这也是我遇到的一个大坑——透明度。</p>
+<a id="more"></a>
+<h3 id="0x83-修改透明度实现背景变暗"><a href="#0x83-修改透明度实现背景变暗" class="headerlink" title="0x83 修改透明度实现背景变暗"></a>0x83 修改透明度实现背景变暗</h3><p>其实方法很简单，看代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">window = ((BaseActivity) context).getWindow();</span><br><span class="line">WindowManager.LayoutParams params = window.getAttributes();</span><br><span class="line">alphaAnimator = <span class="keyword">new</span> ValueAnimator();</span><br><span class="line">alphaAnimator.setDuration(<span class="number">250</span>);</span><br><span class="line">alphaAnimator.addUpdateListener(animation -&gt; &#123;</span><br><span class="line">    params.alpha = (<span class="keyword">float</span>) animation.getAnimatedValue();</span><br><span class="line">    window.setAttributes(params);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>通过上面的代码我们通过BaseActivity取得了Window对象，从这也能发现PopupWindow想要使用Window的话只能使用Acitivity的Window对象。</p>
+<p>看下面这段源码，在PopupWindow的invokePopup时，其实是使用了Activity的WindowManager添加了一个View：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">invokePopup</span><span class="params">(WindowManager.LayoutParams p)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mContext != <span class="keyword">null</span>) &#123;</span><br><span class="line">        p.packageName = mContext.getPackageName();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> PopupDecorView decorView = mDecorView;</span><br><span class="line">    decorView.setFitsSystemWindows(mLayoutInsetDecor);</span><br><span class="line"></span><br><span class="line">    setLayoutDirectionFromAnchor();</span><br><span class="line"></span><br><span class="line">    mWindowManager.addView(decorView, p);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mEnterTransition != <span class="keyword">null</span>) &#123;</span><br><span class="line">        decorView.requestEnterTransition(mEnterTransition);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来要实现变暗效果就是在显示和隐藏启用属性动画就可以了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showAsDropDown</span><span class="params">(View anchor, <span class="keyword">int</span> xoff, <span class="keyword">int</span> yoff)</span> </span>&#123;</span><br><span class="line">    alphaAnimator.setFloatValues(<span class="number">1f</span>, <span class="number">0.8f</span>);</span><br><span class="line">    alphaAnimator.start();</span><br><span class="line">    <span class="keyword">super</span>.showAsDropDown(anchor, xoff, yoff);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dismiss</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    alphaAnimator.setFloatValues(<span class="number">0.8f</span>, <span class="number">1f</span>);</span><br><span class="line">    alphaAnimator.start();</span><br><span class="line">    <span class="keyword">super</span>.dismiss();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0x84-windowIsTranlucent"><a href="#0x84-windowIsTranlucent" class="headerlink" title="0x84 windowIsTranlucent"></a>0x84 windowIsTranlucent</h3><p>这个属性是在Style中设置的，并且Activity一旦加载视图完成后就无法在代码中直接更改。这个属性有什么用呢？顾名思义就是把你的Window设置成透明的，我们知道Window是有背景的，但是如果你想透过一个Window看另一个Window（比如看被覆盖的Activity）只设置Window的背景为透明是不行的，你还需要将Window设置成透明的，否则将会看到Window的黑底。这个现象和启动页加载慢黑屏是一样的，所以网上也有对应的解决方案，其中很重要的一条就是设置<code>&lt;item name=&quot;android:windowIsTranslucent&quot;&gt;true&lt;/item&gt;</code>，原因很容易理解，而正是这个原因，让上面的通过修改透明度使背景变暗的方法出现了错误。</p>
+<h3 id="0x85-合用的坑"><a href="#0x85-合用的坑" class="headerlink" title="0x85 合用的坑"></a>0x85 合用的坑</h3><p>由于项目中使用滑动返回的缘故，windowIsTranlucent必须设置为true，否则Activity内容以外的部分是不显示的（其实是不渲染，处理不好会出现拖影），只有设成透明才能保证滑动时看到前一个Activity的内容。回到刚才说的设置Window透明度，为什么能实现变暗呢，其实就是因为背景是黑的，界面变得透明的话后面的黑色就会“渗”出来，也就形成了所谓的变暗，那如果Window能够透明了，很显然前一个Activity的内容就显示出来了，就和滑动返回一样。</p>
+<h3 id="0x86-解决方案"><a href="#0x86-解决方案" class="headerlink" title="0x86 解决方案"></a>0x86 解决方案</h3><p>知道了原因，解决方法就比较明确了，我们需要在特定的时候关掉透明，但是前面也说过一旦Activity的视图加载完成就很难再通过代码的方式去修改它，而设置Window的Background是没有用的（至少我试了不效果）。所以我们找一种特别的方法，就是通过控制Window的dimAmount属性，来让Window的黑背景发生变化。首先在Style中开启dim，其中0代表透明，1代表全黑：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:backgroundDimEnabled"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:backgroundDimAmount"</span>&gt;</span>0.0<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后我们就可以修改Window的Attributes来修改dimAmount的值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showAsDropDown</span><span class="params">(View anchor, <span class="keyword">int</span> xoff, <span class="keyword">int</span> yoff)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (window != <span class="keyword">null</span>) &#123;</span><br><span class="line">        WindowManager.LayoutParams params = window.getAttributes();</span><br><span class="line">        params.dimAmount = <span class="number">1.0f</span>;</span><br><span class="line">        window.setAttributes(params);</span><br><span class="line">    &#125;</span><br><span class="line">    alphaAnimator.setFloatValues(<span class="number">1f</span>, <span class="number">0.8f</span>);</span><br><span class="line">    alphaAnimator.removeAllListeners();</span><br><span class="line">    alphaAnimator.start();</span><br><span class="line">    <span class="keyword">super</span>.showAsDropDown(anchor, xoff, yoff);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dismiss</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    alphaAnimator.setFloatValues(<span class="number">0.8f</span>, <span class="number">1f</span>);</span><br><span class="line">    alphaAnimator.removeAllListeners();</span><br><span class="line">    alphaAnimator.addListener(<span class="keyword">new</span> AnimatorListenerAdapter() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(Animator animation)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (window != <span class="keyword">null</span>) &#123;</span><br><span class="line">                WindowManager.LayoutParams params = window.getAttributes();</span><br><span class="line">                params.dimAmount = <span class="number">0.0f</span>;</span><br><span class="line">                window.setAttributes(params);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    alphaAnimator.start();</span><br><span class="line">    <span class="keyword">super</span>.dismiss();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码做的事情很简单，显示时将dimAmount设为1为全黑，这样就看不到前一个Activity的内容；PopupWindow消失动画结束后再将dimAmount设回0，这样可以避免闪动，要注意<code>alphaAnimator.removeAllListeners();</code>这一句，负责会影响动画的表现。</p>
+<p>好了～这就是遇到的坑以及一个比较蹩脚的解决方案，如果有机会学习到其实可以不用这么麻烦的话，这就当一篇PopupWindow的考古文吧～</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/04/19/PopupWindow-实现暗色背景的坑/" data-id="ckfsdx7bj001kr49zhehp4946" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PopupWindow/">PopupWindow</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/20/Retrofit2-Converter的使用/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          Retrofit2 Converter的使用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/18/Android-Uri笔记/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">Android Uri笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

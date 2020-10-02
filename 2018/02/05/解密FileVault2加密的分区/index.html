@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>解密FileVault2加密的分区 | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 FileVault像Windows的BitLocker一样,Apple也为macOS(最早应该是OSX Lion开始支持)提供了全盘加密的支持,它就是FileVault,目前该项技术名字叫做FileVault2.当你第一次进入macOS的配置向导,或是从某一次重要的更新重新配置你的mac时,FileVault2会有很大的几率露脸,询问你是否要启用加密特性来保护你的个人数据安全. 当然,所">
+<meta name="keywords" content="macOS,FileVault">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解密FileVault2加密的分区">
+<meta property="og:url" content="https://fioneragh.github.io/2018/02/05/解密FileVault2加密的分区/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 FileVault像Windows的BitLocker一样,Apple也为macOS(最早应该是OSX Lion开始支持)提供了全盘加密的支持,它就是FileVault,目前该项技术名字叫做FileVault2.当你第一次进入macOS的配置向导,或是从某一次重要的更新重新配置你的mac时,FileVault2会有很大的几率露脸,询问你是否要启用加密特性来保护你的个人数据安全. 当然,所">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.207Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="解密FileVault2加密的分区">
+<meta name="twitter:description" content="0x81 FileVault像Windows的BitLocker一样,Apple也为macOS(最早应该是OSX Lion开始支持)提供了全盘加密的支持,它就是FileVault,目前该项技术名字叫做FileVault2.当你第一次进入macOS的配置向导,或是从某一次重要的更新重新配置你的mac时,FileVault2会有很大的几率露脸,询问你是否要启用加密特性来保护你的个人数据安全. 当然,所">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-解密FileVault2加密的分区" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/05/解密FileVault2加密的分区/" class="article-date">
+  <time datetime="2018-02-05T11:41:05.000Z" itemprop="datePublished">2018-02-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      解密FileVault2加密的分区
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-FileVault"><a href="#0x81-FileVault" class="headerlink" title="0x81 FileVault"></a>0x81 FileVault</h3><p>像Windows的BitLocker一样,Apple也为macOS(最早应该是OSX Lion开始支持)提供了全盘加密的支持,它就是FileVault,目前该项技术名字叫做FileVault2.当你第一次进入macOS的配置向导,或是从某一次重要的更新重新配置你的mac时,FileVault2会有很大的几率露脸,询问你是否要启用加密特性来保护你的个人数据安全.</p>
+<p>当然,所有的安全特性包括磁盘加密都会带来性能损失,因为从安全的角度上讲,你的数据要保证安全加密是必须的,而当你要使用这些数据时,就需要通过验证并解密才能成为程序可读的数据.不过话说回来,操作系统会尽可能正确的权衡性能与安全的比重,尤其是Apple整个新产品线都采用nvme的固态硬盘以及使用专门的硬件模块来保证性能.但是第三方SSD就不见得能更好的配合这些为原生苹果硬件提供的特性了,比如臭名昭著的黑苹果,几乎大部分硬件都是fake来得.</p>
+<h3 id="0x82-APFS"><a href="#0x82-APFS" class="headerlink" title="0x82 APFS"></a>0x82 APFS</h3><p>APFS,全称Apple FileSystem,译作苹果文件系统,很多人坚持它由ZFS发展而来,但是这不重要.APFS支持COW,对SSD友好,支持SSD的Trim特性以增高IO吞吐,更重要的是它支持逻辑卷管理.正因为APFS支持这些新特性,Apple终于决定换掉用了十几二十年的HFS(+J),从iOS,tvOS,watchOS到macOS都采用了这一文件系统.</p>
+<p>APFS的出现对黑苹果用户来讲可不见得是好事,High Sierra默认已经将APFS作为默认的文件系统,在升级或安装若检测到你的硬盘是固态硬盘,将会在升级或安装过程中进行APFS的转换,要注意这个转换是不可逆的.纵然如此,我们仍可以干涉macOS的升级进程,既然升级过程是从HFS+转换到APFS的,说明这个过程是使用标志位控制的,在这个过程中有一个转换操作.</p>
+<p>仔细研究过macOS升级过程的小伙伴应该都了解用于安装的app文件里有个非常庞大的dmg文件,dmg文件我们都了解就是磁盘映像文件,和iso/img文件类似,而dmg文件内是一些pkg安装文件和plist或xml配置文件,安装过程首先就是释放这些安装程序和配置文件,我们只需要把配置文件中的ConvertToApfs设置为false就可以阻止转换过程.</p>
+<p>为什么要阻止转换成APFS呢,一个是前面说的SSD兼容问题,一个是黑苹果导致的一些乱七八糟的问题,比如刚开始APFS出现导致Clover识别不到APFS分区,后来是Clover通过实现加载macOS安装镜像的apfs.efi来读取APFS,但是APFS在hackintosh上的问题远不止这些.</p>
+<a id="more"></a>
+<h3 id="0x83-CoreStorage"><a href="#0x83-CoreStorage" class="headerlink" title="0x83 CoreStorage"></a>0x83 CoreStorage</h3><p>前面说了APFS这么多和FileVault有什么关系呢?</p>
+<p>这里不得不说说CoreStorage这一让人又爱又恨的技术,最初被cs坑到是安装10.11时遭遇的4主分区限制,由于个人需要分区多分出了两个,由于原本的分区表存在EFI/RecoveryHD分区,因此加上MachintoshHD和额外的两个分区正好超出了4个分区,导致安装时包报CoreStorage错误,原来是安装程序主动转换HFS分区为能进行逻辑卷管理的CoreStorage,然后在CoreStorage中进行灵活的分卷管理,而这灵活的分卷管理就是相对让人爱的地方,和基础版的LVM用起来感觉差不多.第二个坑是黑苹果升级的坑,CoreStorage下的分区在进行Software Update之后无法向分区写入安装更新引导信息从而导致更新失败,害我那天一直以为是升级没接电源导致的.</p>
+<p>那最新的APFS是否也支持逻辑卷管理呢?苹果不会开倒车,APFS天生支持Container并且APFS Volume是建立在APFS Container之中.从Fushion Drive的支持来看,逻辑卷不是某一文件系统的专利,它是一种更为上层的控制逻辑,或者可以认为它是特殊的软RAID,而Fushion Drive就可以视作软RAID,它能让两块硬盘看起来像一块硬盘甚至一个分区在工作.</p>
+<p>终于该说FileVault了,这里其实源于我一个同事的黑苹果升级后误选了启用FileVault2加密,乖乖,电脑卡了一下午最后不得已才重启发现Clover居然读不到macOS分区,Clover能识别HFS和APFS,现在读不出来只有一个可能–分区被加密了,通过查阅资料发现FileVault Preboot(Preboot是APFS Container的一项特殊技术,有点类似我之前说的更新需要使用的更新引导信息的载体,不过之前是在一个分区上,而APFS将他们放到一个卷上)也许可以进入,然后输入密码进入设置进行FileVault解密,但是悲剧的是进去之后黑苹果的键鼠都是失效的,干瞪眼= =</p>
+<h3 id="0x84-强大的diskutil"><a href="#0x84-强大的diskutil" class="headerlink" title="0x84 强大的diskutil"></a>0x84 强大的diskutil</h3><p>其实系统遇到问题,我们最直接的想法就是进入恢复模式,macOS的Recovery是我认为恢复环境里做的比较好的,虽然它通常只用来在线恢复系统= =,其实它还提供了磁盘工具可以进行磁盘检查或者删掉多余的分区,但是这个磁盘工具也是被编码猴子们一直诟病的存在,它呈现的功能实在太少了,也许对于普通用户来讲这足够且合理.所幸Recovery提供了终端,我们有了diskutil和一些列命令行工具,就能进行更多的修复工作.</p>
+<p>接下来是解密的过程,过程很简单,但是等了好久= =,毕竟要等数据全部解密然后自然而然FileVault会自动关闭.</p>
+<ol>
+<li><p>获取apfs container 信息</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">fionera@Fioneras-MacBook-Air:~|⇒  diskutil apfs list</span><br><span class="line">APFS Container (1 found)</span><br><span class="line">|</span><br><span class="line">+-- Container disk2 9CC08098-8466-435A-ABAD-722607D6E6ED</span><br><span class="line">    ====================================================</span><br><span class="line">    APFS Container Reference:     disk2</span><br><span class="line">    Capacity Ceiling (Size):      89768812544 B (89.8 GB)</span><br><span class="line">    Capacity In Use By Volumes:   47518322688 B (47.5 GB) (52.9% used)</span><br><span class="line">    Capacity Not Allocated:       42250489856 B (42.3 GB) (47.1% free)</span><br><span class="line">    Container Shrink Limit:       58255740928 B (58.3 GB)</span><br><span class="line">    |</span><br><span class="line">    +-&lt; Physical Store disk1s2 D559D0FF-154F-4D2E-A5A2-8FC9F23F97B8</span><br><span class="line">    |   -----------------------------------------------------------</span><br><span class="line">    |   APFS Physical Store Disk:   disk1s2</span><br><span class="line">    |   Size:                       89768812544 B (89.8 GB)</span><br><span class="line">    |</span><br><span class="line">    +-&gt; Volume disk2s1 0070DBC0-5E43-3CB5-9E7F-87863226444D</span><br><span class="line">    |   ---------------------------------------------------</span><br><span class="line">    |   APFS Volume Disk (Role):   disk2s1 (No specific role)</span><br><span class="line">    |   Name:                      M10134 (Case-insensitive)</span><br><span class="line">    |   Mount Point:               /</span><br><span class="line">    |   Capacity Consumed:         46854705152 B (46.9 GB)</span><br><span class="line">    |   FileVault:                 No</span><br><span class="line">    |</span><br><span class="line">    +-&gt; Volume disk2s2 9B3B032E-1B8D-4F16-AC1E-BDCF50C0B15B</span><br><span class="line">    |   ---------------------------------------------------</span><br><span class="line">    |   APFS Volume Disk (Role):   disk2s2 (VM)</span><br><span class="line">    |   Name:                      VM (Case-insensitive)</span><br><span class="line">    |   Mount Point:               /private/var/vm</span><br><span class="line">    |   Capacity Consumed:         20480 B (20.5 KB)</span><br><span class="line">    |   FileVault:                 No</span><br><span class="line">    |</span><br><span class="line">    +-&gt; Volume disk2s3 D89A01D6-70B7-4625-97AB-8876F36F188C</span><br><span class="line">    |   ---------------------------------------------------</span><br><span class="line">    |   APFS Volume Disk (Role):   disk2s3 (Preboot)</span><br><span class="line">    |   Name:                      Preboot (Case-insensitive)</span><br><span class="line">    |   Mount Point:               Not Mounted</span><br><span class="line">    |   Capacity Consumed:         21127168 B (21.1 MB)</span><br><span class="line">    |   FileVault:                 No</span><br><span class="line">    |</span><br><span class="line">    +-&gt; Volume disk2s4 ED0CDC7F-A5EA-42D8-A25E-0FF720CC1A02</span><br><span class="line">        ---------------------------------------------------</span><br><span class="line">        APFS Volume Disk (Role):   disk2s4 (Recovery)</span><br><span class="line">        Name:                      Recovery (Case-insensitive)</span><br><span class="line">        Mount Point:               Not Mounted</span><br><span class="line">        Capacity Consumed:         518991872 B (519.0 MB)</span><br><span class="line">        FileVault:                 No</span><br></pre></td></tr></table></figure>
+<p> 输出结果类似上图,不得不说macOS的diskutil对apfs的信息输出还是比较全面的,我们也可以明确的看到FileVault的开启情况.</p>
+</li>
+<li><p>获取APFS Volume上的CryptoUser</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fionera@Fioneras-MacBook-Air:~|⇒  diskutil apfs listUsers /</span><br><span class="line">Cryptographic user <span class="keyword">for</span> disk2s1 (1 found)</span><br><span class="line">|</span><br><span class="line">+-- 1FA5C6EC-29DF-4132-9B2A-AC61886ADACD</span><br><span class="line">    Type: Local Open Directory User</span><br></pre></td></tr></table></figure>
+<p> 其中那段UUID就是用于解密FileVault的用户标识,这里只有一个LODU,对于加密过的还会有一个iCloud账户,当然如果你手动添加过,也会一一列举出来.</p>
+</li>
+<li><p>decryptVolume</p>
+<p> 没什么好说的,解密分卷关闭FileVault,执行之后可以再第一步中看到进度,等到解密完成一切就可以恢复正常.</p>
+<p> 但是注意这里有一个坑,就是我第二步讲到的用户标识符UUID,如果我在执行<code>diskutil apfs decryptVolume &lt;apfsVolumeDisk&gt;</code>不添加<code>--user</code>参数,工具将默认使用<code>--user disk</code>也就是分区标识符作为用户标识符.那鉴权是一定会失败的,因此正确的命令应该是至少类似这样<code>diskutil apfs decryptVolume disk2s1 --user 1FA5C6EC-29DF-4132-9B2A-AC61886ADACD</code>,等待执行完成,就可以在Clover中看到久违的APFS分区.</p>
+</li>
+</ol>
+<p>不得不说奋斗在黑苹果一线的rah等大牛就是在和苹果的开发人员作斗争,而折腾黑苹果也变成我了解macOS工作机制和系统特性的重要手段,由此出发而接触到APCI汇编,UEFI环境知识都不是我在日常开发工作中所能学习和了解的,在这些盲区学一些用不到的知识不一定没用,或许他们可以拓宽我们的思维,更透彻的了解他们的工作机理.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2018/02/05/解密FileVault2加密的分区/" data-id="ckfsdx7dh003cr49z3pa4s5ro" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FileVault/">FileVault</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macOS/">macOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/02/06/使用btrfs-convert转换ext4/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          使用btrfs-convert转换ext4
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/01/31/获取macOS的DeveloperBeta更新/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">获取macOS的DeveloperBeta更新</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Android中启动多个Activity | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="[2017-08-09修改]0x81 NotificationAndroid操作系统开放给我们Notification的相关API，使得我们可以轻松的控制通知的显示和行为。其中我们想要对通知的点击进行相应的响应时，就会使用到PendingIntent这个东西，PendingIntent有三个非常重要的成员方法getActivity、getBroadcast和getService，根据官方文档的解释">
+<meta name="keywords" content="Android,Activity">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android中启动多个Activity">
+<meta property="og:url" content="https://fioneragh.github.io/2017/08/09/Android中启动多个Activity/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="[2017-08-09修改]0x81 NotificationAndroid操作系统开放给我们Notification的相关API，使得我们可以轻松的控制通知的显示和行为。其中我们想要对通知的点击进行相应的响应时，就会使用到PendingIntent这个东西，PendingIntent有三个非常重要的成员方法getActivity、getBroadcast和getService，根据官方文档的解释">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.165Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android中启动多个Activity">
+<meta name="twitter:description" content="[2017-08-09修改]0x81 NotificationAndroid操作系统开放给我们Notification的相关API，使得我们可以轻松的控制通知的显示和行为。其中我们想要对通知的点击进行相应的响应时，就会使用到PendingIntent这个东西，PendingIntent有三个非常重要的成员方法getActivity、getBroadcast和getService，根据官方文档的解释">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android中启动多个Activity" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/09/Android中启动多个Activity/" class="article-date">
+  <time datetime="2017-08-09T06:41:14.000Z" itemprop="datePublished">2017-08-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android中启动多个Activity
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="2017-08-09修改"><a href="#2017-08-09修改" class="headerlink" title="[2017-08-09修改]"></a>[2017-08-09修改]</h2><h3 id="0x81-Notification"><a href="#0x81-Notification" class="headerlink" title="0x81 Notification"></a>0x81 Notification</h3><p>Android操作系统开放给我们Notification的相关API，使得我们可以轻松的控制通知的显示和行为。其中我们想要对通知的点击进行相应的响应时，就会使用到PendingIntent这个东西，PendingIntent有三个非常重要的成员方法getActivity、getBroadcast和getService，根据官方文档的解释，它们分别用点击通知时打开一个Activity、发送一个广播、启动一个Service，从而达到某些目的。</p>
+<p>比如，收到一篇新闻的通知，我们想要通过通知进入新闻详情页，这时候我们就可以构造一个打开Activity的PendingIntent来完成这件事，PendingIntent中的Intent就是我们使用startActivity时的Intent参数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> Notification.Builder builder = <span class="keyword">new</span> Notification.Builder(<span class="keyword">this</span>);</span><br><span class="line">builder.setContentTitle(<span class="string">"Open One"</span>).setContentText(<span class="string">"Click Open One Activity"</span>).setSmallIcon(</span><br><span class="line">        R.mipmap.ic_launcher).setContentIntent(PendingIntent</span><br><span class="line">        .getActivity(mContext, <span class="number">0</span>, <span class="keyword">new</span> Intent(mContext, ConstraintLayoutActivity.class),</span><br><span class="line">                PendingIntent.FLAG_UPDATE_CURRENT));</span><br><span class="line">notificationManager.notify(NOTIFICATION_ID, builder.build());</span><br></pre></td></tr></table></figure>
+<p>上述代码在Android O 以下已经可以正常运行了，这种状况对于程序正在后台运行并且Activity栈中存在根Activity时会直接在栈顶创建新打开的Activity，和startActivity行为一致，但是若App已经不再运行，而我们又是使用ApplicationContext开启Activity，则必须在Intent上追加参数<code>Intent.FLAG_ACTIVITY_NEW_TASK</code>才行。对于发送广播或者是启动Service，只需要使用PendingIntent特定的API即可。</p>
+<p>如果你的程序tagetApi是Android O，只是这样是无法成功发送通知的，因为Android O 对通知系统又做了改进，添加了NotificationChannel的支持，并支持在Pixel Launcher上添加通道通知显示和iOS的Badge提示。因此我们需要创建一个通知通道：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">NotificationChannel channel = <span class="keyword">new</span> NotificationChannel(<span class="string">"testChannel"</span>, <span class="string">"TestChannel"</span>, NotificationManager.IMPORTANCE_DEFAULT);</span><br><span class="line">channel.setDescription(<span class="string">"Description"</span>);</span><br><span class="line">channel.enableLights(<span class="keyword">true</span>);</span><br><span class="line">channel.setLightColor(Color.RED);</span><br><span class="line">notificationManager.createNotificationChannel(channel);</span><br></pre></td></tr></table></figure>
+<p>之后在NotificationBuilder中指定ChannelId就可以弹出通知了。</p>
+<blockquote>
+<p>[修改补充] Android Support Library 更新到了26.0.0，其中的v7.NotificationCompat被废弃，Google推荐使用v4.Notificationompat.Builder(context，channelId)构建通知，支持库对Android O 的通知做了兼容支持。</p>
+</blockquote>
+<h3 id="0x82-startActivities和getActivities"><a href="#0x82-startActivities和getActivities" class="headerlink" title="0x82 startActivities和getActivities"></a>0x82 startActivities和getActivities</h3><p>继续之前的例子，打开了新闻详情的页面，如果是正常情况下我们还可以按返回键回到根Activity，但若是我们的Activity是通过重新创建Task后启动的，那按返回键就会直接退出到先前的Task，这种体验有时候不是很好。我们知道startActivities就是用于启动多个Activity的，而PendingIntent提供了类似的方法getActivities，这样PendingIntent就会在触发时按顺序打开Activity，从而做到从新闻详情返回到首页的需求：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> NotificationCompat.Builder builder = <span class="keyword">new</span> NotificationCompat.Builder(<span class="keyword">this</span>);</span><br><span class="line">builder.setAutoCancel(<span class="keyword">true</span>).setContentTitle(<span class="string">"Open One"</span>).setContentText(</span><br><span class="line">        <span class="string">"Click Open One Activity"</span>).setSmallIcon(R.mipmap.ic_launcher).setContentIntent(</span><br><span class="line">        PendingIntent.getActivities(mContext, <span class="number">0</span>, <span class="keyword">new</span> Intent[]&#123;<span class="keyword">new</span> Intent(mContext,</span><br><span class="line">                        ConstraintLayoutActivity.class).addFlags(</span><br><span class="line">                Intent.FLAG_ACTIVITY_NEW_TASK), <span class="keyword">new</span> Intent(mContext,</span><br><span class="line">                        GameActivity.class),</span><br><span class="line">                <span class="keyword">new</span> Intent(mContext,</span><br><span class="line">                        OpenGLActivity.class)&#125;,</span><br><span class="line">                PendingIntent.FLAG_UPDATE_CURRENT)).setChannelId(<span class="string">"testChannel"</span>);</span><br><span class="line">notificationManager.notify(NOTIFICATION_ID, builder.build());</span><br></pre></td></tr></table></figure>
+<p>其中第一个Intent因为众所周知的原因必须带有Flag：<code>Intent.FLAG_ACTIVITY_NEW_TASK</code>，后面的Intent便不是必须的，最后一个Intent的Activity会被作为primary key，整个行为和startActivities一致。</p>
+<a id="more"></a>
+<h3 id="0x83-TaskStackBuilder"><a href="#0x83-TaskStackBuilder" class="headerlink" title="0x83 TaskStackBuilder"></a>0x83 TaskStackBuilder</h3><p>除了使用多Intent来开启多个Activity，我们还可以使用TaskStackBuilder，其中v4包中有做了相应兼容的实现的TaskStackBuilder可以使用。仔细阅读TaskStackBuilder的源码，代码不多，其实它也支持startActivities方法，获取PendingIntent时也就是做了一些封装，v4包里的代码因为考虑到更好的兼容性所以在使用API时有更全面的检查，这其实是我们编写代码所应学习的地方，写健壮鲁棒的代码是编码猴子的基本素养。</p>
+<p>我们来简单看下TaskStackBuilder特有的用法，构建新的符合要求的任务栈，并确保满足API 11 之后的不跨任务回退行为。首先需要在Manifest文件创建目标Activity的ParentActivity：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">activity</span> <span class="attr">android:name</span>=<span class="string">".activity.OpenGLActivity"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:parentActivityName</span>=<span class="string">".activity.ConstraintLayoutActivity"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后构建任务栈，并获得PendingIntent设置给Notification：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> NotificationCompat.Builder builder = <span class="keyword">new</span> NotificationCompat.Builder(<span class="keyword">this</span>);</span><br><span class="line">TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(mContext);</span><br><span class="line">taskStackBuilder.addNextIntentWithParentStack(<span class="keyword">new</span> Intent(mContext, OpenGLActivity.class));</span><br><span class="line">builder.setAutoCancel(<span class="keyword">true</span>).setContentTitle(<span class="string">"Open One"</span>).setContentText(</span><br><span class="line">        <span class="string">"Click Open Task Activity"</span>).setSmallIcon(R.mipmap.ic_launcher).setContentIntent(</span><br><span class="line">        taskStackBuilder.getPendingIntent(<span class="number">0</span>, PendingIntent.FLAG_UPDATE_CURRENT))</span><br><span class="line">        .setChannelId(<span class="string">"testChannel"</span>);</span><br><span class="line">notificationManager.notify(NOTIFICATION_ID, builder.build())</span><br></pre></td></tr></table></figure>
+<p>关于启动多个Activity内容就这么多，其实使用TaskStackBuilder是最省时省力的，Google推出的众多支持工具和向后兼容的支持库真的为我们开发带来了很大的方便，所以说AOSP和Support Source其实是最值得学习的Android开发资料。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/08/09/Android中启动多个Activity/" data-id="ckfsdx7ap000gr49z5r0t9kwg" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Activity/">Activity</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/08/09/windowIsTranlucent-踩坑之旅/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          windowIsTranlucent 踩坑之旅
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/08/02/Iterator-元素的删除/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">Iterator 元素的删除</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

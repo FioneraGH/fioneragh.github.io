@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>利用iMazing修改iOS应用数据 | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 iMazingiMazing是一个第三方iOS设备管理工具，它的功能足够强大，在遵循设备通信协议的前提下提供了足够多的功能，比如单应用数据备份、同步设备数据、访问wrapped文件系统等等。利用iMazing的数据备份功能，我们可以手动修改备份后的数据，然后将修改后的数据还原到手机，从而达到某种目的，比如我们需要修改某些小游戏的数据。 0x82 备份应用数据iOS设备如果没有越狱，是没有">
+<meta name="keywords" content="iOSm iMazing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用iMazing修改iOS应用数据">
+<meta property="og:url" content="https://fioneragh.github.io/2018/08/21/利用iMazing修改iOS应用数据/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 iMazingiMazing是一个第三方iOS设备管理工具，它的功能足够强大，在遵循设备通信协议的前提下提供了足够多的功能，比如单应用数据备份、同步设备数据、访问wrapped文件系统等等。利用iMazing的数据备份功能，我们可以手动修改备份后的数据，然后将修改后的数据还原到手机，从而达到某种目的，比如我们需要修改某些小游戏的数据。 0x82 备份应用数据iOS设备如果没有越狱，是没有">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://fioneragh.github.io/images/2018_08_21_01.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2018_08_21_02.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2018_08_21_04.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2018_08_21_03.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2018_08_21_05.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2018_08_21_02.png">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.198Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用iMazing修改iOS应用数据">
+<meta name="twitter:description" content="0x81 iMazingiMazing是一个第三方iOS设备管理工具，它的功能足够强大，在遵循设备通信协议的前提下提供了足够多的功能，比如单应用数据备份、同步设备数据、访问wrapped文件系统等等。利用iMazing的数据备份功能，我们可以手动修改备份后的数据，然后将修改后的数据还原到手机，从而达到某种目的，比如我们需要修改某些小游戏的数据。 0x82 备份应用数据iOS设备如果没有越狱，是没有">
+<meta name="twitter:image" content="https://fioneragh.github.io/images/2018_08_21_01.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-利用iMazing修改iOS应用数据" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/21/利用iMazing修改iOS应用数据/" class="article-date">
+  <time datetime="2018-08-21T10:57:15.000Z" itemprop="datePublished">2018-08-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      利用iMazing修改iOS应用数据
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-iMazing"><a href="#0x81-iMazing" class="headerlink" title="0x81 iMazing"></a>0x81 iMazing</h3><p><a href="https://imazing.com/" target="_blank" rel="noopener">iMazing</a>是一个第三方iOS设备管理工具，它的功能足够强大，在遵循设备通信协议的前提下提供了足够多的功能，比如单应用数据备份、同步设备数据、访问wrapped文件系统等等。利用iMazing的数据备份功能，我们可以手动修改备份后的数据，然后将修改后的数据还原到手机，从而达到某种目的，比如我们需要修改某些小游戏的数据。</p>
+<h3 id="0x82-备份应用数据"><a href="#0x82-备份应用数据" class="headerlink" title="0x82 备份应用数据"></a>0x82 备份应用数据</h3><p>iOS设备如果没有越狱，是没有办法直接访问设备的文件系统，更不必说是直接修改应用数据。当然，没有拿到root权限的Android也是无法做到的，Android的data分区也是权限分明并且较新的版本上都是采用加密数据存储的方式，我们只能想一些曲线救国的方式。</p>
+<p>iOS11.3的越狱刚出没多久，并且最近的支持直到11.4 beta1，如果越狱过的设备重启还会丢失越狱状态，需要重新操作。为了测试新iOS的特性，我早早讲手头的小8升级到了iOS12，截至文章时间最新测试版是12.0 beta9。iOS12现在想要越狱是不可能的，因此只能找找其他方法，比如先备份再修改然后还原。</p>
+<p>要使用这种方式完成我们的需求，我们要做的第一件是就是对应用数据进行备份。Apple钦定的备份工具是iTunes，但我相信每一个是用过它的人都想吐槽，尤其是老版本，所以它于我的功能也就是同步个自定义铃声，而对于它的备份功能，确实它可以进行备份但是备份的数据是整个手机的使用数据，至少我没有发现合适的方法达到我的要求。于是iMazing出现了，iMazing颜值很高并且提供macOS客户端，简直不能再贴心了，最新版本支持iOS12，正好符合我们的要求。(PS: iMazing提供付费服务，可以完成更多的功能，当然我不太需要，至少免费版目前对我而言够用，当然这里指的是备份还原)</p>
+<p><img src="/images/2018_08_21_01.png" alt="iMazing Home"></p>
+<p>左边Panel上方是我当前连接的手机，下方是之前的备份，这个old backup是连接macOS时itunes备份的，为了方便使用，我又用iMazing备份了一遍，有别于iTunes的备份目录<code>~/Library/Application Support/MobileSync/Backup</code>，iMazing备份在<code>~/Library/Application Support/iMazing/Backups</code>这个目录，弄这么一个备份有个好处，就是备份应用数据时可以选择从旧的备份中导出。以凉屋的Soul Knight为例，我们选择设备的Manage Apps，右键选择<code>Backup App Data</code>：</p>
+<p><img src="/images/2018_08_21_02.png" alt="Backup Data"></p>
+<p>备份导出后而我们便开始修改。</p>
+<a id="more"></a>
+<h3 id="0x83-修改应用数据"><a href="#0x83-修改应用数据" class="headerlink" title="0x83 修改应用数据"></a>0x83 修改应用数据</h3><p>经过前面的操作，我们用iMazing导出了一个imazingapp文件：</p>
+<p><img src="/images/2018_08_21_04.png" alt="zipfile"></p>
+<p><img src="/images/2018_08_21_03.png" alt="imazingapp"></p>
+<p>这个文件其实是个压缩包，我们可以使用zip命令解压，解压后的内容如上图，如果你对macOS应用在<code>~/Library</code>里的组织方式比较熟悉，那你会很自然地理解导出的iOS应用数据的组织关系。我们要修改的文件位于<code>Container/Library/Preferences/</code>目录下，简单的配置数据通常是个plist文件，对于一些文件的savefile也可以自己找寻一下，如果这个文件没有加密，那你可以放心大胆的修改。</p>
+<p>修改完之后，我们把修改后的文件打回imazingapp文件，为了干净我们删掉各级目录的.DS_Store文件：</p>
+<p><img src="/images/2018_08_21_05.png" alt="zip"></p>
+<p>处理完新的imazingapp文件，我们就可以还原数据了。</p>
+<h3 id="0x84-还原应用数据"><a href="#0x84-还原应用数据" class="headerlink" title="0x84 还原应用数据"></a>0x84 还原应用数据</h3><p>还原数据就很简单了，还是之前的应用管理页面，我们右键选择<code>Restore App Data</code>:</p>
+<p><img src="/images/2018_08_21_02.png" alt="Restore Data"></p>
+<p>iMazing，会开始尝试恢复，由于使用的是iTunes的还原机制，因此会要求你关闭Find My iPhone功能，并在回复完成时重启，这里有一点需要注意，重启完成后一定不要急着拔掉数据线连接，由于恢复机制的特殊性，如果提前拔掉，就需要重新进行设备初始化设定，虽然我们的数据不会受影响但是毕竟是麻烦，如果连接设备知道开机，并在iMazing上确认完毕，我们将只需要重新确认一下iCloud条款或者重新登陆一下AppleID以确保云服务的正确使用。</p>
+<p>到此为止，iOS应用的数据修改就完成了，可以游戏作弊了哈哈哈:P</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2018/08/21/利用iMazing修改iOS应用数据/" data-id="ckfsdx7cw002or49z06s4rtjq" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOSm-iMazing/">iOSm iMazing</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          Android 无法扫描蓝牙设备踩坑
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/08/01/在macOS-Mojave上使用VirtualBox/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">在macOS Mojave上使用VirtualBox</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+% !TEX TS-program = xelatex
+% !TEX encoding = UTF-8 Unicode
+% !Mode:: "TeX:UTF-8"
+
+\documentclass{resume}
+% \usepackage{zh_CN-Adobefonts_external} % Simplified Chinese Support using external fonts (./fonts/zh_CN-Adobe/)
+\usepackage{zh_CN-Adobefonts_internal} % Simplified Chinese Support using system fonts
+
+\begin{document}
+\pagenumbering{gobble} % suppress displaying page number
+
+\name{杨阳}
+
+\basicInfo{
+  26岁/山东青岛 \textperiodcentered\
+  \email{fionera@outlook.com} \textperiodcentered\ 
+  \phone{(+86) 13156218856} \textperiodcentered\ 
+  \github[github.com/fioneragh]{https://github.com/fioneragh}
+}
+
+工作经历：\textit{4年} \ 现就职：瓜子二手车-金瓜子（北京）科技发展有限公司
+
+~\\
+
+\section{\faGraduationCap\  教育背景}
+\datedsubsection{\textbf{中国海洋大学}，青岛}{2012 -- 2016}
+\textit{学士}\ 计算机信息保密
+
+个人爱好：编程、逆向、Hackintosh、日剧、类DND
+
+\section{\faUsers\ 工作项目经历}
+\datedsubsection{\textbf{瓜子二手车 } 北京}{2018年10月 -- 至今}
+\role{资深移动开发工程师}{车源部门}
+检瓜子，二手车一线评估师收车检测工具
+\begin{itemize}
+  \item 负责项目的基础架构，工单评估和审批流程功能的开发
+  \item 利用ARouter完善模块化支持，对ARouter做出改造以满足Fragment等场景的使用支持
+  \item 引入Kotlin，带领团队转向Koltin开发，利用扩展函数、域操作符等特性减少项目模版代码并提高空安全降低空指针崩溃
+  \item 推动团队对RxJava家族的接受度，以完成权限检查、网络请求和线程操作的响应式转化，同时推动自动正/反序列化代替手动Json到Pojo的解析
+  \item 负责集团网络、WebView等基础组件的维护与接入
+  \item 完成评估工单及审批流程相关的需求开发
+  \item 技术栈：Kotlin，Gradle，OkHttp，Retrofit，RxJava，ARouter，Picasso，FastJson
+\end{itemize}
+
+瓜子租车，原PP租车，C2C/B2C租车平台
+\begin{itemize}
+  \item 为租车项目提供技术支持，对订单流程进行改造
+  \item 完成项目的模块化改造，推动团队将原本的单app模块按业务拆分，按需开发
+  \item 和团队一起将底层网络、Web容器、Push组件等向集团无线公共组件迁移，全面切换基于RxJava的响应式请求处理，去除模版化的生命周期处理逻辑
+  \item 车友订单流程改造，将订单创建逻辑中的限制因素分散到订单创建的过程当中，提高下单体验
+  \item 技术栈：Kotlin，RxJava，ARouter，Glide
+\end{itemize}
+
+集团收银台SDK/智能眼镜SDK
+\begin{itemize}
+  \item 配合收车中台开发和维护集团收银台SDK，完成集团合作POS的对接支持，抽离SDK内部业务逻辑，支持各业务线按需引用，负责接入文档、更新日志的编写
+  \item 接手维护智能眼镜SDK，解决一线出现音视频不同步、丢音现象，推动供应商修正设备固件
+  \item 核心方向：BLE通信、USB设备通信
+\end{itemize}
+
+\datedsubsection{\textbf{中创物流-盈智科技 } 青岛}{2016年7月 -- 2018年9月}
+\role{Android负责人}{货代产品部}
+智能印章管理系统
+\begin{itemize}
+  \item 负责项目的技术选型，以及整体开发方向
+  \item 负责项目的整体架构及用印流程的开发
+  \item 负责与供应商拟定通信传输协议，完成设备通信如BLE、串口设备的功能开发
+  \item 技术栈：Kotlin，OkHttp，Okio，Glide，Gson
+\end{itemize}
+
+货代财务管理系统
+\begin{itemize}
+  \item 负责财务帐务信息录入和报账流程的相关开发
+  \item 主要使用Vue和SpringBoot全家桶进行前后端开发，UI组件库以iView为主，辅助使用element
+\end{itemize}
+
+% Reference Test
+%\datedsubsection{\textbf{Paper Title\cite{zaharia2012resilient}}}{May. 2015}
+%An xxx optimized for xxx\cite{verma2015large}
+%\begin{itemize}
+%  \item main contribution
+%\end{itemize}
+
+\section{\faCogs\ 专业技能}
+% increase linespacing [parsep=0.5ex]
+\begin{itemize}[parsep=0.5ex]
+  \item Android开发，熟练掌握常用的设计模式、数据结构和Framework API，热爱研究移动跨平台如Flutter开发，善于接受学习新事物，乐于钻研新技术和阅读源代码。
+  \item 掌握响应式编程的思想，为团队引入RxJava并进行代码重构，引入Kotlin，使用扩展函数减少模板代码，提高开发效率。
+  \item 熟练掌握Kotlin/Java语言，对JVM有一定了解，掌握多线程、反射、动态代理等常用相关开发知识。
+  \item 了解Python等脚本语言，，使用PyQt写过端口扫瞄器、爬虫、安全报文工具。
+  \item 多年的Linux使用经验，熟练掌握*nix/Linux 基本操作，具备一定的Bash及Python脚本编写能力。喜欢操作系统相关，研究过Hackintosh，ACPI反汇编，kext/kernel的bin-patch等。
+  \item 了解Android逆向知识，出于破解和注入代码的目的逆向过Android应用apk文件，能解读smali语法，进行静态分析。
+  \item 了解加密相关知识，如对称非对称加密、DH密钥交换、RSA、数字证书等。
+\end{itemize}
+
+% %\section{\faHeartO\ 获奖情况}
+% %\datedline{\textit{第一名}, xxx 比赛}{2013 年6 月}
+% %\datedline{其他奖项}{2015}
+
+\section{\faInfo\ 其他}
+% increase linespacing [parsep=0.5ex]
+\begin{itemize}[parsep=0.5ex]
+  \item 个人博客: https://fioneragh.github.io/
+  \item 线上简历: https://fioneragh.github.io/resume/
+  \item 语言: 英语 - 熟练(CET6)
+\end{itemize}
+
+%Powered By \XeLaTeX\
+%% Reference
+%\newpage
+%\bibliographystyle{IEEETran}
+%\bibliography{mycite}
+\end{document}

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Openstack快速安装：packstack | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x80 前言我曾经在差不多两年前安装过Openstack，当时是按照某个论坛的大牛的分享，一步一个脚印，用了很长时间才进入Openstack DashBoard并进行自己劳动成果的体验，感受自己为自己提供的服务。但是那次血泪安装史也并不完美，虽然核心组件成功运行，但是仍旧有部分功能存在问题，迫于精力有限，我便没有再碰过Openstack。最近又心血来潮想要玩一玩这个曾经的玩物，恰巧了解到Open">
+<meta name="keywords" content="Openstack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Openstack快速安装：packstack">
+<meta property="og:url" content="https://fioneragh.github.io/2017/03/02/Openstack快速安装：packstack/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x80 前言我曾经在差不多两年前安装过Openstack，当时是按照某个论坛的大牛的分享，一步一个脚印，用了很长时间才进入Openstack DashBoard并进行自己劳动成果的体验，感受自己为自己提供的服务。但是那次血泪安装史也并不完美，虽然核心组件成功运行，但是仍旧有部分功能存在问题，迫于精力有限，我便没有再碰过Openstack。最近又心血来潮想要玩一玩这个曾经的玩物，恰巧了解到Open">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.177Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Openstack快速安装：packstack">
+<meta name="twitter:description" content="0x80 前言我曾经在差不多两年前安装过Openstack，当时是按照某个论坛的大牛的分享，一步一个脚印，用了很长时间才进入Openstack DashBoard并进行自己劳动成果的体验，感受自己为自己提供的服务。但是那次血泪安装史也并不完美，虽然核心组件成功运行，但是仍旧有部分功能存在问题，迫于精力有限，我便没有再碰过Openstack。最近又心血来潮想要玩一玩这个曾经的玩物，恰巧了解到Open">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Openstack快速安装：packstack" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/02/Openstack快速安装：packstack/" class="article-date">
+  <time datetime="2017-03-02T10:13:01.000Z" itemprop="datePublished">2017-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Openstack快速安装：packstack
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x80-前言"><a href="#0x80-前言" class="headerlink" title="0x80 前言"></a>0x80 前言</h3><p>我曾经在差不多两年前安装过Openstack，当时是按照某个论坛的大牛的分享，一步一个脚印，用了很长时间才进入Openstack DashBoard并进行自己劳动成果的体验，感受自己为自己提供的服务。但是那次血泪安装史也并不完美，虽然核心组件成功运行，但是仍旧有部分功能存在问题，迫于精力有限，我便没有再碰过Openstack。<br>最近又心血来潮想要玩一玩这个曾经的玩物，恰巧了解到Openstack可以近乎一键安装，于是便再次操弄起来。</p>
+<p>这里要特别感谢《Linux就该这么学》的主题网站，两年前的论坛我是记不住了，但这个网站我个人觉得是非常适合参照学习来提升个人能力的。<a href="http://www.linuxprobe.com/chapter-22.html" target="_blank" rel="noopener">第22章 使用openstack部署云计算服务环境。 | 《Linux就该这么学》</a></p>
+<h3 id="0x81-安装准备"><a href="#0x81-安装准备" class="headerlink" title="0x81 安装准备"></a>0x81 安装准备</h3><p>处于学习目的，我使用的资源都是这篇教程的网站提供的。再次感谢让我有一次轻松学习部署Openstack的机会。<a href="http://www.linuxprobe.com/tools" target="_blank" rel="noopener">软件资源库 | 《Linux就该这么学》</a></p>
+<h3 id="0x82-RHEL-7-安装"><a href="#0x82-RHEL-7-安装" class="headerlink" title="0x82 RHEL 7 安装"></a>0x82 RHEL 7 安装</h3><p>和安装一般的虚拟机一样，但是我们需要添加两块虚拟硬盘，其中一块提供给Openstack的Cinder使用。内存至少4GB（这里坑了我好久，第一次是horizon配置失败，后来不定时的发生错误，经过监视CPU和内存的使用才发现根本原因是内存不够，我分配4G只有3.8可用，最高占用达到过3.77G），虚拟网卡至少要有一个方便主机直接控制虚拟机的，比如Host-Only模式，当然要链接外网下载Package的话可以再分一块NAT，我直接使用的桥接（我是在Virtual Box中完成的）。</p>
+<a id="more"></a>
+<h3 id="0x83-软件源的配置"><a href="#0x83-软件源的配置" class="headerlink" title="0x83 软件源的配置"></a>0x83 软件源的配置</h3><p><code>linuxprobe.com</code>提供的镜像默认repo是空的（貌似有一个EPEL和一个EPEL-Testing在线源），也就是说你不能安装任何软件包，所以我们要自己配置软件源。当然你可以直接配置在线软件源，由于所需的包那个网站都提供了，所以我配置的是离线仓库。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@openstack ~]# cat /etc/yum.repos.d/rhel.repo</span><br><span class="line">[base]</span><br><span class="line">name=base</span><br><span class="line">baseurl=file:///media/cdrom</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">[root@openstack ~]# cat /etc/yum.repos.d/epel.repo</span><br><span class="line">[epel]</span><br><span class="line">name=epel</span><br><span class="line">baseurl=file:///media/EPEL</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">[root@openstack ~]# cat /etc/yum.repos.d/openstack.repo</span><br><span class="line">[openstack]</span><br><span class="line">name=openstack</span><br><span class="line">baseurl=file:///media/openstack-juno</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br></pre></td></tr></table></figure>
+<p>这样我们就可以安装常用的vim、net-tools等软件包了。</p>
+<h3 id="0x84-安装Openstack"><a href="#0x84-安装Openstack" class="headerlink" title="0x84 安装Openstack"></a>0x84 安装Openstack</h3><p>我们先安装packstack工具:</p>
+<blockquote>
+<p>yum install openstack-packstack</p>
+</blockquote>
+<p>之后像执行部署工具：</p>
+<blockquote>
+<p>packstack –allinone –provision-demo=n –nagios-install=n</p>
+</blockquote>
+<p>这里不设置provision，也不安装nagios。等一切Apply完成，显示如下结果</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line">Welcome to Installer setup utility</span><br><span class="line">Packstack changed given value  to required value /root/.ssh/id_rsa.pub</span><br><span class="line"></span><br><span class="line">Installing:</span><br><span class="line">Clean Up                                             [ DONE ]</span><br><span class="line">Setting up ssh keys                                  [ DONE ]</span><br><span class="line">Discovering hosts details                           [ DONE ]</span><br><span class="line">Adding pre install manifest entries                  [ DONE ]</span><br><span class="line">Preparing servers                                    [ DONE ]</span><br><span class="line">Adding AMQP manifest entries                         [ DONE ]</span><br><span class="line">Adding MySQL manifest entries                        [ DONE ]</span><br><span class="line">Adding Keystone manifest entries                     [ DONE ]</span><br><span class="line">Adding Glance Keystone manifest entries              [ DONE ]</span><br><span class="line">Adding Glance manifest entries                       [ DONE ]</span><br><span class="line">Adding Cinder Keystone manifest entries              [ DONE ]</span><br><span class="line">Adding Cinder manifest entries                       [ DONE ]</span><br><span class="line">Checking if the Cinder server has a cinder-volumes vg[ DONE ]</span><br><span class="line">Adding Nova API manifest entries                     [ DONE ]</span><br><span class="line">Adding Nova Keystone manifest entries                [ DONE ]</span><br><span class="line">Adding Nova Cert manifest entries                    [ DONE ]</span><br><span class="line">Adding Nova Conductor manifest entries               [ DONE ]</span><br><span class="line">Creating ssh keys for Nova migration                 [ DONE ]</span><br><span class="line">Gathering ssh host keys for Nova migration           [ DONE ]</span><br><span class="line">Adding Nova Compute manifest entries                 [ DONE ]</span><br><span class="line">Adding Nova Scheduler manifest entries               [ DONE ]</span><br><span class="line">Adding Nova VNC Proxy manifest entries               [ DONE ]</span><br><span class="line">Adding Openstack Network-related Nova manifest entries[ DONE ]</span><br><span class="line">Adding Nova Common manifest entries                  [ DONE ]</span><br><span class="line">Adding Neutron API manifest entries                  [ DONE ]</span><br><span class="line">Adding Neutron Keystone manifest entries             [ DONE ]</span><br><span class="line">Adding Neutron L3 manifest entries                   [ DONE ]</span><br><span class="line">Adding Neutron L2 Agent manifest entries             [ DONE ]</span><br><span class="line">Adding Neutron DHCP Agent manifest entries           [ DONE ]</span><br><span class="line">Adding Neutron LBaaS Agent manifest entries          [ DONE ]</span><br><span class="line">Adding Neutron Metering Agent manifest entries       [ DONE ]</span><br><span class="line">Adding Neutron Metadata Agent manifest entries       [ DONE ]</span><br><span class="line">Checking if NetworkManager is enabled and running    [ DONE ]</span><br><span class="line">Adding OpenStack Client manifest entries             [ DONE ]</span><br><span class="line">Adding Horizon manifest entries                      [ DONE ]</span><br><span class="line">Adding Swift Keystone manifest entries               [ DONE ]</span><br><span class="line">Adding Swift builder manifest entries                [ DONE ]</span><br><span class="line">Adding Swift proxy manifest entries                  [ DONE ]</span><br><span class="line">Adding Swift storage manifest entries                [ DONE ]</span><br><span class="line">Adding Swift common manifest entries                 [ DONE ]</span><br><span class="line">Adding MongoDB manifest entries                      [ DONE ]</span><br><span class="line">Adding Ceilometer manifest entries                   [ DONE ]</span><br><span class="line">Adding Ceilometer Keystone manifest entries          [ DONE ]</span><br><span class="line">Adding post install manifest entries                 [ DONE ]</span><br><span class="line">Installing Dependencies                              [ DONE ]</span><br><span class="line">Copying Puppet modules and manifests                 [ DONE ]</span><br><span class="line">Applying 192.168.208.108_prescript.pp</span><br><span class="line">192.168.208.108_prescript.pp:                        [ DONE ]</span><br><span class="line">Applying 192.168.208.108_amqp.pp</span><br><span class="line">Applying 192.168.208.108_mysql.pp</span><br><span class="line">192.168.208.108_amqp.pp:                             [ DONE ]</span><br><span class="line">192.168.208.108_mysql.pp:                            [ DONE ]</span><br><span class="line">Applying 192.168.208.108_keystone.pp</span><br><span class="line">Applying 192.168.208.108_glance.pp</span><br><span class="line">Applying 192.168.208.108_cinder.pp</span><br><span class="line">192.168.208.108_keystone.pp:                         [ DONE ]</span><br><span class="line">192.168.208.108_glance.pp:                           [ DONE ]</span><br><span class="line">192.168.208.108_cinder.pp:                           [ DONE ]</span><br><span class="line">Applying 192.168.208.108_api_nova.pp</span><br><span class="line">192.168.208.108_api_nova.pp:                         [ DONE ]</span><br><span class="line">Applying 192.168.208.108_nova.pp</span><br><span class="line">192.168.208.108_nova.pp:                             [ DONE ]</span><br><span class="line">Applying 192.168.208.108_neutron.pp</span><br><span class="line">192.168.208.108_neutron.pp:                          [ DONE ]</span><br><span class="line">Applying 192.168.208.108_neutron_fwaas.pp</span><br><span class="line">Applying 192.168.208.108_osclient.pp</span><br><span class="line">Applying 192.168.208.108_horizon.pp</span><br><span class="line">192.168.208.108_neutron_fwaas.pp:                    [ DONE ]</span><br><span class="line">192.168.208.108_horizon.pp:                          [ DONE ]</span><br><span class="line">192.168.208.108_osclient.pp:                         [ DONE ]</span><br><span class="line">Applying 192.168.208.108_ring_swift.pp</span><br><span class="line">192.168.208.108_ring_swift.pp:                       [ DONE ]</span><br><span class="line">Applying 192.168.208.108_swift.pp</span><br><span class="line">192.168.208.108_swift.pp:                            [ DONE ]</span><br><span class="line">Applying 192.168.208.108_mongodb.pp</span><br><span class="line">192.168.208.108_mongodb.pp:                          [ DONE ]</span><br><span class="line">Applying 192.168.208.108_ceilometer.pp</span><br><span class="line">192.168.208.108_ceilometer.pp:                       [ DONE ]</span><br><span class="line">Applying 192.168.208.108_postscript.pp</span><br><span class="line">192.168.208.108_postscript.pp:                       [ DONE ]</span><br><span class="line">Applying Puppet manifests                            [ DONE ]</span><br><span class="line">Finalizing                                           [ DONE ]</span><br><span class="line"></span><br><span class="line"> **** Installation completed successfully ******</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Additional information:</span><br><span class="line"> * A new answerfile was created in: /root/packstack-answers-20170302-045851.txt</span><br><span class="line"> * Time synchronization installation was skipped. Please note that unsynchronized time on server instances might be problem for some OpenStack components.</span><br><span class="line"> * File /root/keystonerc_admin has been created on OpenStack client host 192.168.208.108. To use the command line tools you need to source the file.</span><br><span class="line"> * To access the OpenStack Dashboard browse to http://192.168.208.108/dashboard .</span><br><span class="line">Please, find your login credentials stored in the keystonerc_admin in your home directory.</span><br><span class="line"> * Because of the kernel update the host 192.168.208.108 requires reboot.</span><br><span class="line"> * The installation log file is available at: /var/tmp/packstack/20170302-045851-iuq1om/openstack-setup.log</span><br><span class="line"> * The generated manifests are available at: /var/tmp/packstack/20170302-045851-iuq1om/manifests</span><br></pre></td></tr></table></figure>
+<p>附加信息里告诉了我们DashBoard地址，以及账号密码的存放位置<code>/root/keystonerc_admin</code>，可以登录玩耍了～</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/03/02/Openstack快速安装：packstack/" data-id="ckfsdx7bj001jr49zkbr7qo3p" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Openstack/">Openstack</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/06/Vim的Python配置——YouCompleteMe/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          Vim的Python配置——YouCompleteMe
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/02/Hexo-Image-Asset/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">Hexo Image Asset</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

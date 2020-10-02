@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Makefile 基础 | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x00 吐槽最近一段时间真是命途多舛，昨天晚上感觉差点被发烧烧成傻子，到晚上2点多都烧到了39，当时真的担心自己睡过去醒了会成为白痴，那我还如何去怼人，那么多没做的事自己再也意识不到是多么可悲的事情。这段时间诸多不顺，当然这种不顺利也不仅仅是在我身上，也许生活本该这样充满波折才比较有趣，但是大条的自己却往往不去在意一些细节，让自己一错再错，比如这日常笔记就一断再断。不得不说，能坚持做一件事情真的">
+<meta name="keywords" content="Linux,Makefile">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Makefile 基础">
+<meta property="og:url" content="https://fioneragh.github.io/2017/04/10/Makefile-基础/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x00 吐槽最近一段时间真是命途多舛，昨天晚上感觉差点被发烧烧成傻子，到晚上2点多都烧到了39，当时真的担心自己睡过去醒了会成为白痴，那我还如何去怼人，那么多没做的事自己再也意识不到是多么可悲的事情。这段时间诸多不顺，当然这种不顺利也不仅仅是在我身上，也许生活本该这样充满波折才比较有趣，但是大条的自己却往往不去在意一些细节，让自己一错再错，比如这日常笔记就一断再断。不得不说，能坚持做一件事情真的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.175Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Makefile 基础">
+<meta name="twitter:description" content="0x00 吐槽最近一段时间真是命途多舛，昨天晚上感觉差点被发烧烧成傻子，到晚上2点多都烧到了39，当时真的担心自己睡过去醒了会成为白痴，那我还如何去怼人，那么多没做的事自己再也意识不到是多么可悲的事情。这段时间诸多不顺，当然这种不顺利也不仅仅是在我身上，也许生活本该这样充满波折才比较有趣，但是大条的自己却往往不去在意一些细节，让自己一错再错，比如这日常笔记就一断再断。不得不说，能坚持做一件事情真的">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Makefile-基础" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/10/Makefile-基础/" class="article-date">
+  <time datetime="2017-04-10T10:29:38.000Z" itemprop="datePublished">2017-04-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Makefile 基础
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x00-吐槽"><a href="#0x00-吐槽" class="headerlink" title="0x00 吐槽"></a>0x00 吐槽</h3><p>最近一段时间真是命途多舛，昨天晚上感觉差点被发烧烧成傻子，到晚上2点多都烧到了39，当时真的担心自己睡过去醒了会成为白痴，那我还如何去怼人，那么多没做的事自己再也意识不到是多么可悲的事情。这段时间诸多不顺，当然这种不顺利也不仅仅是在我身上，也许生活本该这样充满波折才比较有趣，但是大条的自己却往往不去在意一些细节，让自己一错再错，比如这日常笔记就一断再断。不得不说，能坚持做一件事情真的时非常不容易，那些可以坚持的人必然具有强大的内心，而我自己又是那种外表逞强内心脆弱的人，有的时候真的很羡慕那些无忧无虑做爱做的事情的人，也许，我羡慕的一直都是我自己而不知。</p>
+<h3 id="0x81-make"><a href="#0x81-make" class="headerlink" title="0x81 make"></a>0x81 make</h3><p>扒wiki的事情这里就不做了，有时候想想自己把网上的东西用自己理解的语言表达出来还不一定准确，毕竟这是此情此景下的理解，过个小半年自己如果再回来看也许都不知道自己当初说了啥。这里简单的说一下make，make在英语里就是做的意思，make love啦等等，我们可以将它理解为程序的构建工具，就像webpack一样，它根据描述文件Makefile调用编译工具如GCC完成整个构建任务build，说她是个辅助工具也不为过。它有很多实现，在Linux下常用的就是GNU Make Tool。</p>
+<h3 id="0x82-Makefile"><a href="#0x82-Makefile" class="headerlink" title="0x82 Makefile"></a>0x82 Makefile</h3><p>Makefile是一个描述文件，也可以视为配置文件，就像webpack的webpack.config.js文件，它描述了构建任务所需的必要参数和构建过程。通常make工具会自己搜寻目录下的描述文件，如makefile、Makefile等，我们只需要在工程目录下创建相应的文件即可。</p>
+<a id="more"></a>
+<h3 id="0x83-Makefile-基本原则"><a href="#0x83-Makefile-基本原则" class="headerlink" title="0x83 Makefile 基本原则"></a>0x83 Makefile 基本原则</h3><p>如果你只是进行非常普通的人力重复的构建任务，那Makefile再适合不过了，对于这种状况Makefile的书写也非常简单：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">target : dependencies[;command]</span><br><span class="line">    command</span><br></pre></td></tr></table></figure>
+<p>target：目标的意思，就是你要构建什么<br>dependencies：依赖，意为构建目标要依赖哪些东西<br>command：指令，满足依赖的情况下完成构建目标需要执行什么命令。命令的书写有两种格式：一种是简单命令直接跟在dependencies后面，用”;”分隔；另一种是另起一行，每行命令用tab开头以让make知道这是一组命令。</p>
+<p>例如：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">main : main.cpp</span><br><span class="line">    g++ -o main main.cpp</span><br></pre></td></tr></table></figure>
+<p>这样再工程目录下执行make，便会生成main这个二进制文件。</p>
+<h3 id="0x84-变量"><a href="#0x84-变量" class="headerlink" title="0x84 变量"></a>0x84 变量</h3><p>仔细看Makefile可以发现它其实有点类似bash脚本，假设我们的二进制文件main的构建需要依赖一大堆文件，那我们在命令中也要同样书写这些重复的文件名，所以Makefile支持变量特性，可以将这些模板代码统一管理，还可以减少维护的难度：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">OBJECT=main.o d1.o d2.o d3.o</span><br><span class="line"></span><br><span class="line">main : <span class="variable">$(OBJECT)</span></span><br><span class="line">    g++ -o main <span class="variable">$(OBJECT)</span></span><br><span class="line"></span><br><span class="line">d1.o : d1.cpp d1.h</span><br><span class="line">    g++ -c d1.cpp</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>当然这个OBJECT变量的值也可在make命令运行时指定，比如<code>make OBJECT=xxx</code>。</p>
+<h3 id="0x85-自动推断"><a href="#0x85-自动推断" class="headerlink" title="0x85 自动推断"></a>0x85 自动推断</h3><p>通过上面的例子，我们发现在生成.o中间文件时，我们都会书写cpp文件，这样就会显得特别繁琐，GNU make支持自动推断，所以下面两段脚本的作用是等同的：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">d1.o : d1.cpp dd1.h</span><br><span class="line">    g++ -c d1.cpp</span><br><span class="line"></span><br><span class="line">d1.o : dd1.h</span><br></pre></td></tr></table></figure>
+<h3 id="0x86-文件包含"><a href="#0x86-文件包含" class="headerlink" title="0x86 文件包含"></a>0x86 文件包含</h3><p>当工程变得庞大，我们的Makefile可能也会变得冗长，我们通常会想把Makefile按我们编写代码的模块一样分开书写，那就使用include关键字，包含的文件将会被make工具自动加载进来。</p>
+<h3 id="0x87-伪目标与更新规则"><a href="#0x87-伪目标与更新规则" class="headerlink" title="0x87 伪目标与更新规则"></a>0x87 伪目标与更新规则</h3><p>我们在用Tarball的方式自己编译源码安装软件时，通常会执行一次<code>make clean</code>以确保删除之前编译留下的文件来进行一次全量编译，那clean是怎么实现的呢？</p>
+<p>这里我们先来说一下更新规则，make很智能，在你使用make进行构建任务时，他总能找到你做了修改的源文件并依次更新依赖目标，最终编译出一个新的二进制ELF或其他target，而对于那些没有改动的，它便不会去重新编译。</p>
+<p>make的更新规则主要有两条，一是存在依赖，二是时间戳比目标新。首先来说第一条规则——存在依赖，它的意思就是target后的dependencies不能是空的，否则make会跳过这个目标，除非你显式的指定它。而我们的clean工作就是一个dependencies是空的伪target，这样在构建的过程中便不会执行对应的清扫命令，而在我们使用<code>make clean</code>的时候它会生效，为了方便维护我们还会添加.PHONY声明词缀来标识这件事情：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.PHONY : clean</span><br><span class="line">clean :</span><br><span class="line">    -rm -f <span class="variable">$(OBJECT)</span> main // rm前的<span class="string">"-"</span>是指即使出现执行失败的状况也不要打断这个过程，比如<span class="string">"No such file or directory."</span></span><br></pre></td></tr></table></figure>
+<p>至于第二条时间戳更新就比较好理解了，通常情况下只有依赖文件的时间戳比目标文件新才说明发生了更改，需要重新编译或链接。</p>
+<p>Makefile的基本用法就是这样，很简单清晰自然，当然在比较大的工程里Makefile绝不会这么简单，写好Makefile也是一门学问，一个成型的项目的Makefile通常会充斥了大量的条件判断和可重用的函数，这些扩展后面有机会再写（估计是难了，好多有机会的坑一个都没补2333），有时间玩一下交叉编译工具CMake，当下只简单的在AndroidJni工程里写过简单的CMakeLists.txt文件，还需多多学习呀～</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/04/10/Makefile-基础/" data-id="ckfsdx7bd0019r49zc5jrgcp5" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Makefile/">Makefile</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/11/Fedora下安装Unity-Editor/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          Fedora下安装Unity Editor
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/06/YouCompleteMe的C-C-支持/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">YouCompleteMe的C/C++支持</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

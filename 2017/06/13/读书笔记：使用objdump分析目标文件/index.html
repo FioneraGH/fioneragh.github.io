@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>读书笔记：使用objdump分析目标文件 | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="[这篇读书笔记可能要分几天完成] 0x80 前言最近几天扮演了一下很多人眼里的仇敌——面试官，说句实在话，自己也就从中国海洋育儿所毕业不到一年，工作两年多，而很多应聘者扣头上就是三年工作经验，最初的时候心想我有什么资格去面试行业道路上的老前辈。几场面试下来，这种想法就不存在了。的确，牛人云集的互联网行业谁也不敢说大话，但是很多应聘者都有一个通病，那就是对技术只知其一不知其二，他们更多满足于使用上而">
+<meta name="keywords" content="Linux,objdump">
+<meta property="og:type" content="article">
+<meta property="og:title" content="读书笔记：使用objdump分析目标文件">
+<meta property="og:url" content="https://fioneragh.github.io/2017/06/13/读书笔记：使用objdump分析目标文件/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="[这篇读书笔记可能要分几天完成] 0x80 前言最近几天扮演了一下很多人眼里的仇敌——面试官，说句实在话，自己也就从中国海洋育儿所毕业不到一年，工作两年多，而很多应聘者扣头上就是三年工作经验，最初的时候心想我有什么资格去面试行业道路上的老前辈。几场面试下来，这种想法就不存在了。的确，牛人云集的互联网行业谁也不敢说大话，但是很多应聘者都有一个通病，那就是对技术只知其一不知其二，他们更多满足于使用上而">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_06_13_01.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_06_13_02.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_06_13_03.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_06_15_01.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_06_15_02.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_06_15_03.png">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.207Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="读书笔记：使用objdump分析目标文件">
+<meta name="twitter:description" content="[这篇读书笔记可能要分几天完成] 0x80 前言最近几天扮演了一下很多人眼里的仇敌——面试官，说句实在话，自己也就从中国海洋育儿所毕业不到一年，工作两年多，而很多应聘者扣头上就是三年工作经验，最初的时候心想我有什么资格去面试行业道路上的老前辈。几场面试下来，这种想法就不存在了。的确，牛人云集的互联网行业谁也不敢说大话，但是很多应聘者都有一个通病，那就是对技术只知其一不知其二，他们更多满足于使用上而">
+<meta name="twitter:image" content="https://fioneragh.github.io/images/2017_06_13_01.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-读书笔记：使用objdump分析目标文件" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/06/13/读书笔记：使用objdump分析目标文件/" class="article-date">
+  <time datetime="2017-06-13T10:38:08.000Z" itemprop="datePublished">2017-06-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      读书笔记：使用objdump分析目标文件
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>[这篇读书笔记可能要分几天完成]</p>
+<h3 id="0x80-前言"><a href="#0x80-前言" class="headerlink" title="0x80 前言"></a>0x80 前言</h3><p>最近几天扮演了一下很多人眼里的仇敌——面试官，说句实在话，自己也就从中国海洋育儿所毕业不到一年，工作两年多，而很多应聘者扣头上就是三年工作经验，最初的时候心想我有什么资格去面试行业道路上的老前辈。几场面试下来，这种想法就不存在了。的确，牛人云集的互联网行业谁也不敢说大话，但是很多应聘者都有一个通病，那就是对技术只知其一不知其二，他们更多满足于使用上而忽略了基础的重要性，更有甚者对于底层或者基础知识嗤之以鼻。</p>
+<p>最近几场面试我都会循序渐进的问几个问题，问题最终都停在是否阅读过源码这件事情上，我承认，我没有看所有的源码，我没有足够的时间去阅读所有的代码，但我对我感兴趣或者说我认为有用的源代码都会尝试去学习，因为我觉得别人的代码总有值的我们学习的地方，我不可能记住代码，但我会尽可能的去领悟他们的设计思想，说不定哪天你也会需要开发这样一个东西，它可以帮助你快速的技术选型与定桩。</p>
+<p>还有一点，基础知识的重要性，我深知基础的重要性，也承认我的基础不是很扎实，但是如果你连最基本的基础知识都掌握的不够好，你说在团队中是骨干是核心我是不信的，忽略了基础的开发按照我的理解只是在用不同的方式堆砌代码，毫无技术含量可言，代码也必然枯燥乏味。我也一直在反思自己，最近项目也算是比较繁忙，忙什么，忙需求，自己也写了不少日记吐槽自己，可是我转念一想理需求是作为开发又不得不做还必须做好的事情，我学习了很多，时间很紧（当然我还是能抽出时间打打游戏放松一下，我不是机器我也需要休息）却很充实，文章中断的多了但是我认为这是一个好的现象，盲目的坚持写些没用的东西（比如现在）其实也是浪费时间。最近又拿出时间来看《程序员的自我修养》，我决定认真的看完，并记录下自己的收获，也算是让自己的努力有一个可以追溯的证据。</p>
+<h3 id="0x81-目标文件"><a href="#0x81-目标文件" class="headerlink" title="0x81 目标文件"></a>0x81 目标文件</h3><p>最近又看到了目标文件这一章（又是因为之前断断续续看的都忘得差不多了），目标文件就是经过编译但未经过链接的中间文件。Linux下目标文件和可执行文件的内容与结构很相似，所以它们通称为ELF文件，包括动态链接库和静态链接库也是ELF文件。</p>
+<p><img src="/images/2017_06_13_01.png" alt="中间文件和可执行文件"></p>
+<p>目标文件的结构到底是怎样的？它们通常按类别存储，而每一个类别叫做一个Section，比如编译后的机器指令存放在Code Section，数据存放在Data Section当中。</p>
+<h3 id="0x82-生成目标文件"><a href="#0x82-生成目标文件" class="headerlink" title="0x82 生成目标文件"></a>0x82 生成目标文件</h3><p>为了方便以后到回头来结合书看，我就用书上的例子。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SimpleSection.c</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">printf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* format, ...)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> global_init_var = <span class="number">84</span>;</span><br><span class="line"><span class="keyword">int</span> global_uninit_var;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func1</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> static_var = <span class="number">85</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> static_var2;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> b;</span><br><span class="line"></span><br><span class="line">    func1(static_var + static_var2 + a + b);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们使用gcc生成32位目标文件：</p>
+<p><img src="/images/2017_06_13_02.png" alt="生成目标文件"></p>
+<p>目标文件大小为1344个字节，接下来我们使用objdump工具分析目标文件内容。</p>
+<a id="more"></a>
+<h3 id="0x83-objdump分析基本信息"><a href="#0x83-objdump分析基本信息" class="headerlink" title="0x83 objdump分析基本信息"></a>0x83 objdump分析基本信息</h3><p>objdump来自于包binutils，隶属于GNU Development Tools，它的主要功能就是分析出目标文件的各种信息，比如<code>objdump -h SimpleSection.o</code>：</p>
+<p><img src="/images/2017_06_13_03.png" alt="objdump结果"></p>
+<p>从上述的结果我们可以看出SimpleSection.o一共有7个Section，分别是.text、.data、.bss、.rodata、.comment、.note.GNU-stack、.eh_frame对应代码段、数据段、符号块预留段、只读数据段、编译器信息段、栈标记段、异常处理段（书上没有，exception handling的意思，内容类似debug_frame段）。</p>
+<p>其中的Size表示段长，File Off表示段起始偏移，Algn表示对齐，所以我们可以看出各段是连续存储的，最初是ELF Header，它记录了最基本的信息。</p>
+<p>在每一行的下面都跟了一行信息，它们是对该段的描述，它们的含义如下：</p>
+<ul>
+<li>CONTENTS 占据文件内容</li>
+<li>ALLOC 运行时申请内存</li>
+<li>LOAD 可作为装载数据</li>
+<li>RELOC Load时可重定向</li>
+<li>READONLY 内容只读</li>
+<li>CODE 内容为机器代码</li>
+<li>DATA 程序数据</li>
+</ul>
+<p>我们可以发现.bss段是只申请内存而不占据文件内容的，因此.bss段可以视作未初始化的全局变量和局部静态变量的预留位置。</p>
+<h3 id="0x84-目标文件分析（2017-06-15更新）"><a href="#0x84-目标文件分析（2017-06-15更新）" class="headerlink" title="0x84 目标文件分析（2017-06-15更新）"></a>0x84 目标文件分析（2017-06-15更新）</h3><p>从前面的基本信息中我们可以发现，目标文件是按段存储的，接下来我们来分别看每个段的内容。</p>
+<ol>
+<li><p>代码段（.text）<br> 关于目标文件的内容我们可以先用objdump显示出来，使用它的<code>objdump -s, --full-contents Display the full contents of all sections requested</code>参数，控制台会打印16进制的文件内容。</p>
+<p> <img src="/images/2017_06_15_01.png" alt="16进制内容"></p>
+<p> 通过这种方式我们可以看每个段的内容，代码段长度0x62与之前的信息一致，然后使用<code>objdump -d, --disassemble Display assembler contents of executable sections</code>参数，可以显示代码段的反汇编指令：</p>
+<p> <img src="/images/2017_06_15_02.png" alt="代码段反汇编"></p>
+<p> 从图中能看到我们定义的两个函数名，这两个函数的地址就保存在符号表当中，如果SimpleSection.o被strip工具脱符，那就看不到函数地址，但是我们可以推断出来只是不知道名字。</p>
+<p> <img src="/images/2017_06_15_03.png" alt="stripped反汇编"></p>
+<p> 从反汇编的结果来看，0x1b和0x61相对位置的0xc3正好是函数返回ret操作。</p>
+</li>
+<li><p>数据段和只读数据段（.data/.rodata）<br> 从16进制内容中可以看出，数据段正好8字节，每4字节对应84和85，也就是我们源代码中的global_init_var及static_var这两个初始化的全局和静态局部整形变量。global_uninit_var和static_var2则不在这一段，看符号表会发现static_var2是在BSS段，而global_uninit_var没有存放在任何段，只是用一个COMMON符号标记，按书中所说，这跟编译器的实现有关，全局未初始化变量也有可能记录在BSS段。</p>
+<p> 至于只读数据段25640a00正是源代码中的”%d\n”字符串，其中0a是ASCII中的换行，最后的00是终止符。</p>
+</li>
+</ol>
+<blockquote>
+<p>static int x1 = 0; static int x2 = 1;这两种数据所在的段是不一定一致的，x2在数据段很容易理解，而x1赋值为0在某些编译器看来它相当于是未初始化的，所以经过编译器的优化它可能会存放在BSS段当中。</p>
+</blockquote>
+<ol>
+<li>其他段<br> 其他的内容主要都是一些附加信息，比如comment段显示的是编译器的信息。</li>
+</ol>
+<p>简单的使用objdump就说这么多，接下来就结合另一个elf文件分析利器readelf剖析它们的文件结构（以我的表达能力可能得写好几篇，然后烂尾= =不得不说写东西实在是个体力活）。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/06/13/读书笔记：使用objdump分析目标文件/" data-id="ckfsdx7di003er49zha8ckfrw" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/objdump/">objdump</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/06/19/读书笔记：ELF文件结构/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          读书笔记：ELF文件结构
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/06/10/使用debugfs恢复文件/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">使用debugfs恢复文件</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

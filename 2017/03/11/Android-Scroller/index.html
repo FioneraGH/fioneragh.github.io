@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Android Scroller | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 Scroller 是什么Scroller是Android提供的一个滚动计算器，我们通常用它在自定义View时形成动画，更是做滚性滚动提高用户体验的利器。Scroller跟踪整个View的内容位移变化，但是它不会主动做些什么，它只是计算了对应的数值用于返回给开发者使用。 0x82 startScroll 方法该方法是触发滚动的最简单方法，它共接受5个参数，前四个分别为起始位置坐标和结束位置">
+<meta name="keywords" content="Android,Scroller">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Scroller">
+<meta property="og:url" content="https://fioneragh.github.io/2017/03/11/Android-Scroller/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 Scroller 是什么Scroller是Android提供的一个滚动计算器，我们通常用它在自定义View时形成动画，更是做滚性滚动提高用户体验的利器。Scroller跟踪整个View的内容位移变化，但是它不会主动做些什么，它只是计算了对应的数值用于返回给开发者使用。 0x82 startScroll 方法该方法是触发滚动的最简单方法，它共接受5个参数，前四个分别为起始位置坐标和结束位置">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.162Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android Scroller">
+<meta name="twitter:description" content="0x81 Scroller 是什么Scroller是Android提供的一个滚动计算器，我们通常用它在自定义View时形成动画，更是做滚性滚动提高用户体验的利器。Scroller跟踪整个View的内容位移变化，但是它不会主动做些什么，它只是计算了对应的数值用于返回给开发者使用。 0x82 startScroll 方法该方法是触发滚动的最简单方法，它共接受5个参数，前四个分别为起始位置坐标和结束位置">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android-Scroller" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/11/Android-Scroller/" class="article-date">
+  <time datetime="2017-03-11T04:36:47.000Z" itemprop="datePublished">2017-03-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android Scroller
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-Scroller-是什么"><a href="#0x81-Scroller-是什么" class="headerlink" title="0x81 Scroller 是什么"></a>0x81 Scroller 是什么</h3><p>Scroller是Android提供的一个滚动计算器，我们通常用它在自定义View时形成动画，更是做滚性滚动提高用户体验的利器。Scroller跟踪整个View的内容位移变化，但是它不会主动做些什么，它只是计算了对应的数值用于返回给开发者使用。</p>
+<h3 id="0x82-startScroll-方法"><a href="#0x82-startScroll-方法" class="headerlink" title="0x82 startScroll 方法"></a>0x82 startScroll 方法</h3><p>该方法是触发滚动的最简单方法，它共接受5个参数，前四个分别为起始位置坐标和结束位置坐标，第五个参数是滚动计算时长，默认为250ms。</p>
+<p>看一下startScroll的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startScroll</span><span class="params">(<span class="keyword">int</span> startX, <span class="keyword">int</span> startY, <span class="keyword">int</span> dx, <span class="keyword">int</span> dy, <span class="keyword">int</span> duration)</span> </span>&#123;</span><br><span class="line">    mMode = SCROLL_MODE;</span><br><span class="line">    mFinished = <span class="keyword">false</span>;</span><br><span class="line">    mDuration = duration;</span><br><span class="line">    mStartTime =AnimationUtils.currentAnimationTimeMillis();</span><br><span class="line">    mStartX = startX;</span><br><span class="line">    mStartY = startY;</span><br><span class="line">    mFinalX = startX + dx;</span><br><span class="line">    mFinalY = startY + dy;</span><br><span class="line">    mDeltaX = dx;</span><br><span class="line">    mDeltaY = dy;</span><br><span class="line">    mDurationReciprocal = <span class="number">1.0f</span> / (<span class="keyword">float</span>) mDuration;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到实际上这个方法仅仅是保存了一下你传进去的值，并没有进行动画的相关代码。</p>
+<a id="more"></a>
+<h3 id="0x83-fling-方法"><a href="#0x83-fling-方法" class="headerlink" title="0x83 fling 方法"></a>0x83 fling 方法</h3><p>fling方法与startScroll方法类似，只不过这个方法是基于一个fling的手势的，它接收8个参数，其中前四的是比较重要的，分别表示滚动开起点坐标和初始速度。</p>
+<p>看一下fling的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fling</span><span class="params">(<span class="keyword">int</span> startX, <span class="keyword">int</span> startY, <span class="keyword">int</span> velocityX, <span class="keyword">int</span> velocityY,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">int</span> minX, <span class="keyword">int</span> maxX, <span class="keyword">int</span> minY, <span class="keyword">int</span> maxY)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Continue a scroll or fling in progress</span></span><br><span class="line">    <span class="keyword">if</span> (mFlywheel &amp;&amp; !mFinished) &#123;</span><br><span class="line">        <span class="keyword">float</span> oldVel = getCurrVelocity();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">float</span> dx = (<span class="keyword">float</span>) (mFinalX - mStartX);</span><br><span class="line">        <span class="keyword">float</span> dy = (<span class="keyword">float</span>) (mFinalY - mStartY);</span><br><span class="line">        <span class="keyword">float</span> hyp = (<span class="keyword">float</span>) Math.hypot(dx, dy);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">float</span> ndx = dx / hyp;</span><br><span class="line">        <span class="keyword">float</span> ndy = dy / hyp;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">float</span> oldVelocityX = ndx * oldVel;</span><br><span class="line">        <span class="keyword">float</span> oldVelocityY = ndy * oldVel;</span><br><span class="line">        <span class="keyword">if</span> (Math.signum(velocityX) == Math.signum(oldVelocityX) &amp;&amp;</span><br><span class="line">                Math.signum(velocityY) == Math.signum(oldVelocityY)) &#123;</span><br><span class="line">            velocityX += oldVelocityX;</span><br><span class="line">            velocityY += oldVelocityY;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    mMode = FLING_MODE;</span><br><span class="line">    mFinished = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">float</span> velocity = (<span class="keyword">float</span>) Math.hypot(velocityX, velocityY);</span><br><span class="line"></span><br><span class="line">    mVelocity = velocity;</span><br><span class="line">    mDuration = getSplineFlingDuration(velocity);</span><br><span class="line">    mStartTime = AnimationUtils.currentAnimationTimeMillis();</span><br><span class="line">    mStartX = startX;</span><br><span class="line">    mStartY = startY;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">float</span> coeffX = velocity == <span class="number">0</span> ? <span class="number">1.0f</span> : velocityX / velocity;</span><br><span class="line">    <span class="keyword">float</span> coeffY = velocity == <span class="number">0</span> ? <span class="number">1.0f</span> : velocityY / velocity;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">double</span> totalDistance = getSplineFlingDistance(velocity);</span><br><span class="line">    mDistance = (<span class="keyword">int</span>) (totalDistance * Math.signum(velocity));</span><br><span class="line"></span><br><span class="line">    mMinX = minX;</span><br><span class="line">    mMaxX = maxX;</span><br><span class="line">    mMinY = minY;</span><br><span class="line">    mMaxY = maxY;</span><br><span class="line"></span><br><span class="line">    mFinalX = startX + (<span class="keyword">int</span>) Math.round(totalDistance * coeffX);</span><br><span class="line">    <span class="comment">// Pin to mMinX &lt;= mFinalX &lt;= mMaxX</span></span><br><span class="line">    mFinalX = Math.min(mFinalX, mMaxX);</span><br><span class="line">    mFinalX = Math.max(mFinalX, mMinX);</span><br><span class="line"></span><br><span class="line">    mFinalY = startY + (<span class="keyword">int</span>) Math.round(totalDistance * coeffY);</span><br><span class="line">    <span class="comment">// Pin to mMinY &lt;= mFinalY &lt;= mMaxY</span></span><br><span class="line">    mFinalY = Math.min(mFinalY, mMaxY);</span><br><span class="line">    mFinalY = Math.max(mFinalY, mMinY);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>发现它和startScroll一样，就只是计算保存了一部分数值而已。</p>
+<h3 id="0x84-滚动处理的真正实现"><a href="#0x84-滚动处理的真正实现" class="headerlink" title="0x84 滚动处理的真正实现"></a>0x84 滚动处理的真正实现</h3><p>如前面所见，Scroller只是一个辅助类，而它的触发滚动的方法都只是保存了一些初始化数据，那这个滚动究竟是怎么实现的。这其中有一个<code>computeScroll()</code>方法，这个方法是View里的一个空方法，根据API 25的源码，这个方法会被<code>updateDisplayListIfDirty()</code>方法调用（如果drawingWithRenderNode是false，draw也会直接调用computeScroll），而<code>updateDisplayListIfDirty()</code>又被View的<code>draw(Canvas canvas, ViewGroup parent, long drawingTime)</code>方法调用，这个方法根据注释是ViewGroup调用drawChild()时触发的，而这个之后会调用<code>dispatchDraw(Canvas canvas)</code>或<code>draw(Canvas canvas)</code>方法，进而触发了onDraw回调。也就是说，View在绘制时会主动触发<code>computeScroll()</code>这个方法，由于原本是空实现（TextView等继承类都做出了实现，因此不能完全复写而不调用super，要视具体情况而定）所以没有任何效果，而这个方法就是配合Scroller的<code>computeScrollOffset()</code>方法计算滚动值的，而连续的滚动值就形成了平滑滚动等动画。</p>
+<p>Scroller计算值主要通过两部分的帮助，一个是前面提到的<code>computeScrollOffset()</code>方法，另一个就是这个方法内部使用的一个插值器<code>ViscousFluidInterpolator</code>。</p>
+<ol>
+<li><p>computeScrollOffset 方法<br> 我们通过接受computeScroll的回调，使用computeScrollOffset方法计算offset值给onDraw时绘制使用，根据16ms的绘制间隔，如果不会出现计算或绘制延时掉帧，那就是60帧的连续动画。这个方法也很简单，就是判断两种模式，如果是SCROLL_MODE则使用插值器获取数据，如果是FLING_MODE则根据速度和时间获取当前滚动值：</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (timePassed &lt; mDuration) &#123;</span><br><span class="line">    <span class="keyword">switch</span> (mMode) &#123;</span><br><span class="line">        <span class="keyword">case</span> SCROLL_MODE:</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">float</span> x = mInterpolator.getInterpolation(timePassed * mDurationReciprocal);</span><br><span class="line">            mCurrX = mStartX + Math.round(x * mDeltaX);</span><br><span class="line">            mCurrY = mStartY + Math.round(x * mDeltaY);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> FLING_MODE:</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">float</span> t = (<span class="keyword">float</span>) timePassed / mDuration;</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> index = (<span class="keyword">int</span>) (NB_SAMPLES * t);</span><br><span class="line">            <span class="keyword">float</span> distanceCoef = <span class="number">1</span>.f;</span><br><span class="line">            <span class="keyword">float</span> velocityCoef = <span class="number">0</span>.f;</span><br><span class="line">            <span class="keyword">if</span> (index &lt; NB_SAMPLES) &#123;</span><br><span class="line">                <span class="keyword">final</span> <span class="keyword">float</span> t_inf = (<span class="keyword">float</span>) index / NB_SAMPLES;</span><br><span class="line">                <span class="keyword">final</span> <span class="keyword">float</span> t_sup = (<span class="keyword">float</span>) (index + <span class="number">1</span>) / NB_SAMPLES;</span><br><span class="line">                <span class="keyword">final</span> <span class="keyword">float</span> d_inf = SPLINE_POSITION[index];</span><br><span class="line">                <span class="keyword">final</span> <span class="keyword">float</span> d_sup = SPLINE_POSITION[index + <span class="number">1</span>];</span><br><span class="line">                velocityCoef = (d_sup - d_inf) / (t_sup - t_inf);</span><br><span class="line">                distanceCoef = d_inf + (t - t_inf) * velocityCoef;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        mCurrVelocity = velocityCoef * mDistance / mDuration * <span class="number">1000.0f</span>;</span><br><span class="line"></span><br><span class="line">        mCurrX = mStartX + Math.round(distanceCoef * (mFinalX - mStartX));</span><br><span class="line">        <span class="comment">// Pin to mMinX &lt;= mCurrX &lt;= mMaxX</span></span><br><span class="line">        mCurrX = Math.min(mCurrX, mMaxX);</span><br><span class="line">        mCurrX = Math.max(mCurrX, mMinX);</span><br><span class="line"></span><br><span class="line">        mCurrY = mStartY + Math.round(distanceCoef * (mFinalY - mStartY));</span><br><span class="line">        <span class="comment">// Pin to mMinY &lt;= mCurrY &lt;= mMaxY</span></span><br><span class="line">        mCurrY = Math.min(mCurrY, mMaxY);</span><br><span class="line">        mCurrY = Math.max(mCurrY, mMinY);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (mCurrX == mFinalX &amp;&amp; mCurrY == mFinalY) &#123;</span><br><span class="line">            mFinished = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    mCurrX = mFinalX;</span><br><span class="line">    mCurrY = mFinalY;</span><br><span class="line">    mFinished = <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ViscousFluidInterpolator<br> 这个类用途很窄，就是用于SCROLL_MODE辅助计算返回当前时间对应值，它的实现也很简单这里就不贴了。</p>
+</li>
+</ol>
+<p>Scroller是个很简单的类，源代码也就不到600行，但是这里的确能看出Google设计的精妙，这种能符合所有View绘制需求的解耦的确不是一人一日之功。总而言之，Android源码虽然不能说无可挑剔，毕竟存在历史包袱，但在兼容性和扩展性上能做到这样，的确是很值得学习的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/03/11/Android-Scroller/" data-id="ckfsdx7ak000cr49z0hmq93p1" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Scroller/">Scroller</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/13/Android-IPC：Messenger/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          Android IPC：Messenger
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/09/Material-Design绚丽动画：transition-framework/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">Material Design绚丽动画：transition framework</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

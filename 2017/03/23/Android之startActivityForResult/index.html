@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Android之startActivityForResult | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x80 前言Framework源码来自Android Platform API 25 0x81 startActivity碎碎念前面我记得我写了Context是如何调用startActivity的，其本质是一种代理机制，在这其中提到了非常重要的一个类——ContextImpl，实际上就是它进行了一系列判断（主要是该Intent不来自Activity的话FLAG_ACTIVITY_NEW_TASK">
+<meta name="keywords" content="Android,Activity">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android之startActivityForResult">
+<meta property="og:url" content="https://fioneragh.github.io/2017/03/23/Android之startActivityForResult/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x80 前言Framework源码来自Android Platform API 25 0x81 startActivity碎碎念前面我记得我写了Context是如何调用startActivity的，其本质是一种代理机制，在这其中提到了非常重要的一个类——ContextImpl，实际上就是它进行了一系列判断（主要是该Intent不来自Activity的话FLAG_ACTIVITY_NEW_TASK">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.166Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android之startActivityForResult">
+<meta name="twitter:description" content="0x80 前言Framework源码来自Android Platform API 25 0x81 startActivity碎碎念前面我记得我写了Context是如何调用startActivity的，其本质是一种代理机制，在这其中提到了非常重要的一个类——ContextImpl，实际上就是它进行了一系列判断（主要是该Intent不来自Activity的话FLAG_ACTIVITY_NEW_TASK">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android之startActivityForResult" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/23/Android之startActivityForResult/" class="article-date">
+  <time datetime="2017-03-23T10:41:03.000Z" itemprop="datePublished">2017-03-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android之startActivityForResult
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x80-前言"><a href="#0x80-前言" class="headerlink" title="0x80 前言"></a>0x80 前言</h3><p>Framework源码来自Android Platform API 25</p>
+<h3 id="0x81-startActivity碎碎念"><a href="#0x81-startActivity碎碎念" class="headerlink" title="0x81 startActivity碎碎念"></a>0x81 startActivity碎碎念</h3><p>前面我记得我写了Context是如何调用startActivity的，其本质是一种代理机制，在这其中提到了非常重要的一个类——ContextImpl，实际上就是它进行了一系列判断（主要是该Intent不来自Activity的话FLAG_ACTIVITY_NEW_TASK的判断），并最终使用ActivityManagerNative通知到AMS打开了Activity。在这篇笔记里，我们就会发现，差别其实仅在过程，结果都是一样的，Activity都是由AMS管理的。</p>
+<h3 id="0x82-startActivity在Activity中的实现"><a href="#0x82-startActivity在Activity中的实现" class="headerlink" title="0x82 startActivity在Activity中的实现"></a>0x82 startActivity在Activity中的实现</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivity</span><span class="params">(Intent intent, @Nullable Bundle options)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (options != <span class="keyword">null</span>) &#123;</span><br><span class="line">        startActivityForResult(intent, -<span class="number">1</span>, options);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Note we want to go through this call for compatibility with</span></span><br><span class="line">        <span class="comment">// applications that may have overridden the method.</span></span><br><span class="line">        startActivityForResult(intent, -<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很明显，startActivity调用了Activity的startActvityForResult这个方法，并向其中传递了值为-1的requestCode，这个我们最常用的方法其实就是一个简单的封装，视为语法糖也无可厚非，我一我们重点来看startActvityForResult这个方法。</p>
+<a id="more"></a>
+<h3 id="0x83-startActivityForResult"><a href="#0x83-startActivityForResult" class="headerlink" title="0x83 startActivityForResult"></a>0x83 startActivityForResult</h3><p>方法的代码不多，直接贴了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivityForResult</span><span class="params">(@RequiresPermission Intent intent, <span class="keyword">int</span> requestCode,</span></span></span><br><span class="line"><span class="function"><span class="params">        @Nullable Bundle options)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">        options = transferSpringboardActivityOptions(options);</span><br><span class="line">        Instrumentation.ActivityResult ar =</span><br><span class="line">            mInstrumentation.execStartActivity(</span><br><span class="line">                <span class="keyword">this</span>, mMainThread.getApplicationThread(), mToken, <span class="keyword">this</span>,</span><br><span class="line">                intent, requestCode, options);</span><br><span class="line">        <span class="keyword">if</span> (ar != <span class="keyword">null</span>) &#123;</span><br><span class="line">            mMainThread.sendActivityResult(</span><br><span class="line">                mToken, mEmbeddedID, requestCode, ar.getResultCode(),</span><br><span class="line">                ar.getResultData());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (requestCode &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            mStartedActivity = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    cancelInputsAndStartExitTransition(options);</span><br><span class="line">    <span class="comment">// TODO Consider clearing/flushing other event sources and events for child windows.</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (options != <span class="keyword">null</span>) &#123;</span><br><span class="line">            mParent.startActivityFromChild(<span class="keyword">this</span>, intent, requestCode, options);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// Note we want to go through this method for compatibility with</span></span><br><span class="line">            <span class="comment">// existing applications that may have overridden it.</span></span><br><span class="line">            mParent.startActivityFromChild(<span class="keyword">this</span>, intent, requestCode);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法的注释，说明了几种状况：1. 这个方法用于启动一个Activity，但是requestCode必须有意义，什么叫有意义？就是不小于0，否则这一次启动与直接调用startActivity无异（requestCode = -1），onActivityResult不会被调用，当符合条件，mStartedAcitivity会被标记为true；2. 如果Activity是singleTask的，它将不会运行在你的任务栈里并立即收到一个取消的request；3. 当你在onCreate到onResume期间调用这个方法，那你原来Activity的window将不会被显示知道收到result，这么做是为了避免界面闪烁。这几种情况都是可能会出现问题的情况，需要多加注意。</p>
+<p>我们看代码，首先是mParent的判断，mParent指的是父Activty，什么是父Actvity？在早期Android中还没有出现Fragment概念的时候，有一个Activity容器，名字叫做ActivityGroup，现在它已经被废弃了，Google推荐使用FragmentManager代替它（也是个坑），所以这里就是判定这个Activity是不是包含在其他Activity内以免当前Activity收不到result，所以这里有两种情况：</p>
+<ol>
+<li><p><code>mParent == null</code></p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">options = transferSpringboardActivityOptions(options);</span><br><span class="line">Instrumentation.ActivityResult ar =</span><br><span class="line">    mInstrumentation.execStartActivity(</span><br><span class="line">        <span class="keyword">this</span>, mMainThread.getApplicationThread(), mToken, <span class="keyword">this</span>,</span><br><span class="line">        intent, requestCode, options);</span><br><span class="line"><span class="keyword">if</span> (ar != <span class="keyword">null</span>) &#123;</span><br><span class="line">    mMainThread.sendActivityResult(</span><br><span class="line">        mToken, mEmbeddedID, requestCode, ar.getResultCode(),</span><br><span class="line">        ar.getResultData());</span><br><span class="line">&#125;</span><br><span class="line">cancelInputsAndStartExitTransition(options);</span><br></pre></td></tr></table></figure>
+<p> 我们可以看到，它先处理了options用于入场，这个不重要。重要的是mInstrumentation.execStartActivity这次调用，其实呢，ContextImpl启动Actvity后面也是通过它启动了Activity，他返回一个结果，这个结果不为null也就是目标Activity设置了setResult的时候，这个结果就会设置给我们源Activity，onActivityResult被调用，最后处理清理inputs并退场，其实顺着看进去这些过程都是由ApplicationThread为我们的App负责schedule的，太过深入的以后有机会记录一下。</p>
+<p> 接下来看Instrumentation这个类，这个是极其重要的一个类，它是个工具类，负责把我们的需求送出去或者执行，源码不多2000多行，但是大部分API都是被标记为@hide的，也就是说日常开发不能使用。我们直接看ActivityResult后面部分的execStartActivity系列方法：</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    intent.migrateExtraStreamToClipData();</span><br><span class="line">    intent.prepareToLeaveProcess(who);</span><br><span class="line">    <span class="keyword">int</span> result = ActivityManagerNative.getDefault()</span><br><span class="line">        .startActivity(whoThread, who.getBasePackageName(), intent,</span><br><span class="line">            intent.resolveTypeIfNeeded(who.getContentResolver()),</span><br><span class="line">            token, target != <span class="keyword">null</span> ? target.mEmbeddedID : <span class="keyword">null</span>,</span><br><span class="line">            requestCode, <span class="number">0</span>, <span class="keyword">null</span>, options);</span><br><span class="line">    checkStartActivityResult(result, intent);</span><br><span class="line">&#125; <span class="keyword">catch</span> (RemoteException e) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Failure from system"</span>, e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 代码也不多，你会发现，它其实就是把通过ActivityManagerNative参数又传了出去，交给了AMS处理，而<code>checkStartActivityResult(result, intent)</code>方法就是负责抛出异常的。</p>
+</li>
+<li><p><code>mParent != null</code></p>
+<p> 这种情况调用的是startActivityFromChild方法：</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (options != <span class="keyword">null</span>) &#123;</span><br><span class="line">    mParent.startActivityFromChild(<span class="keyword">this</span>, intent, requestCode, options);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    mParent.startActivityFromChild(<span class="keyword">this</span>, intent, requestCode);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 点进去就会发现和上面的流程似乎差不多，由于已经被抛弃了这里就不说了。</p>
+</li>
+</ol>
+<h3 id="0x84-结语"><a href="#0x84-结语" class="headerlink" title="0x84 结语"></a>0x84 结语</h3><p>Activity可以说是Androidxits比较核心的地方，其复杂的调用过程自然不是几篇文章就能说清楚的，当然我也不想在这篇文章深入的去挖掘，毕竟这是一篇Activity#startActivityForResult方法的笔记，后续的内容慢慢去挖掘记录，我不想自己的日常笔记冗杂而让我自己失去看的欲望，其实是为了多写几篇强迫自己尽可能的坚持去干一件事情，自己目前却是学过也用过了很多东西，但我还是希望自己能慢慢把他们记录下来，而不是蛇吞象。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/03/23/Android之startActivityForResult/" data-id="ckfsdx7as000jr49zrcv6ankd" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Activity/">Activity</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/27/基于Vue的Weex工程构建/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          基于Vue的Weex工程构建
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/21/Android之startActivity/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">Android之startActivity</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

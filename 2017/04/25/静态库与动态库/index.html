@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>静态库与动态库 | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 静态库与动态库库的概念在我们日常开发和使用软件中是非常常见的，它们通常是一组经过编译的代码的组合，比如Linux发行版当中就存在大量的共享库提供给操作系统其他软件使用，它们可能存在多个版本，我们平时安装的依赖包有80%是程序二进制运行所需要的库文件。按一般说法，库通常分为静态库和动态库，前者是编译进了最终的二进制文件，后者以一种动态加载的方式提供功能。以C++为例，静态库通常是.a/.l">
+<meta name="keywords" content="ELF,LoadLibrary">
+<meta property="og:type" content="article">
+<meta property="og:title" content="静态库与动态库">
+<meta property="og:url" content="https://fioneragh.github.io/2017/04/25/静态库与动态库/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 静态库与动态库库的概念在我们日常开发和使用软件中是非常常见的，它们通常是一组经过编译的代码的组合，比如Linux发行版当中就存在大量的共享库提供给操作系统其他软件使用，它们可能存在多个版本，我们平时安装的依赖包有80%是程序二进制运行所需要的库文件。按一般说法，库通常分为静态库和动态库，前者是编译进了最终的二进制文件，后者以一种动态加载的方式提供功能。以C++为例，静态库通常是.a/.l">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_04_25_01.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_04_25_02.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_04_25_03.png">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.211Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="静态库与动态库">
+<meta name="twitter:description" content="0x81 静态库与动态库库的概念在我们日常开发和使用软件中是非常常见的，它们通常是一组经过编译的代码的组合，比如Linux发行版当中就存在大量的共享库提供给操作系统其他软件使用，它们可能存在多个版本，我们平时安装的依赖包有80%是程序二进制运行所需要的库文件。按一般说法，库通常分为静态库和动态库，前者是编译进了最终的二进制文件，后者以一种动态加载的方式提供功能。以C++为例，静态库通常是.a/.l">
+<meta name="twitter:image" content="https://fioneragh.github.io/images/2017_04_25_01.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-静态库与动态库" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/25/静态库与动态库/" class="article-date">
+  <time datetime="2017-04-25T10:01:17.000Z" itemprop="datePublished">2017-04-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      静态库与动态库
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-静态库与动态库"><a href="#0x81-静态库与动态库" class="headerlink" title="0x81 静态库与动态库"></a>0x81 静态库与动态库</h3><p>库的概念在我们日常开发和使用软件中是非常常见的，它们通常是一组经过编译的代码的组合，比如Linux发行版当中就存在大量的共享库提供给操作系统其他软件使用，它们可能存在多个版本，我们平时安装的依赖包有80%是程序二进制运行所需要的库文件。按一般说法，库通常分为静态库和动态库，前者是编译进了最终的二进制文件，后者以一种动态加载的方式提供功能。以C++为例，静态库通常是.a/.lib结尾，动态库通常是.so/.dll结尾。</p>
+<h3 id="0x82-如何编译一个静态库"><a href="#0x82-如何编译一个静态库" class="headerlink" title="0x82 如何编译一个静态库"></a>0x82 如何编译一个静态库</h3><p>静态库一般是一组代码的集合，它们可以独立于main函数之外，专于提供相应的功能，链接器在链接静态库时会将所有的内容链接到可执行二进制文件或其他库中。下面我们举个简单的例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// StaticMath.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> once</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StaticMath</span> &#123;</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        StaticMath(<span class="keyword">void</span>);</span><br><span class="line">        ~StaticMath(<span class="keyword">void</span>);</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">double</span> <span class="title">add</span><span class="params">(<span class="keyword">double</span> a, <span class="keyword">double</span> b)</span></span>; <span class="comment">// 加法</span></span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">double</span> <span class="title">sub</span><span class="params">(<span class="keyword">double</span> a, <span class="keyword">double</span> b)</span></span>; <span class="comment">// 减法</span></span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">double</span> <span class="title">mul</span><span class="params">(<span class="keyword">double</span> a, <span class="keyword">double</span> b)</span></span>; <span class="comment">// 乘法</span></span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">double</span> <span class="title">div</span><span class="params">(<span class="keyword">double</span> a, <span class="keyword">double</span> b)</span></span>; <span class="comment">// 除法</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// StaticMath.cpp</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"StaticMath.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line">StaticMath::StaticMath() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">StaticMath::~StaticMath() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">double</span> StaticMath::add(<span class="keyword">double</span> a, <span class="keyword">double</span> b) &#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">double</span> StaticMath::sub(<span class="keyword">double</span> a, <span class="keyword">double</span> b) &#123;</span><br><span class="line">    <span class="keyword">return</span> a - b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">double</span> StaticMath::mul(<span class="keyword">double</span> a, <span class="keyword">double</span> b) &#123;</span><br><span class="line">    <span class="keyword">return</span> a * b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">double</span> StaticMath::div(<span class="keyword">double</span> a, <span class="keyword">double</span> b) &#123;</span><br><span class="line">    <span class="keyword">return</span> a / b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> StaticMath::print() &#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Print"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上定义了StaticMath的一组头文件和实现文件，我们将在main.cpp中使用这个类及其方法，进行如下操作生成静态库并链接到可执行文件main：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">g++ -c StaticMath.cpp</span><br><span class="line">ar -crv libstaticmath.a StaticMath.o</span><br><span class="line">g++ main.cpp -L. -lstaticmath -O2 -o main</span><br></pre></td></tr></table></figure>
+<p>这三句命令首先生成了StaticMath.o中间文件，然后使用ar打包并令生成libstaticmath.a静态库文件，最后使用g++调用链接器链接staticmath库并生成可执行文件main，我们看下执行结果：</p>
+<p><img src="/images/2017_04_25_01.png" alt="main执行结果和依赖"></p>
+<p>通过ldd的分析结果我们可以发现，依赖库中并没有staticmath，这说明静态库是编译进了二进制文件当中。</p>
+<a id="more"></a>
+<h3 id="0x83-如何编译一个动态库"><a href="#0x83-如何编译一个动态库" class="headerlink" title="0x83 如何编译一个动态库"></a>0x83 如何编译一个动态库</h3><p>我们创建DynamicMath.h和DynamicMath.cpp文件，其内容除了类名和StaticMath没什么区别，然后我们执行以下命令生成可执行文件dynamic：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">g++ -fPIC -c DynamicMath.cpp</span><br><span class="line">g++ -shared -o libdynamicmath.so DynamicMath.o</span><br><span class="line">g++ dynamic.cpp -L. -ldynamicmath -O2 -o dynamic</span><br></pre></td></tr></table></figure>
+<p>其中-fPIC选项表示生成的代码是支持重定向的，-shared参数用于将中间文件生成动态库（这里不再是使用打包命令ar），最后像链接静态库一样链接动态库，我们看下执行结果：</p>
+<p><img src="/images/2017_04_25_02.png" alt="dynamic执行结果和依赖"></p>
+<p>可以发现无法执行，提示找不到动态库，和ldd的分析结果一致。</p>
+<h3 id="0x84-如何确保二进制文件搜索到需要的动态库"><a href="#0x84-如何确保二进制文件搜索到需要的动态库" class="headerlink" title="0x84 如何确保二进制文件搜索到需要的动态库"></a>0x84 如何确保二进制文件搜索到需要的动态库</h3><p>上面执行dynamic失败的结果很明显，结果也很明确，程序在执行时没有找到自己的依赖库因此没办法进行下去。其实发生这种状况的原因就是elf在执行时到固定的目录去搜索自己需要的动态库，如果所有的路径都找不到，那就无法执行，搜索路径的规则不在这里展开说，网上一查都有，这里只说一下解决方案（其实解决方案也是根据搜索规则来的）。</p>
+<ol>
+<li><p>ldconfig<br> 这种方式是比较标准的方式，通过前面的ldd分析，我们发现在/lib等目录下的库是可以找到的，也就是说系统本身存在一些默认的搜索路径以供系统程序运行，那像mariadb这些第三方软件要怎么办呢？解决办法就是下载依赖包，将需要的动态库文件放入到默认的搜索路径下，比如/lib、/lib64、/usr/lib、/usr/lib64等，所以我们的程序要执行只需要将libdynamicmath.so放到对应arch下的搜索路径下就可以了。</p>
+<p> 但是如果第三方软件的依赖库其实是自己家的，目前只有自己的软件能用到，也一股脑的扔到默认路径下么，很明显这不是一个明智的解决方式，因此操作系统允许对搜索路径进行配置，第三方软件在安装时将自己的动态库放到单独的目录并通过配置搜索路径的方式提供服务。这种方法很简单，我们就是通过修改/etc/ld.so.conf文件（大多数发行版已经对该文件提供动态支持，会搜索/etc/ld.so.conf.d目录下的所有配置，这种方式更灵活也不会破环依赖关系检查），然后调用ldconfig命令重新生成ld.so,cache缓存文件，这样你的可执行程序就能找到动态库了。</p>
+</li>
+<li><p>LD_LIBRARY_PATH变量<br> 它是一个环境变量，在login_shell中执行的时候库加载器也会优先查找这个路径，因此我们只需要<code>export LD_LIBRARY_PATH=./</code>然后执行我们的二进制文件，就可以正常执行了。但这种方法只能算是个临时的解决方案，当然你可以把你的启动过程包装成一个脚本，这样每次启动也能正确的加载了。</p>
+</li>
+<li><p>编译时指定查找路径<br> 这是编译器的一个可配置项，它通过告诉链接器rpath来知会目标文件在执行时到配置目录下去寻找动态库：<code>g++ dynamic.cpp -L. -ldynamicmath -Wl,-rpath=./ -O2 -o dynamic</code>其中-Wl便是将要告知链接器的参数，在这里还可以指定soname。我们看下新的运行结果：</p>
+<p> <img src="/images/2017_04_25_03.png" alt="dynamic执行结果和依赖"></p>
+</li>
+</ol>
+<p>就说这么多，这篇笔记的目的就是为了加深自己对基础概念的理解和GCC编译器的实践，还是那句话，学无止境，码不停题。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/04/25/静态库与动态库/" data-id="ckfsdx7dn003kr49zyomu2hbr" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ELF/">ELF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LoadLibrary/">LoadLibrary</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/26/正确配置Sudoers/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          正确配置Sudoers
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/24/堆，栈，自由储存区/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">堆，栈，自由储存区</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

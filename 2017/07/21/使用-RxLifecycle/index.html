@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>使用 RxLifecycle | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="[2017-07-21修改]0x80 “解除订阅”经过进一步的使用和Github上README的解释，Rxlifecycle实际上并没有真正的解除订阅关系，而只是终止了事件流，如若需要显式地解除订阅（比如doOnUnsubscribe/doOnDispose的操作）可能仍然需要手动解除。另一方面，如果事件流已经停止并且没有强引用的对象存在，当发生GC时变为DISPOSED状态的Disposable">
+<meta name="keywords" content="RxJava,RxLifecycle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 RxLifecycle">
+<meta property="og:url" content="https://fioneragh.github.io/2017/07/21/使用-RxLifecycle/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="[2017-07-21修改]0x80 “解除订阅”经过进一步的使用和Github上README的解释，Rxlifecycle实际上并没有真正的解除订阅关系，而只是终止了事件流，如若需要显式地解除订阅（比如doOnUnsubscribe/doOnDispose的操作）可能仍然需要手动解除。另一方面，如果事件流已经停止并且没有强引用的对象存在，当发生GC时变为DISPOSED状态的Disposable">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.193Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 RxLifecycle">
+<meta name="twitter:description" content="[2017-07-21修改]0x80 “解除订阅”经过进一步的使用和Github上README的解释，Rxlifecycle实际上并没有真正的解除订阅关系，而只是终止了事件流，如若需要显式地解除订阅（比如doOnUnsubscribe/doOnDispose的操作）可能仍然需要手动解除。另一方面，如果事件流已经停止并且没有强引用的对象存在，当发生GC时变为DISPOSED状态的Disposable">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-使用-RxLifecycle" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/21/使用-RxLifecycle/" class="article-date">
+  <time datetime="2017-07-21T06:17:43.000Z" itemprop="datePublished">2017-07-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用 RxLifecycle
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="2017-07-21修改"><a href="#2017-07-21修改" class="headerlink" title="[2017-07-21修改]"></a>[2017-07-21修改]</h2><h3 id="0x80-“解除订阅”"><a href="#0x80-“解除订阅”" class="headerlink" title="0x80 “解除订阅”"></a>0x80 “解除订阅”</h3><p>经过进一步的使用和Github上README的解释，Rxlifecycle实际上并没有真正的解除订阅关系，而只是终止了事件流，如若需要显式地解除订阅（比如doOnUnsubscribe/doOnDispose的操作）可能仍然需要手动解除。另一方面，如果事件流已经停止并且没有强引用的对象存在，当发生GC时变为DISPOSED状态的Disposable最终会被回收。</p>
+<h3 id="0x81-响应式编程"><a href="#0x81-响应式编程" class="headerlink" title="0x81 响应式编程"></a>0x81 响应式编程</h3><p>RxJava 为编程带来的便利性毋庸置疑，它把我这种编码猴子从复杂的多线程编程和回调地狱中解救出来。<br>流式的业务处理让原本复杂的多线程逻辑变得符合人类思维，事件发起者（被关注者）Observable 可以立即或随时的发送事件，订阅者接受事件进行处理。<br>一旦订阅者与被订阅的者建立联系Subscribtion，如果此时不想接受事件的订阅，还可以进行解除订阅。<br>在Android 编程当中，很多元素都有生命周期的概念，一个个钩子都与元素挂钩，而一个元素要实现某些功能通常都是在固定的生命周期当中，这便引出了生命周期与订阅的关系。<br>当然，我们可以手动处理这种关系，但是这种模板式的关系约束，完全可以抽象出来，自动管理Observable 的订阅与“解除订阅”，这便是RxLifecycle。</p>
+<h3 id="0x82-RxLifecycle"><a href="#0x82-RxLifecycle" class="headerlink" title="0x82 RxLifecycle"></a>0x82 RxLifecycle</h3><p>RxLifecycle 是一个基于RxJava 开发的生命周期管理库，它能按配置自动管理Observable的订阅和解除。<br>要使用它只需要在<code>build.gradle</code>中添加依赖：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// RxLifecycle</span></span><br><span class="line">compile <span class="string">'com.trello:rxlifecycle:1.0'</span> [<span class="number">1</span>]</span><br><span class="line">compile <span class="string">'com.trello:rxlifecycle-android:1.0'</span> [<span class="number">2</span>]</span><br><span class="line">compile <span class="string">'com.trello:rxlifecycle-components:1.0'</span> [<span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<p>其中<code>[1]</code>是基础库，<code>[2]</code>是对Android支持，<code>[3]</code>是RxActivity、RxFragment等组件。</p>
+<a id="more"></a>
+<h3 id="0x83-RxLifecycle-使用"><a href="#0x83-RxLifecycle-使用" class="headerlink" title="0x83 RxLifecycle 使用"></a>0x83 RxLifecycle 使用</h3><p>RxLifecycle 是一个比较简单明了的库，因为它的定位足够单纯，像张白纸一样——在特定的生命周期钩子“解除订阅”。<br>它的用法主要有两个——自动和手动。</p>
+<ol>
+<li><p>自动管理</p>
+<p> Observable 在<code>subcribe()</code>之前使用<code>compose(bindToLifecycle())</code>这样订阅的解除便会自动关联，并且解除时机与订阅时机对应。</p>
+<p> Activity:onCreate -&gt; onDestroy, onStart -&gt; onStop, onResume -&gt; onPause, onPause -&gt; onStop, onStop -&gt; onDestroy</p>
+<p> Fragment:类似</p>
+</li>
+<li><p>手动管理</p>
+<p> compose 对象是<code>bindUntilEvent(ActivityEvent.PAUSE)</code>，示例是在Activity#onPause 时“解除订阅”。</p>
+</li>
+</ol>
+<h3 id="0x84-RxLifecycle-详解"><a href="#0x84-RxLifecycle-详解" class="headerlink" title="0x84 RxLifecycle 详解"></a>0x84 RxLifecycle 详解</h3><p>此处我们以<code>RxAppCompatActivity</code>为讲解对象。</p>
+<ul>
+<li>首先<code>RxAppCompatActivity</code>内创建了一个Activity内全局对象lifecycleSubject：<code>private final BehaviorSubject&lt;ActivityEvent&gt; lifecycleSubject = BehaviorSubject.create();</code>。</li>
+</ul>
+<p>然后在每个生命周期都发送对应的事件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="meta">@CallSuper</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    lifecycleSubject.onNext(ActivityEvent.CREATE);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="meta">@CallSuper</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onStart</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onStart();</span><br><span class="line">    lifecycleSubject.onNext(ActivityEvent.START);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="meta">@CallSuper</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onResume</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onResume();</span><br><span class="line">    lifecycleSubject.onNext(ActivityEvent.RESUME);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="meta">@CallSuper</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPause</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    lifecycleSubject.onNext(ActivityEvent.PAUSE);</span><br><span class="line">    <span class="keyword">super</span>.onPause();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="meta">@CallSuper</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onStop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    lifecycleSubject.onNext(ActivityEvent.STOP);</span><br><span class="line">    <span class="keyword">super</span>.onStop();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="meta">@CallSuper</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    lifecycleSubject.onNext(ActivityEvent.DESTROY);</span><br><span class="line">    <span class="keyword">super</span>.onDestroy();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>以上便是各个生命周期发出的事件。</li>
+<li>手动管理核心方法，此处返回一个Transformer用于<code>compose()</code>并生成一个新的Observable。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="meta">@NonNull</span></span><br><span class="line"><span class="meta">@CheckResult</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> &lt;T&gt; <span class="function">LifecycleTransformer&lt;T&gt; <span class="title">bindUntilEvent</span><span class="params">(@NonNull ActivityEvent event)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> RxLifecycle.bindUntilEvent(lifecycleSubject, event);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>bindUntilEvent是RxLifecycle类里的方法，这个方法返回了一个<code>new UntilEventObservableTransformer&lt;&gt;(lifecycle, event);</code>。</li>
+</ul>
+<p>该类的call中有操作符执行时的具体实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ntilEventObservableTransformer</span><span class="params">(@Nonnull Observable&lt;R&gt; lifecycle, @Nonnull R event)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.lifecycle = lifecycle;</span><br><span class="line">    <span class="keyword">this</span>.event = event;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Observable&lt;T&gt; <span class="title">call</span><span class="params">(Observable&lt;T&gt; source)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> source.takeUntil(takeUntilEvent(lifecycle, event));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>它调用了takeUntil 操作符，这便是流结束的标志。TakeUntilGenerator 中的<code>takeUntilEvent()</code>方法计算了具体的case：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Nonnull</span></span><br><span class="line"><span class="keyword">static</span> &lt;T&gt; <span class="function">Observable&lt;T&gt; <span class="title">takeUntilEvent</span><span class="params">(@Nonnull <span class="keyword">final</span> Observable&lt;T&gt; lifecycle, @Nonnull <span class="keyword">final</span> T event)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> lifecycle.takeFirst(<span class="keyword">new</span> Func1&lt;T, Boolean&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Boolean <span class="title">call</span><span class="params">(T lifecycleEvent)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> lifecycleEvent.equals(event);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>实际上取了第一个符合你设定的生命周期的事件。</li>
+<li>自动管理核心方法，此处也返回一个Transformer用于<code>compose()</code>并生成一个新的Observable。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="meta">@NonNull</span></span><br><span class="line"><span class="meta">@CheckResult</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> &lt;T&gt; <span class="function">LifecycleTransformer&lt;T&gt; <span class="title">bindToLifecycle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> RxLifecycleAndroid.bindActivity(lifecycleSubject);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>RxLifecycleAndroid 是管理自动映射关系的类，通过bindActivity 方法确定对应关系<code>ACTIVITY_LIFECYCLE</code>并调用RxLifecycle 的bind 方法进行绑定。</li>
+</ul>
+<p>与手动管理类似，返回了一个<code>new UntilCorrespondingEventObservableTransformer&lt;&gt;(lifecycle.share(), correspondingEvents);</code>，该对象的call：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">UntilCorrespondingEventObservableTransformer</span><span class="params">(@Nonnull Observable&lt;R&gt; sharedLifecycle,</span></span></span><br><span class="line"><span class="function"><span class="params">                                                    @Nonnull Func1&lt;R, R&gt; correspondingEvents)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.sharedLifecycle = sharedLifecycle;</span><br><span class="line">    <span class="keyword">this</span>.correspondingEvents = correspondingEvents;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Observable&lt;T&gt; <span class="title">call</span><span class="params">(Observable&lt;T&gt; source)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> source.takeUntil(takeUntilCorrespondingEvent(sharedLifecycle, correspondingEvents));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>TakeUntilGenerator</code>的<code>takeUntilCorrespondingEvent</code>方法：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Nonnull</span></span><br><span class="line"><span class="keyword">static</span> &lt;T&gt; <span class="function">Observable&lt;Boolean&gt; <span class="title">takeUntilCorrespondingEvent</span><span class="params">(@Nonnull <span class="keyword">final</span> Observable&lt;T&gt; lifecycle,</span></span></span><br><span class="line"><span class="function"><span class="params">                                                           @Nonnull <span class="keyword">final</span> Func1&lt;T, T&gt; correspondingEvents)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Observable.combineLatest(</span><br><span class="line">        lifecycle.take(<span class="number">1</span>).map(correspondingEvents), <span class="comment">// [1]</span></span><br><span class="line">        lifecycle.skip(<span class="number">1</span>), <span class="comment">// [2]</span></span><br><span class="line">        <span class="keyword">new</span> Func2&lt;T, T, Boolean&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Boolean <span class="title">call</span><span class="params">(T bindUntilEvent, T lifecycleEvent)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> lifecycleEvent.equals(bindUntilEvent);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;) <span class="comment">// [3]</span></span><br><span class="line">        .onErrorReturn(Functions.RESUME_FUNCTION)</span><br><span class="line">        .takeFirst(Functions.SHOULD_COMPLETE);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Observable.combineLatest 将两个Observable合并，三个参数分别是:</li>
+</ul>
+<p>[1]根据订阅时的当前已被发送事件映射取消订阅事件的Observable，[2]跳过当前事件的下一次事件，[3]combine合并规则，根据事件是否一致判断，一致则触发takeFirst的true返回导致takeUtil触发并“解除订阅”。<br>事件流自动结束，ALL DONE～</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/07/21/使用-RxLifecycle/" data-id="ckfsdx7cd002dr49zdb68j1vf" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RxJava/">RxJava</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RxLifecycle/">RxLifecycle</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/07/24/PopupWindow中使用Fragment的坑/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          PopupWindow中使用Fragment的坑
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/07/19/利用Build-Variant启用Stetho/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">利用Build Variant启用Stetho</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>利用Hotpatch禁用DGPU | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 Clover-HotpatchHackintosh，这应该是这个系列的第一篇，黑苹果的折腾笔记绝对可以写本书，只是拿不出这么多的时间来做这件事情。 Clover，一个强大的引导工具，基于rEFInd魔改而来，提供强大的驱动注入和二进制patch的功能，@RehabMan等大牛的参与更是为Clover带来更加强大的诸如AutoMerge等功能，让Clover可以为黑苹果工作的更好。 Hot">
+<meta name="keywords" content="macOS,Clover,Hackintosh,Hotpatch,ACPI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用Hotpatch禁用DGPU">
+<meta property="og:url" content="https://fioneragh.github.io/2018/03/24/利用Hotpatch禁用DGPU/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 Clover-HotpatchHackintosh，这应该是这个系列的第一篇，黑苹果的折腾笔记绝对可以写本书，只是拿不出这么多的时间来做这件事情。 Clover，一个强大的引导工具，基于rEFInd魔改而来，提供强大的驱动注入和二进制patch的功能，@RehabMan等大牛的参与更是为Clover带来更加强大的诸如AutoMerge等功能，让Clover可以为黑苹果工作的更好。 Hot">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.197Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用Hotpatch禁用DGPU">
+<meta name="twitter:description" content="0x81 Clover-HotpatchHackintosh，这应该是这个系列的第一篇，黑苹果的折腾笔记绝对可以写本书，只是拿不出这么多的时间来做这件事情。 Clover，一个强大的引导工具，基于rEFInd魔改而来，提供强大的驱动注入和二进制patch的功能，@RehabMan等大牛的参与更是为Clover带来更加强大的诸如AutoMerge等功能，让Clover可以为黑苹果工作的更好。 Hot">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-利用Hotpatch禁用DGPU" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/24/利用Hotpatch禁用DGPU/" class="article-date">
+  <time datetime="2018-03-24T07:12:53.000Z" itemprop="datePublished">2018-03-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      利用Hotpatch禁用DGPU
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-Clover-Hotpatch"><a href="#0x81-Clover-Hotpatch" class="headerlink" title="0x81 Clover-Hotpatch"></a>0x81 Clover-Hotpatch</h3><p>Hackintosh，这应该是这个系列的第一篇，黑苹果的折腾笔记绝对可以写本书，只是拿不出这么多的时间来做这件事情。</p>
+<p>Clover，一个强大的引导工具，基于rEFInd魔改而来，提供强大的驱动注入和二进制patch的功能，<a href="https://github.com/RehabMan" target="_blank" rel="noopener">@RehabMan</a>等大牛的参与更是为Clover带来更加强大的诸如AutoMerge等功能，让Clover可以为黑苹果工作的更好。</p>
+<p>Hotpatch，字面意思热补丁，主要是对于Clover强大的ACPI修改功能的支持，将hackintosh复杂而繁琐的ACPI修改中解放出来，从而实现patch像DSDT设备改名等功能。Hotpatch能做到DSDT/SSDT对象命名，插入补丁，方法重定向，方法重写等功能，通过灵活的扩展SSDT文件，我们只要自己学会ACPI汇编的语法从而会阅读aml文件经过iasl反汇编的dsl源文件，便可以完成自己想做的任何事。当然这个过程看起来容易，往往需要大量的基础知识和充分的测试才能写出能够使用的Hotpatch文件。</p>
+<h3 id="0x82-High-Sierra-对WindowServer的修改"><a href="#0x82-High-Sierra-对WindowServer的修改" class="headerlink" title="0x82 High Sierra 对WindowServer的修改"></a>0x82 High Sierra 对WindowServer的修改</h3><p>macOS由于自身独特的封闭性，所以对传统laptop的DGPU并没有提供足够的支持，尤其是nVidia显卡。纵使nVidia官方提供了macOS可用的WebDriver来驱动我们的GT显卡，但是这些驱动往往是提供给桌面级独立GPU使用的。</p>
+<p>在10.13之前，包括10.12，我们可以通过nv_diable参数禁用macOS对DGPU显卡进行驱动，当然这样也只是禁止了驱动的加载，在设备上电时仍会消耗电池资源。真正正确的做法是对SSDT/DSDT进行修改，通过_OFF方法禁用显卡，这种修改方式有一个很棘手的问题，就是EC，大量的笔记本（Lenovo几乎全系）有EmbeddedController，通过它来进行设备的电源管理。在我们在调用_OFF方法时EC可能还没准备好，因此我们需要将代码段里的方法转移到REG（具体的我没仔细研究）中来保证正常的工作。</p>
+<p>到了10.13，系统底层做了大量的修改，尤其是显卡驱动部分，就像10.11的USB栈重写，nv_disable参数已经失效，系统在监测到设备会尝试进行驱动，由于根本无法驱动DGPU，所以WindowServer会出现“Window Server Service only ran for 0 seconds”的提示，其实如果能看到完整的log你就会发现WindowServer的确起不来，服务运行0s也就说得通了。</p>
+<p>之前禁用独立显卡的方法仍然有效，但是在引导安装器阶段可能会遇到问题，于是RehabMan出了篇教程<a href="https://www.tonymacx86.com/threads/fix-window-server-service-only-ran-for-0-seconds-with-dual-gpu.233092/" target="_blank" rel="noopener">[FIX] “Window Server Service only ran for 0 seconds” with dual-GPU</a>就是解决这个问题。这篇教程通过DeviceSpecificMethod注入了一些属性，其实作用和Clover的Devices/AddProperties作用类似，有机会做个对比。</p>
+<a id="more"></a>
+<h3 id="0x83-SSDT-DDGPU-dsl"><a href="#0x83-SSDT-DDGPU-dsl" class="headerlink" title="0x83 SSDT-DDGPU.dsl"></a>0x83 SSDT-DDGPU.dsl</h3><p>这时候Hotpatch大放异彩，我们只需要写一个简单的dsl文件并将它编译后的aml文件置入@EFI/EFI/Clover/ACPI/patched当中就可以起到禁用DGPU的作用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// For disabling the discrete GPU</span><br><span class="line"></span><br><span class="line">DefinitionBlock(&quot;&quot;, &quot;SSDT&quot;, 2, &quot;hack&quot;, &quot;_DDGPU&quot;, 0)</span><br><span class="line">&#123;</span><br><span class="line">    // Note: The _OFF path should be customized to correspond to your native ACPI</span><br><span class="line">    // the two paths provided here should be considered examples only</span><br><span class="line">    // it is best to edit the code such that only the single _OFF path that your ACPI</span><br><span class="line">    // uses is included.</span><br><span class="line">    External(_SB.PCI0.PEG0.PEGP._OFF, MethodObj)</span><br><span class="line">    External(_SB.PCI0.PEGP.DGFX._OFF, MethodObj)</span><br><span class="line"></span><br><span class="line">    Device(RMD1)</span><br><span class="line">    &#123;</span><br><span class="line">        Name(_HID, &quot;RMD10000&quot;)</span><br><span class="line">        Method(_INI)</span><br><span class="line">        &#123;</span><br><span class="line">            // disable discrete graphics (Nvidia/Radeon) if it is present</span><br><span class="line">            If (CondRefOf(\_SB.PCI0.PEG0.PEGP._OFF)) &#123; \_SB.PCI0.PEG0.PEGP._OFF() &#125;</span><br><span class="line">            If (CondRefOf(\_SB.PCI0.PEGP.DGFX._OFF)) &#123; \_SB.PCI0.PEGP.DGFX._OFF() &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//EOF</span><br></pre></td></tr></table></figure>
+<p>代码没多少，引用了外部的方法，定义了新的设备RMD1，这个抽象的设备就做了一件事，在_INI方法设备初始化的时候检查饮用的方法有没有定义，定义了就执行。其中的PEGP和DGFX通常指代nVidia/Radeon设备，而PCI0后的路径使设备作用域路径。</p>
+<p>设备路径很好找，在我们之前iasl反汇编的dsl文件中过滤_OFF方法就能找到，比如<code>grep -l Method.*_OFF *.dsl</code>结果可能是SSDT-5.dsl，进去找到正确的路径位置就行。</p>
+<h3 id="0x84-Collection-Of-Some"><a href="#0x84-Collection-Of-Some" class="headerlink" title="0x84 Collection Of Some"></a>0x84 Collection Of Some</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line"> * Intel ACPI Component Architecture</span><br><span class="line"> * AML/ASL+ Disassembler version 20161210-64(RM)</span><br><span class="line"> * Copyright (c) 2000 - 2016 Intel Corporation</span><br><span class="line"> * </span><br><span class="line"> * Disassembling to non-symbolic legacy ASL operators</span><br><span class="line"> *</span><br><span class="line"> * Disassembly of iASLZEyCG3.aml, Sat Mar 24 15:48:25 2018</span><br><span class="line"> *</span><br><span class="line"> * Original Table Header:</span><br><span class="line"> *     Signature        &quot;SSDT&quot;</span><br><span class="line"> *     Length           0x000004E9 (1257)</span><br><span class="line"> *     Revision         0x02</span><br><span class="line"> *     Checksum         0xDD</span><br><span class="line"> *     OEM ID           &quot;hack&quot;</span><br><span class="line"> *     OEM Table ID     &quot;spoof&quot;</span><br><span class="line"> *     OEM Revision     0x00000000 (0)</span><br><span class="line"> *     Compiler ID      &quot;INTL&quot;</span><br><span class="line"> *     Compiler Version 0x20161210 (538317328)</span><br><span class="line"> */</span><br><span class="line">DefinitionBlock (&quot;&quot;, &quot;SSDT&quot;, 2, &quot;hack&quot;, &quot;_DDGPU&quot;, 0x00000000)</span><br><span class="line">&#123;</span><br><span class="line">    External (_SB_.PCI0.PEG0.PEGP._OFF, MethodObj)    // 0 Arguments (from opcode)</span><br><span class="line">    External (_SB_.PCI0.PEG0.PEGP._ON_, MethodObj)    // 0 Arguments (from opcode)</span><br><span class="line">    External (_SB_.PCI0.PEG2.PEGP._OFF, MethodObj)    // 0 Arguments (from opcode)</span><br><span class="line">    External (_SB_.PCI0.PEG2.PEGP._ON_, MethodObj)    // 0 Arguments (from opcode)</span><br><span class="line">    External (_SB_.PCI0.PEGP.DGFX._OFF, MethodObj)    // 0 Arguments (from opcode)</span><br><span class="line">    External (_SB_.PCI0.PEGP.DGFX._ON_, MethodObj)    // 0 Arguments (from opcode)</span><br><span class="line">    External (_SB_.PCI0.PEG_.VID_._PS0, MethodObj)    // 0 Arguments (from opcode)</span><br><span class="line">    External (_SB_.PCI0.PEG_.VID_._PS3, MethodObj)    // 0 Arguments (from opcode)</span><br><span class="line">    External (_SB_.PCI0.PEG_.VID_.XDSM, MethodObj)    // 4 Arguments (from opcode)</span><br><span class="line">    External (_SB_.PCI0.RP01.PEGP._OFF, MethodObj)    // 0 Arguments (from opcode)</span><br><span class="line">    External (_SB_.PCI0.RP01.PEGP._ON_, MethodObj)    // 0 Arguments (from opcode)</span><br><span class="line">    External (_SB_.PCI0.RP01.PXSX._OFF, MethodObj)    // 0 Arguments (from opcode)</span><br><span class="line">    External (_SB_.PCI0.RP01.PXSX._ON_, MethodObj)    // 0 Arguments (from opcode)</span><br><span class="line">    External (_SB_.PCI0.RP05.PXSX._OFF, MethodObj)    // 0 Arguments (from opcode)</span><br><span class="line">    External (_SB_.PCI0.RP05.PXSX._ON_, MethodObj)    // 0 Arguments (from opcode)</span><br><span class="line"></span><br><span class="line">    Device (DGPU)</span><br><span class="line">    &#123;</span><br><span class="line">        Name (_HID, &quot;DGPU1000&quot;)  // _HID: Hardware ID</span><br><span class="line">        Name (RMEN, One)</span><br><span class="line">        Method (_INI, 0, NotSerialized)  // _INI: Initialize</span><br><span class="line">        &#123;</span><br><span class="line">            _OFF ()</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Method (_ON, 0, NotSerialized)  // _ON_: Power On</span><br><span class="line">        &#123;</span><br><span class="line">            If (CondRefOf (\_SB.PCI0.PEG0.PEGP._ON))</span><br><span class="line">            &#123;</span><br><span class="line">                \_SB.PCI0.PEG2.PEGP._ON ()</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            If (CondRefOf (\_SB.PCI0.PEG2.PEGP._ON))</span><br><span class="line">            &#123;</span><br><span class="line">                \_SB.PCI0.PEG0.PEGP._ON ()</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            If (CondRefOf (\_SB.PCI0.PEGP.DGFX._ON))</span><br><span class="line">            &#123;</span><br><span class="line">                \_SB.PCI0.PEGP.DGFX._ON ()</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            If (CondRefOf (\_SB.PCI0.PEG.VID._PS0))</span><br><span class="line">            &#123;</span><br><span class="line">                \_SB.PCI0.PEG.VID._PS0 ()</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            If (CondRefOf (\_SB.PCI0.RP01.PEGP._ON))</span><br><span class="line">            &#123;</span><br><span class="line">                \_SB.PCI0.RP01.PEGP._ON ()</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            If (CondRefOf (\_SB.PCI0.RP01.PXSX._ON))</span><br><span class="line">            &#123;</span><br><span class="line">                \_SB.PCI0.RP01.PXSX._ON ()</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            If (CondRefOf (\_SB.PCI0.RP05.PXSX._ON))</span><br><span class="line">            &#123;</span><br><span class="line">                \_SB.PCI0.RP05.PXSX._ON ()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Method (_OFF, 0, NotSerialized)  // _OFF: Power Off</span><br><span class="line">        &#123;</span><br><span class="line">            If (CondRefOf (\_SB.PCI0.PEG0.PEGP._OFF))</span><br><span class="line">            &#123;</span><br><span class="line">                \_SB.PCI0.PEG2.PEGP._OFF ()</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            If (CondRefOf (\_SB.PCI0.PEG2.PEGP._OFF))</span><br><span class="line">            &#123;</span><br><span class="line">                \_SB.PCI0.PEG0.PEGP._OFF ()</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            If (CondRefOf (\_SB.PCI0.PEGP.DGFX._OFF))</span><br><span class="line">            &#123;</span><br><span class="line">                \_SB.PCI0.PEGP.DGFX._OFF ()</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            If (CondRefOf (\_SB.PCI0.PEG.VID._PS3))</span><br><span class="line">            &#123;</span><br><span class="line">                \_SB.PCI0.PEG.VID.XDSM (ToUUID (&quot;a486d8f8-0bda-471b-a72b-6042a6b5bee0&quot;), 0x0100, 0x1A, Buffer (0x04)</span><br><span class="line">                    &#123;</span><br><span class="line">                         0x01, 0x00, 0x00, 0x03</span><br><span class="line">                    &#125;)</span><br><span class="line">                \_SB.PCI0.PEG.VID._PS3 ()</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            If (CondRefOf (\_SB.PCI0.RP01.PEGP._OFF))</span><br><span class="line">            &#123;</span><br><span class="line">                \_SB.PCI0.RP01.PEGP._OFF ()</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            If (CondRefOf (\_SB.PCI0.RP01.PXSX._OFF))</span><br><span class="line">            &#123;</span><br><span class="line">                \_SB.PCI0.RP01.PXSX._OFF ()</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            If (CondRefOf (\_SB.PCI0.RP05.PXSX._OFF))</span><br><span class="line">            &#123;</span><br><span class="line">                \_SB.PCI0.RP05.PXSX._OFF ()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很多人可能有疑虑，为什么这里_OFF方法可以放心调用，我猜测是因为Hotpatch的SSDT是在最后才将设备挂上，而不是像之前的_INI方法调用比较早，有可能EC还没准备好，所以需要将EC的调用放到确保EC已经准备好的位置。</p>
+<p>目前为止，配合正确的config文件和驱动你应该已经能看到Installer了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2018/03/24/利用Hotpatch禁用DGPU/" data-id="ckfsdx7ct002nr49ztsife67l" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ACPI/">ACPI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Clover/">Clover</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hackintosh/">Hackintosh</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hotpatch/">Hotpatch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macOS/">macOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/10/霓虹之行/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          霓虹之行
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/20/辞工作的日子/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">辞工作的日子</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

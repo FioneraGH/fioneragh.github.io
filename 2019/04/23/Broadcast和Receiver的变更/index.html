@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Broadcast和Receiver的变更 | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 后台限制变更从Android Nougat开始，Google开始逐渐收紧后台运行权限，到Oreo几乎禁掉了所有匿名广播。 广播的唤起进程确实非常拖慢设备的运行速度，甚至由于大量App被唤起占用CPU资源会让很多人觉得手机卡顿，所以Google终于开始限制各大App对这些系统资源的滥用。其实从另一方面讲，这些限制的出现也意味着很多功能成了系统软件的专属，用户软件相当于失去了对应的能力，当然">
+<meta name="keywords" content="Android,BroadcastReceiver">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Broadcast和Receiver的变更">
+<meta property="og:url" content="https://fioneragh.github.io/2019/04/23/Broadcast和Receiver的变更/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 后台限制变更从Android Nougat开始，Google开始逐渐收紧后台运行权限，到Oreo几乎禁掉了所有匿名广播。 广播的唤起进程确实非常拖慢设备的运行速度，甚至由于大量App被唤起占用CPU资源会让很多人觉得手机卡顿，所以Google终于开始限制各大App对这些系统资源的滥用。其实从另一方面讲，这些限制的出现也意味着很多功能成了系统软件的专属，用户软件相当于失去了对应的能力，当然">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.166Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Broadcast和Receiver的变更">
+<meta name="twitter:description" content="0x81 后台限制变更从Android Nougat开始，Google开始逐渐收紧后台运行权限，到Oreo几乎禁掉了所有匿名广播。 广播的唤起进程确实非常拖慢设备的运行速度，甚至由于大量App被唤起占用CPU资源会让很多人觉得手机卡顿，所以Google终于开始限制各大App对这些系统资源的滥用。其实从另一方面讲，这些限制的出现也意味着很多功能成了系统软件的专属，用户软件相当于失去了对应的能力，当然">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Broadcast和Receiver的变更" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/23/Broadcast和Receiver的变更/" class="article-date">
+  <time datetime="2019-04-23T05:27:08.000Z" itemprop="datePublished">2019-04-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Broadcast和Receiver的变更
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-后台限制变更"><a href="#0x81-后台限制变更" class="headerlink" title="0x81 后台限制变更"></a>0x81 后台限制变更</h3><p>从Android Nougat开始，Google开始逐渐收紧后台运行权限，到Oreo几乎禁掉了所有匿名广播。</p>
+<p>广播的唤起进程确实非常拖慢设备的运行速度，甚至由于大量App被唤起占用CPU资源会让很多人觉得手机卡顿，所以Google终于开始限制各大App对这些系统资源的滥用。其实从另一方面讲，这些限制的出现也意味着很多功能成了系统软件的专属，用户软件相当于失去了对应的能力，当然Google其实也考虑到这些事情，提出了很多方案来弥补这些不足，也对一些功能放宽限制来保证App在前台可以正常使用。Lolipop引入的JobScheduler以及最新的Jetpack组件WorkManager都是不错的替代方案。</p>
+<h3 id="0x82-Nougat的变更"><a href="#0x82-Nougat的变更" class="headerlink" title="0x82 Nougat的变更"></a>0x82 Nougat的变更</h3><p>Nougat的变更算是一次试水，主要砍掉了两个广播并削弱了一个广播的能力。</p>
+<p><code>ACTION_NEW_VIDEO</code>和<code>ACTION_NEW_PICTURE</code>两个广播被完全砍掉，即使你的App的Target级别不是24+，只要运行在Nougat设备上，就无法再接收这两个广播，如果想做类似的功能可以利用JobScheduler对ContentUri创建的相应的Job，待收到相应的Uri，相应的JobService会被系统适时完成你的逻辑。</p>
+<p><code>CONNECTIVITY_ACTION</code>便是被削弱的广播，这个广播非常常用，我们通常用它来处理我们的App在Wifi和Cellar下的行为，静态注册的广播接收器将不再工作：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">receiver</span> <span class="attr">android:name</span>=<span class="string">".nougat.receiver.ManifestConnectivityReceiver"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:name</span>=<span class="string">"android.net.conn.CONNECTIVITY_CHANGE"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">tools:ignore</span>=<span class="string">"BatteryLife"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">receiver</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如果我们真的想接受网络变化怎么办，Google考虑到这个广播的易用性，保留了动态注册的能力，这意味着只要我们是通过上下文注册的，我们仍然能收到广播及其信息，并且这个广播是粘性的，我们可以依赖它作为当前的网络状态：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> intentFilter = IntentFilter()</span><br><span class="line">intentFilter.addAction(ImplicitAction.CONNECTIVITY_ACTION)</span><br><span class="line">registerReceiver(registerConnectivityReceiver, intentFilter)</span><br></pre></td></tr></table></figure>
+<p>当然，实际上Google建议我们用更加细粒度的控制，而不是真的依赖沉重的广播组件，毕竟这个广播已被弱化，并根据路线图以后很可能被直接砍掉，因此我们可以通过向ConnectivityManager注册回调的方式完整我们需求，并且他能做到的不仅仅是Wifi这种无线连接，像是蓝牙网络等等都可以：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">val</span> connCallback = <span class="keyword">object</span> : ConnectivityManager.NetworkCallback() &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onAvailable</span><span class="params">(network: <span class="type">Network</span>?)</span></span> &#123;</span><br><span class="line">        println(<span class="string">"Connectivity Callback Available: <span class="subst">$&#123;network?.toString()&#125;</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onLost</span><span class="params">(network: <span class="type">Network</span>?)</span></span> &#123;</span><br><span class="line">        println(<span class="string">"Connectivity Callback Lost: <span class="subst">$&#123;network?.toString()&#125;</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCapabilitiesChanged</span><span class="params">(network: <span class="type">Network</span>?, networkCapabilities: <span class="type">NetworkCapabilities</span>?)</span></span> &#123;</span><br><span class="line">        println(<span class="string">"Connectivity Callback Changed: <span class="subst">$&#123;network?.toString()&#125;</span> / <span class="subst">$&#123;networkCapabilities?.toString()&#125;</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">val</span> connManger = getSystemService(Context.CONNECTIVITY_SERVICE) <span class="keyword">as</span> ConnectivityManager</span><br><span class="line">connManger.registerNetworkCallback(</span><br><span class="line">        NetworkRequest.Builder().addTransportType(NetworkCapabilities.TRANSPORT_WIFI).build(),</span><br><span class="line">        connCallback)</span><br></pre></td></tr></table></figure>
+<p>当然，如果对实时性不是那么依赖，例如我们只是想在某些情况下帮用户做一些辅助任务，提高易用性，还是建议使用JobScheduler，更加内存友好、电池友好：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) <span class="keyword">as</span> JobScheduler</span><br><span class="line"><span class="keyword">val</span> job = JobInfo.Builder(CONNECTIVITY_JOB_ID, ComponentName(<span class="keyword">this</span>, ConnectivityJobService::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>))</span></span><br><span class="line">        .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)</span><br><span class="line">        .build()</span><br><span class="line">jobScheduler.schedule(job)</span><br></pre></td></tr></table></figure>
+<p>JobService相关不在这里展开，Google文档描述的非常详细，并且有很丰富的样例。</p>
+<h3 id="0x83-Oreo的变更"><a href="#0x83-Oreo的变更" class="headerlink" title="0x83 Oreo的变更"></a>0x83 Oreo的变更</h3><p>Oreo做了更加激进的变更，甚至大量变更是忽视掉Target级别的，只要运行在Oreo设备上，它就生效，当然这里关注的还是广播的问题。</p>
+<p>首先，</p>
+<ul>
+<li><p>Apps that are running in the background now have limits on how freely they can access background services.</p>
+</li>
+<li><p>Apps cannot use their manifests to register for most implicit broadcasts (that is, broadcasts that are not targeted specifically at the app).</p>
+</li>
+</ul>
+<p>其中第二条，清单再也不能注册大部分的匿名广播（未明确指定），这是一个相当大的变更，可以看出是紧随Nougat来的。当然他们默认是指Target级别达到26+，但是Oreo放开了用户设置，用户可以强制限制。</p>
+<p>对于系统广播，都是匿名广播，基本上可以认为静态注册都不再工作（除了极少数和带指定信息的），我们用自定义的注册在清单中的广播接收器做个实验，一共三种情况——发送匿名Action、发送带PackageName的匿名Action和显式发送：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">receiver</span> <span class="attr">android:name</span>=<span class="string">".oreo.receiver.ManifestStaticReceiver"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:exported</span>=<span class="string">"false"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"action.STATIC"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">receiver</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ManifestStaticReceiver</span> : <span class="type">BroadcastReceiver</span></span>() &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onReceive</span><span class="params">(context: <span class="type">Context</span>?, intent: <span class="type">Intent</span>?)</span></span> &#123;</span><br><span class="line">        <span class="keyword">val</span> msg = <span class="string">"Manifest Static Received"</span> +</span><br><span class="line">                <span class="string">": <span class="subst">$&#123;intent?.action&#125;</span> "</span> +</span><br><span class="line">                <span class="string">"/ <span class="subst">$&#123;intent?.`package`&#125;</span> "</span> +</span><br><span class="line">                <span class="string">"/ <span class="subst">$&#123;intent?.component&#125;</span>&#125;"</span></span><br><span class="line">        context?.showToast(msg)</span><br><span class="line">        println(msg)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">btn_static_send.setOnClickListener &#123;</span><br><span class="line">    <span class="keyword">val</span> intent = Intent()</span><br><span class="line">    intent.action = Actions.STATIC</span><br><span class="line">    sendBroadcast(intent)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">btn_static_send_with_pkg.setOnClickListener &#123;</span><br><span class="line">    <span class="keyword">val</span> intent = Intent()</span><br><span class="line">    intent.action = Actions.STATIC</span><br><span class="line">    intent.setPackage(packageName)</span><br><span class="line">    sendBroadcast(intent)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">btn_static_send_explicit.setOnClickListener &#123;</span><br><span class="line">    <span class="keyword">val</span> intent = Intent()</span><br><span class="line">    intent.setClass(<span class="keyword">this</span><span class="symbol">@MainActivity</span>, ManifestStaticReceiver::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br><span class="line">    sendBroadcast(intent)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述三个广播发送，只有第二个和第三个有结果：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Manifest Static Received: action.STATIC / com.fionera.receiverchanges / ComponentInfo&#123;com.fionera.receiverchanges/com.fionera.receiverchanges.oreo.receiver.ManifestStaticReceiver&#125;&#125;</span><br><span class="line">Manifest Static Received: null / null / ComponentInfo&#123;com.fionera.receiverchanges/com.fionera.receiverchanges.oreo.receiver.ManifestStaticReceiver&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>很明显，我们自定义的纯匿名广播在静态注册时也会失效，解决方法只有两个——指定目标和显式指定组件，而动态注册仍可以正常响应匿名广播，但是在我的测试里显式广播是失效的。</p>
+<p>当然了，更加鲁棒的解决方案依然是JobScheduler。</p>
+<p>由于Oreo砍掉了几乎所有能砍掉的匿名广播，所以Pie相对不这一部分没有大的变更，如今各大厂商商店开始陆续要求Target提升到26+，是该向GooglePlay看齐规范规范了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2019/04/23/Broadcast和Receiver的变更/" data-id="ckfsdx7aw000mr49zuslupm4e" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BroadcastReceiver/">BroadcastReceiver</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/30/Gradle依赖管理踩坑/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">Gradle依赖管理踩坑</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

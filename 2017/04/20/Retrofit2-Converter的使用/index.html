@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Retrofit2 Converter的使用 | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x80 前言今天来说一个比较简单的东西——Converter。看它的名字就知道它是转换器的意思，相信很多人都用过GsonConverter这个库，它的内容很简单并且它一直跟着Retrofit2主库的更新而更新。今天在重构代码的时候遇到了这样一个问题，我需要拿到返回内容的原始字符串而不是经过转换的POJO类，而GsonConverter没有办法做到，于是自己为了节省时间就做了点修改。 0x81 G">
+<meta name="keywords" content="Retrofit,Converter">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Retrofit2 Converter的使用">
+<meta property="og:url" content="https://fioneragh.github.io/2017/04/20/Retrofit2-Converter的使用/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x80 前言今天来说一个比较简单的东西——Converter。看它的名字就知道它是转换器的意思，相信很多人都用过GsonConverter这个库，它的内容很简单并且它一直跟着Retrofit2主库的更新而更新。今天在重构代码的时候遇到了这样一个问题，我需要拿到返回内容的原始字符串而不是经过转换的POJO类，而GsonConverter没有办法做到，于是自己为了节省时间就做了点修改。 0x81 G">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.178Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Retrofit2 Converter的使用">
+<meta name="twitter:description" content="0x80 前言今天来说一个比较简单的东西——Converter。看它的名字就知道它是转换器的意思，相信很多人都用过GsonConverter这个库，它的内容很简单并且它一直跟着Retrofit2主库的更新而更新。今天在重构代码的时候遇到了这样一个问题，我需要拿到返回内容的原始字符串而不是经过转换的POJO类，而GsonConverter没有办法做到，于是自己为了节省时间就做了点修改。 0x81 G">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Retrofit2-Converter的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/20/Retrofit2-Converter的使用/" class="article-date">
+  <time datetime="2017-04-20T10:05:28.000Z" itemprop="datePublished">2017-04-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Retrofit2 Converter的使用
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x80-前言"><a href="#0x80-前言" class="headerlink" title="0x80 前言"></a>0x80 前言</h3><p>今天来说一个比较简单的东西——Converter。看它的名字就知道它是转换器的意思，相信很多人都用过GsonConverter这个库，它的内容很简单并且它一直跟着Retrofit2主库的更新而更新。今天在重构代码的时候遇到了这样一个问题，我需要拿到返回内容的原始字符串而不是经过转换的POJO类，而GsonConverter没有办法做到，于是自己为了节省时间就做了点修改。</p>
+<h3 id="0x81-GsonConverter-的使用"><a href="#0x81-GsonConverter-的使用" class="headerlink" title="0x81 GsonConverter 的使用"></a>0x81 GsonConverter 的使用</h3><p>用法很简单，先在build.gradle文件中引用该库：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">compile <span class="string">'com.squareup.retrofit2:retrofit:2.2.0'</span></span><br><span class="line">compile <span class="string">'com.squareup.retrofit2:converter-gson:2.2.0'</span></span><br><span class="line">compile <span class="string">'com.squareup.retrofit2:adapter-rxjava2:2.2.0'</span></span><br></pre></td></tr></table></figure>
+<p>这样我们就可以在RetrofitBuilder构造Retrofit实例时添加相应的功能：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ApiService apiService = <span class="keyword">new</span> Retrofit.Builder().client(okHttpBuilder.build())</span><br><span class="line">    .baseUrl(HttpConstants.BASE_URL)</span><br><span class="line">    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())</span><br><span class="line">    .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">    .build().create(ApiService.class);</span><br></pre></td></tr></table></figure>
+<p>上面代码我们为Retrofit添加了RxJava2的适配器以及使用Gson处理字符串的Converter。</p>
+<h3 id="0x82-ApiService"><a href="#0x82-ApiService" class="headerlink" title="0x82 ApiService"></a>0x82 ApiService</h3><p>我们看下一般情况下的ApiService如何写，首先来看一个GET请求：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GET</span>(HttpConstants.HOME_PAGE)</span><br><span class="line">Observable&lt;BaseEntity&lt;HomeBean&gt;&gt; getHomePage(<span class="meta">@Query</span>(<span class="string">"time"</span>) String time);</span><br></pre></td></tr></table></figure>
+<p>这个请求很简单，@GET指明了在那个rest-path上执行GET请求，有一个查询参数time，接口方法的返回值是一个Observable，经过GsonConverter转换后的内容是BaseEntity<homebean>，我们还可以写过滤器取出HomeBean从而让代码更简洁。</homebean></p>
+<p>再来看一个发送Json数据的POST请求：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@POST</span>(HttpConstants.CART_ADD)</span><br><span class="line">Observable&lt;BaseEntity&lt;Empty&gt;&gt; addToCart(<span class="meta">@Body</span> Map&lt;String, String&gt; info);</span><br></pre></td></tr></table></figure>
+<p>这个和上面的GET差不多，只不过注解变成了@POST，参数是@Body，返回值是然被转换成POJO，泛型中的Empty表示我不在意返回内容是什么，我只需要通过返回的规约code进行判断。这一切都工作的很好，知道我发现了有的接口的返回值是没办法通过Gson转换成POJO的，这时候我们需要原始的响应结果。</p>
+<a id="more"></a>
+<h3 id="0x83-如何更好的处理返回结果"><a href="#0x83-如何更好的处理返回结果" class="headerlink" title="0x83 如何更好的处理返回结果"></a>0x83 如何更好的处理返回结果</h3><p>最开始的时候我在想，GsonConverter也是根据Type做的转换，那我使用Observable<string>作为返回值是不是就可以拿到原始的原始响应的字符串，后来发现是我想多了。</string></p>
+<p>于是我用了一个比较笨的方法，我维护了两个Retrofit的实例，一个叫ApiInstance，另一个叫NoGsonApiInstance。即便是这样我们仍然不能使用Observable<string>作为返回值，除非你实现了类似的StringConverter，最省事的我用了Observable<responsebody>这一最原始的用法：</responsebody></string></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GET</span>(HttpConstants.GOODS_DETAIL)</span><br><span class="line"><span class="function">Observable&lt;ResponseBody&gt; <span class="title">getGoodsDetail</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            @Query(<span class="string">"goods_commonid"</span>)</span> String goods_commonid,</span></span><br><span class="line"><span class="function">            @<span class="title">Query</span><span class="params">(<span class="string">"first_goods_id"</span>)</span> String first_goods_id,</span></span><br><span class="line"><span class="function">            @<span class="title">Query</span><span class="params">(<span class="string">"key"</span>)</span> String key)</span>;</span><br></pre></td></tr></table></figure>
+<p>依然是一个GET请求，这个返回的结果中由于有一些自定义的附加字符导致它不是一个合适的Json字符串，因此没办法使用GsonConverter，所以这样请求成功拿到了ResponseBody，我们可以做一些自定义处理。</p>
+<p>到这这一切看起来都很顺利，直到我用原来的方式发送一个POST请求时，Logcat中明确的打印没有一个合适的Converter将Map型的@Body转换成Json字符串，我才意识到问题，因为之前一直是用FormBody的@Field参数向服务器POST数据，没有意识到Map类型的参数GsonConverter参与了转换。</p>
+<h3 id="0x84-如何更好的处理请求体"><a href="#0x84-如何更好的处理请求体" class="headerlink" title="0x84 如何更好的处理请求体"></a>0x84 如何更好的处理请求体</h3><p>形如下面这种请求，我们需要向服务器递交Json串，还想要直接使用ResponseBody该怎么处理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@POST</span>(HttpConstants.ORDER_PREPAY)</span><br><span class="line"><span class="function">Observable&lt;ResponseBody&gt; <span class="title">orderPrepay</span><span class="params">(@Body Map&lt;String, String&gt; info)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>既然知道了使用GsonConverter时能转换成功，那说明GsonConverter肯定做了处理，我们看一下GsonConverterFactory的源码（由于我的Studio不会自己下载并关联源码了，就先将就着看Decompiler的代码吧，反正Java不经过混淆的话直接反编译也不怎么影响阅读）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">GsonConverterFactory</span> <span class="keyword">extends</span> <span class="title">Factory</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Gson gson;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> GsonConverterFactory <span class="title">create</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> create(<span class="keyword">new</span> Gson());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> GsonConverterFactory <span class="title">create</span><span class="params">(Gson gson)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> GsonConverterFactory(gson);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">GsonConverterFactory</span><span class="params">(Gson gson)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(gson == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"gson == null"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.gson = gson;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Converter&lt;ResponseBody, ?&gt; responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) &#123;</span><br><span class="line">        TypeAdapter&lt;?&gt; adapter = <span class="keyword">this</span>.gson.getAdapter(TypeToken.get(type));</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> GsonResponseBodyConverter(<span class="keyword">this</span>.gson, adapter);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Converter&lt;?, RequestBody&gt; requestBodyConverter(Type type, Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) &#123;</span><br><span class="line">        TypeAdapter&lt;?&gt; adapter = <span class="keyword">this</span>.gson.getAdapter(TypeToken.get(type));</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> GsonRequestBodyConverter(<span class="keyword">this</span>.gson, adapter);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>GsonConverterFactory的代码不多，我们能很直观的看到，确实有两个Converter，一个Response的，一个Request的，看Converter.Factory的源码中其实还有一个stringConverter的方法，用于将请求参数转成字符串。</p>
+<p>看到这，不需要看两个Converter的源码我们也知道了，的确是GsonConverter可能有能力将Map转成对应的RequestBody，所以我便有了一下小trick哈哈。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RetrofitStringConverter</span> <span class="keyword">extends</span> <span class="title">Factory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RetrofitStringConverter <span class="title">create</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RetrofitStringConverter();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Converter&lt;?, RequestBody&gt; requestBodyConverter(Type type, Annotation[] parameterAnnotations,</span><br><span class="line">            Annotation[] methodAnnotations, Retrofit retrofit) &#123;</span><br><span class="line">        <span class="keyword">return</span> GsonConverterFactory.create().requestBodyConverter(type, parameterAnnotations,</span><br><span class="line">                methodAnnotations, retrofit);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>虽然可能不太优雅，但是目前用起来还没有什么副作用，就是自定义了一个Factory，代码很简单也很容易看懂就不啰嗦了。</p>
+<blockquote>
+<p>多说一句，不重写对应的方法在父类中是返回null的，根据文档如果返回的Converter是null表明它不具有处理的能力，也就是说不由它处理，如果没有其他的Converter那就是默认的返回方式ResponseBody。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/04/20/Retrofit2-Converter的使用/" data-id="ckfsdx7bm001or49zgkenlm6y" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Converter/">Converter</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Retrofit/">Retrofit</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/24/堆，栈，自由储存区/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          堆，栈，自由储存区
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/19/PopupWindow-实现暗色背景的坑/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">PopupWindow 实现暗色背景的坑</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

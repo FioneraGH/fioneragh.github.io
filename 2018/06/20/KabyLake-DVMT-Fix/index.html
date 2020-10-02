@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>KabyLake DVMT Fix | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 CloverHackintosh，这应该是这个系列的第二篇，第一篇参考利用Hotpatch禁用DGPU主要记录了如何利用Clover禁用部分笔记本未提供BIOS选项的独显。 Clover，一个强大的引导工具，基于rEFInd魔改而来，提供强大的驱动注入和二进制patch的功能，@RehabMan等大牛的参与更是为Clover带来更加强大的诸如AutoMerge等功能，让Clover可以为">
+<meta name="keywords" content="macOS,Clover,Hackintosh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KabyLake DVMT Fix">
+<meta property="og:url" content="https://fioneragh.github.io/2018/06/20/KabyLake-DVMT-Fix/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 CloverHackintosh，这应该是这个系列的第二篇，第一篇参考利用Hotpatch禁用DGPU主要记录了如何利用Clover禁用部分笔记本未提供BIOS选项的独显。 Clover，一个强大的引导工具，基于rEFInd魔改而来，提供强大的驱动注入和二进制patch的功能，@RehabMan等大牛的参与更是为Clover带来更加强大的诸如AutoMerge等功能，让Clover可以为">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://fioneragh.github.io/images/2018_06_20_01.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2018_06_20_02.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2018_06_20_03.png">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.173Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="KabyLake DVMT Fix">
+<meta name="twitter:description" content="0x81 CloverHackintosh，这应该是这个系列的第二篇，第一篇参考利用Hotpatch禁用DGPU主要记录了如何利用Clover禁用部分笔记本未提供BIOS选项的独显。 Clover，一个强大的引导工具，基于rEFInd魔改而来，提供强大的驱动注入和二进制patch的功能，@RehabMan等大牛的参与更是为Clover带来更加强大的诸如AutoMerge等功能，让Clover可以为">
+<meta name="twitter:image" content="https://fioneragh.github.io/images/2018_06_20_01.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-KabyLake-DVMT-Fix" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/20/KabyLake-DVMT-Fix/" class="article-date">
+  <time datetime="2018-06-20T10:19:59.000Z" itemprop="datePublished">2018-06-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      KabyLake DVMT Fix
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-Clover"><a href="#0x81-Clover" class="headerlink" title="0x81 Clover"></a>0x81 Clover</h3><p>Hackintosh，这应该是这个系列的第二篇，第一篇参考<a href="https://fioneragh.github.io/2018/03/24/%E5%88%A9%E7%94%A8Hotpatch%E7%A6%81%E7%94%A8DGPU/">利用Hotpatch禁用DGPU</a>主要记录了如何利用Clover禁用部分笔记本未提供BIOS选项的独显。</p>
+<p>Clover，一个强大的引导工具，基于rEFInd魔改而来，提供强大的驱动注入和二进制patch的功能，<a href="https://github.com/RehabMan" target="_blank" rel="noopener">@RehabMan</a>等大牛的参与更是为Clover带来更加强大的诸如AutoMerge等功能，让Clover可以为黑苹果工作的更好。</p>
+<h3 id="0x82-DVMT"><a href="#0x82-DVMT" class="headerlink" title="0x82 DVMT"></a>0x82 DVMT</h3><p>DVMT，全称Dynamic video memory technology，意为动态显存技术，这个显存还不是传统意义上我们在使用显卡的显存，它更像一种预申请用于做缓冲区初始化的存储空间。对于大部分PC厂商来说，BIOS通常会提供一个用于设置大小的选项，而对于很多笔记本来说，BIOS本身提供的选项设置就很少，更别说提供DVMT的设置。</p>
+<p>在比较新的硬件平台上(Broadwell+)，比如我现在使用的KabyLake，也就是7代英特尔CPU，在安装macOS时如果不进行相应的patch，就会导致对应的Framerbuffer程序crash从而导致kernel panic，这是个很致命的问题，因为这个过程发生在你刚引导家在进入系统的时候。究其原因，是因为macOS对于新硬件平台申请了至少64m的prealloc空间，而大部分笔记本设备厂商出厂都设置在32m，当系统想要申请比其大的空间时必然失败，就跟我们平时编程遇到的allocation memory failed是类似的情况，知道问题就知道对应的解决方案了。</p>
+<a id="more"></a>
+<h3 id="0x83-minStolenSize-patch"><a href="#0x83-minStolenSize-patch" class="headerlink" title="0x83 minStolenSize patch"></a>0x83 minStolenSize patch</h3><p>macOS的Framebuffer中有一个非常magic的值——minStolenSize，论坛上叫这个名字我也没有去细查，这个值只要从76修改到EB即能规避DVMT不足的问题，但是貌似他只是修改了检查，而实际上binary向系统申请的值仍然是原值，只是申请这么大空间不一定用得到这么大空间，所以反正能用。</p>
+<p>以10.14 Beta为例，因为这个特征值的确定在10.14发生了修改，我们先找到binary里对应的特征值位置：</p>
+<p><img src="/images/2018_06_20_01.png" alt="minStolenSize位置"></p>
+<p>为了避免不同版本因为某些状况刚好会修改其他的值，我们通常会多添加几个特征字节用来确保这个patch仅在我们已知的情况下起作用，当然用Clover的patch filter也可以做到，但是如果要修改的这组值在ninary理由多个备选，我们就得找到真正影响minStolenSize的地方。介于上述原因，KabyLake平台下的Clover-KextsToPatch中关于minStolenSize的patch通常这样写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">Comment:</span><br><span class="line">minStolenPatch (10.14 Beta1)</span><br><span class="line"></span><br><span class="line">Name:</span><br><span class="line">AppleIntelKBLGraphicsFramebuffer</span><br><span class="line"></span><br><span class="line">Find:</span><br><span class="line">76 46 48 FF 05 BA 48 08</span><br><span class="line"></span><br><span class="line">Repl:</span><br><span class="line">EB 46 48 FF 05 BA 48 08</span><br><span class="line"></span><br><span class="line">Comment:</span><br><span class="line">minStolenPatch (10.14 Beta2)</span><br><span class="line"></span><br><span class="line">Name:</span><br><span class="line">AppleIntelKBLGraphicsFramebuffer</span><br><span class="line"></span><br><span class="line">Find:</span><br><span class="line">76 46 48 FF 05 02 52 08</span><br><span class="line"></span><br><span class="line">Repl:</span><br><span class="line">EB 46 48 FF 05 02 52 08</span><br></pre></td></tr></table></figure>
+<h3 id="0x84-32mb-DVMT-prealloc-patch"><a href="#0x84-32mb-DVMT-prealloc-patch" class="headerlink" title="0x84 32mb DVMT-prealloc patch"></a>0x84 32mb DVMT-prealloc patch</h3><p>minStolenPatch着实是一个不错的方案，我们只要注意找到正确的minStolenSize值并修改，通常就可以正常使用了。不过根据<a href="https://github.com/RehabMan" target="_blank" rel="noopener">RehabMan</a>的说法，这种做法他认为可能会带来一些其他的问题，最好的解决方式还是将macOS认为需要申请64m空间的设置调整到32m，从而保证申请申请与使用的一致性，毕竟我们的笔记本可能真的只有32m的dvmt可分配空间。</p>
+<p>与minStolenPatch的解决思路一致，我们先要找到对应ig-platform-id下的配置信息的二进制位置，然后进行相应的patch。在我们仅仅是安装macOS时，因为不需要硬件加速我们完全可以设置一个根本不存在的platform-id来进入安装界面，此时整个界面都是没有显卡加速的，所以也没有流畅的动画，但是此时我们不需要任何patch就能进入系统，原因也很简单就是因为AppleIntelKBLGraphicsFramebuffer(KabyLake)这个binary所在的kextbundle根本没有加载，自然也不会出现申请内存不足的状况，所以我们还是从AppleIntelKBLGraphicsFramebuffer下手，寻找合适的patch。以10.14 Beta为例，我使用的KabyLake平台的platform-id是0x56160000，搜索结果：</p>
+<p><img src="/images/2018_06_20_02.png" alt="platform-id位置"><br><img src="/images/2018_06_20_03.png" alt="platform-id位置"></p>
+<p>之所以这样修改是因为我已经没办法通过High Sierra的<code>01030303 00002002</code>找到原来的值了，很有可能已经完全变了。根据High Sierra的经验，10.13的KabyLakeFramebuffer的patch是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Comment:</span><br><span class="line">HD620, 32MB BIOS, 19MB framebuffer 9MB cursor bytes 2048MB vram</span><br><span class="line"></span><br><span class="line">Name:</span><br><span class="line">AppleIntelKBLGraphicsFramebuffer</span><br><span class="line"></span><br><span class="line">Find:</span><br><span class="line">01030303 00002002 00000000 00000060</span><br><span class="line"></span><br><span class="line">Repl:</span><br><span class="line">01030303 00003001 00009000 00000080</span><br></pre></td></tr></table></figure>
+<p>内容比较多，但主要分为四块分别是pipe count、framebuffer size、cursor bytes和dmvm，其中第一个通常用来做特征值，第二个是主要的framebuffer大小，第三个cursor的大小，他太小的话通常会导致画面抖动，0x00000000指的是自动，第四个是系统内动态显示内存的最大值，也就是macOS关于信息里的显存大小，加大它可以减少一些花屏幕但作用不是很明显。</p>
+<p>根据之前的信息推测，第二张里是我需要patch的信息，因为我们能在platform-id后找到对应的0x00002002， 指framebuffer的大小为34m，因此我们通过以下patch完成我们需求：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Comment:</span><br><span class="line">HD620, 32MB BIOS, 19MB framebuffer 2048MB vram</span><br><span class="line"></span><br><span class="line">Name:</span><br><span class="line">AppleIntelKBLGraphicsFramebuffer</span><br><span class="line"></span><br><span class="line">Find:</span><br><span class="line">200248BA 00000060</span><br><span class="line"></span><br><span class="line">Repl:</span><br><span class="line">300148BA 00000080</span><br></pre></td></tr></table></figure>
+<h3 id="0x85-IntelGraphicsDVMTFixup-required-Lilu"><a href="#0x85-IntelGraphicsDVMTFixup-required-Lilu" class="headerlink" title="0x85 IntelGraphicsDVMTFixup (required Lilu)"></a>0x85 IntelGraphicsDVMTFixup (required Lilu)</h3><p>Clover的patch有一个最致命的地方，想要正确的patch必须已经通过kextcache建立了内核缓存，kextcache执行时将所有已经加载的kext都加到了缓存当中，这样才能被Clover正确的进行二进制替换，具体的原理我没有看Clover的源码，大体意思就是Clover要hook这一过程kext被内核缓存是必须的。因为这些局限，<a href="https://github.com/vit9696" target="_blank" rel="noopener">vit9696</a>写了一个内核扩展，它叫Lilu，通过较早的加载Lilu.kext并加载其他有hook功能的插件kext，这样当系统加载对应kext时可以直接进行patch，这样就可以做到无痛打patch。</p>
+<p>IntelGraphicsDVMTFixup实际上做的事情和上面是一致的，最大的特点就是借助了Lilu的特性。如果你有一定的编程能力，我建议使用这个repo，当macOS新版本发布时自行修改fork的repo编译一个kext来使用，虽然sherlock已经更新了IntelGraphicsDVMTFixup支持了10.14，但我发现他只是修改了Lilu hook的版本匹配以不需要使用<code>-lilubeta*</code>参数来加载它，patch的内容并没有改，可行性我没有测试，不过鉴于很多人都用它应该没什么问题，感兴趣的人可以试试。</p>
+<p>DVMT相关的内容差不多就这些，有其他新的内容我再补充。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2018/06/20/KabyLake-DVMT-Fix/" data-id="ckfsdx7bb0015r49zu0tuzy9p" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Clover/">Clover</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hackintosh/">Hackintosh</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macOS/">macOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/27/macOS使用seedutil选择不同的Beta版本/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          macOS使用seedutil选择不同的Beta版本
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/05/14/设置CrossOver的LANGENV/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">设置CrossOver的LANGENV</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

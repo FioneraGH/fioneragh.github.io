@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>升级到gradle-plugin 3.0.0 | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 Google I/O 2017北京时间5月18日凌晨1点，Google开发者大会是周年纪念版开始，第一天就放出了很多激动人心的东西。作为一名实打实的Android开发新手，自然注意到新发布的Android Studio 3.0，3.0对我已经用了一年多的JVM语言Kotlin提供了官方支持，并将Kotlin作为Android开发的一级语言。 0x82 Android Studio 3.0">
+<meta name="keywords" content="Android,Gradle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="升级到gradle-plugin 3.0.0">
+<meta property="og:url" content="https://fioneragh.github.io/2017/05/18/升级到gradle-plugin-3-0-0/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 Google I/O 2017北京时间5月18日凌晨1点，Google开发者大会是周年纪念版开始，第一天就放出了很多激动人心的东西。作为一名实打实的Android开发新手，自然注意到新发布的Android Studio 3.0，3.0对我已经用了一年多的JVM语言Kotlin提供了官方支持，并将Kotlin作为Android开发的一级语言。 0x82 Android Studio 3.0">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_05_18_01.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_05_18_02.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_05_18_03.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_05_18_04.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_05_18_05.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_05_18_06.png">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.200Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="升级到gradle-plugin 3.0.0">
+<meta name="twitter:description" content="0x81 Google I/O 2017北京时间5月18日凌晨1点，Google开发者大会是周年纪念版开始，第一天就放出了很多激动人心的东西。作为一名实打实的Android开发新手，自然注意到新发布的Android Studio 3.0，3.0对我已经用了一年多的JVM语言Kotlin提供了官方支持，并将Kotlin作为Android开发的一级语言。 0x82 Android Studio 3.0">
+<meta name="twitter:image" content="https://fioneragh.github.io/images/2017_05_18_01.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-升级到gradle-plugin-3-0-0" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/18/升级到gradle-plugin-3-0-0/" class="article-date">
+  <time datetime="2017-05-18T10:24:30.000Z" itemprop="datePublished">2017-05-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      升级到gradle-plugin 3.0.0
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-Google-I-O-2017"><a href="#0x81-Google-I-O-2017" class="headerlink" title="0x81 Google I/O 2017"></a>0x81 Google I/O 2017</h3><p>北京时间5月18日凌晨1点，Google开发者大会是周年纪念版开始，第一天就放出了很多激动人心的东西。作为一名实打实的Android开发新手，自然注意到新发布的Android Studio 3.0，3.0对我已经用了一年多的JVM语言Kotlin提供了官方支持，并将Kotlin作为Android开发的一级语言。</p>
+<h3 id="0x82-Android-Studio-3-0-的变化"><a href="#0x82-Android-Studio-3-0-的变化" class="headerlink" title="0x82 Android Studio 3.0 的变化"></a>0x82 Android Studio 3.0 的变化</h3><p>3.0其实完全可以看作是2.5 preview3改名字而来，整合了gradle-plugin 2.5的特性，使用了最新的构建工具Gradle 4.0，因为存在broken api所以干脆将Major版本提到了3，gradle-plugin 3.0.0 alpha1的出现需要我们做一些工程级别的更改，同时跟上的Gradle 4.0也废弃了很多API（其实很多API在3.4就已经标记为废弃了，并提示在4.0很可能会移除）。除此之外，就是为IDEA Android Support Plugin添加了Kotlin支持，例如在我们创建Activity时可以选择Source Type为Kotlin，Kotlin的主要功能仍要依靠JetBrains的Kotlin插件。还有一个很重要的变化，启动画面变漂亮了。</p>
+<a id="more"></a>
+<h3 id="0x83-Migrate-to-the-New-Plugin"><a href="#0x83-Migrate-to-the-New-Plugin" class="headerlink" title="0x83 Migrate to the New Plugin"></a>0x83 Migrate to the New Plugin</h3><p>标题就是Google官方文档的标题，随着gradle-plugin 3.0.0 alpha1的推出，文档也随之更新。本篇主要根据官方文档调整各build.gradle文件，以确保插件能正确的运行。</p>
+<ol>
+<li><p>基础集成<br> 打开先前的工程，AS3.0通常会提示你升级到最新的插件版本，也可以自己手动更改：</p>
+ <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    classpath <span class="string">'com.android.tools.build:gradle:3.0.0-alpha1'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 使用它至少需要Gradle 4.0 milestone1的支持，我使用了官网最新的milestone2版本。</p>
+</li>
+<li><p>使用Flavor Dimensions<br> Dimension的概念好久之前就有了，可以认为它和flavor是相辅相成的，可以使构建更加灵活，但是这次更新的插件要求必须使用Flavor Dimensions，从而方便gradle正确的构建代码。几个月前曾经记录过一个坑，module中的BuildConfig的DEBUG值永远为false，<a href="https://fioneragh.github.io/2017/02/10/Android-Module-BuildConfig/">Android Module BuildConfig</a>中说的很明白，Android Studio在打包的时候，module使用的永远是release包，所以导致了这个问题。当时的解决办法是这样：</p>
+ <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">debugCompile project(<span class="string">path:</span><span class="string">':base'</span>,<span class="string">configuration:</span><span class="string">'debug'</span>)</span><br><span class="line">releaseCompile project(<span class="string">path:</span><span class="string">':base'</span>,<span class="string">configuration:</span><span class="string">'release'</span>)</span><br></pre></td></tr></table></figure>
+<p> 然后再gradle文件中配置<code>publishNonDefault true</code>，现在Google强制使用Flavor Dimensions后，module也能根据需要选择variant。</p>
+<p> 根据官方文档的说法，plugin 3.0采用新的机制来自动匹配构建变量，app的debug会匹配module的debug，并且使用flavor的xxDebug和匹配module的xxDebug，这要求所有的Flavor都必须指定一个已存在的dimension，即使flavor只有一个，否则会遇到如下错误：</p>
+<p> <img src="/images/2017_05_18_01.png" alt="缺少dimension"></p>
+<p> 因此我们需要声明Flavor Dimensions并分配：</p>
+ <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">flavorDimensions <span class="string">"eson"</span>,<span class="string">"test"</span></span><br><span class="line"></span><br><span class="line">productFlavors &#123;</span><br><span class="line">    fuck &#123;</span><br><span class="line">        dimension <span class="string">"eson"</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    hell &#123;</span><br><span class="line">        dimension <span class="string">"eson"</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cake &#123;</span><br><span class="line">        dimension <span class="string">"eson"</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 为了方便说明问题，我们用2个dimension加3个flavor的方式演示。首先我们将三个flavor都设置为”eson”，会报一个错误：</p>
+<p> <img src="/images/2017_05_18_02.png" alt="test未分配"></p>
+<p> 这种状况也就是说flavor不能不关联dimension，dimension也不能存在空闲，否则这个dimension就是多余的，我们将cake的dimension改成test，最终编译通过后我们看一下构建变量：</p>
+<p> <img src="/images/2017_05_18_03.png" alt="四种构建变量"></p>
+<p> 如果我们不使用dimension，那原本构建变量应该是迟迟迟迟3(flavors)<em>2(debug + release)=6种，那现在为什么是4种呢，看构建变量名字我们就可以推断出来4=2(dimensions)</em>2(debug + release)，所以dimension可以看作维度的意思，不同维度加构建类型形成最终的构建变量，当你只有一个维度的时候，flavor中可以省略绑定步骤。</p>
+</li>
+<li><p>module中使用Flavor Dimension<br> 我在moudle中通常是不配置flavor的，因为它们通常是共用代码的存在，但是有特殊的需求还是会用到，因此也需要指定dimension，原则上和app一样，毕竟app本身也是一个module。在library module中使用有一点要注意，就是定义的dimension最好不要重名，官方文档也提到，如果都使用一个名字可能会出现不可控的结果，经过我的实验所有共用的资源文件都失效了。</p>
+</li>
+<li><p>dimension不匹配<br> 既然使用了flavor和dimension，那很有可能出现module的一个dimension存在多个flavor，这时候后见会出现如下问题：</p>
+<p> <img src="/images/2017_05_18_04.png" alt="consumer&amp;producer mismatch1"></p>
+<p> <img src="/images/2017_05_18_05.png" alt="consumer&amp;producer mismatch2"></p>
+<p> 这时候可以使用flavorSelection指定某个dimension下选择某个flavor，最终构建变量关系如下：</p>
+<p> <img src="/images/2017_05_18_06.png" alt="wonderful dependencies"></p>
+<p> 这里Google的官方文档表述稍有歧义，但是也有可能是我理解的不好，但是例子很明确，尝试一下就能得得到结论了。</p>
+</li>
+</ol>
+<h3 id="0x84-Use-the-new-dependency-configurations"><a href="#0x84-Use-the-new-dependency-configurations" class="headerlink" title="0x84 Use the new dependency configurations"></a>0x84 Use the new dependency configurations</h3><p>这是另一个比较常用的变化，由于Gradle升级到了4.0，很多API发生了变化，其中configrations在3.4就推出了新的API，官方有个表格说得很明白，这里主要说说重要的变化。</p>
+<ol>
+<li><p>compile -&gt; implementation<br> 关键字长了不少，其主要是用来代替compile关键字，它使用在module中时只在编译期有效，对于依赖module的app（官方文档称之为消费者）在编译期运行时都有效，也就是说多个依赖一次打包，可以很好的节约我们的时间。</p>
+</li>
+<li><p>compile -&gt; api<br> 这个行为类似implmentation，只是即使在module中也会在运行时有效，也就是说无论在哪个module里都会参与打包，这种行为最像原本的compile，根据文档app应该使用implementation，除非想暴露api给独立的test模块。</p>
+</li>
+<li><p>provided -&gt; compileOnly &amp; apk -&gt; runtimeOnly<br> 和原来行为类似。</p>
+</li>
+</ol>
+<p>差不多就这些，其他更新也有，但是不一定都常用，有需要再去翻文档就行了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/05/18/升级到gradle-plugin-3-0-0/" data-id="ckfsdx7cz002qr49z7uhrqejf" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gradle/">Gradle</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/22/UnitTest插入Mysql数据中文乱码/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          UnitTest插入Mysql数据中文乱码
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/17/拷贝构造函数和移动构造函数/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">拷贝构造函数和移动构造函数</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

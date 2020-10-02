@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>macOS误删CoreType | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 事故背景——完整卸载Xcode自High Sierra升级到Mojave后，Xcode也相对应的推出了beta版，一方面因为我不是依赖Xcode的开发者，另一方面Xcode占用的空间是真的大。 基于以上原因我决定彻底删除Xcode9，只使用Xcode10beta。 为了给予Xcode10一个相对干净的工作环境，我分别删除了~/Library/Developer、/Library/Deve">
+<meta name="keywords" content="macOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="macOS误删CoreType">
+<meta property="og:url" content="https://fioneragh.github.io/2018/07/14/macOS误删CoreTypes/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 事故背景——完整卸载Xcode自High Sierra升级到Mojave后，Xcode也相对应的推出了beta版，一方面因为我不是依赖Xcode的开发者，另一方面Xcode占用的空间是真的大。 基于以上原因我决定彻底删除Xcode9，只使用Xcode10beta。 为了给予Xcode10一个相对干净的工作环境，我分别删除了~/Library/Developer、/Library/Deve">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://fioneragh.github.io/images/2018_07_14_01.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2018_07_14_02.png">
+<meta property="og:image" content="https://fioneragh.github.io/images/2018_07_14_03.png">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.187Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="macOS误删CoreType">
+<meta name="twitter:description" content="0x81 事故背景——完整卸载Xcode自High Sierra升级到Mojave后，Xcode也相对应的推出了beta版，一方面因为我不是依赖Xcode的开发者，另一方面Xcode占用的空间是真的大。 基于以上原因我决定彻底删除Xcode9，只使用Xcode10beta。 为了给予Xcode10一个相对干净的工作环境，我分别删除了~/Library/Developer、/Library/Deve">
+<meta name="twitter:image" content="https://fioneragh.github.io/images/2018_07_14_01.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-macOS误删CoreTypes" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/14/macOS误删CoreTypes/" class="article-date">
+  <time datetime="2018-07-14T05:57:28.000Z" itemprop="datePublished">2018-07-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      macOS误删CoreType
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-事故背景——完整卸载Xcode"><a href="#0x81-事故背景——完整卸载Xcode" class="headerlink" title="0x81 事故背景——完整卸载Xcode"></a>0x81 事故背景——完整卸载Xcode</h3><p>自High Sierra升级到Mojave后，Xcode也相对应的推出了beta版，一方面因为我不是依赖Xcode的开发者，另一方面Xcode占用的空间是真的大。</p>
+<p>基于以上原因我决定彻底删除Xcode9，只使用Xcode10beta。</p>
+<p>为了给予Xcode10一个相对干净的工作环境，我分别删除了<code>~/Library/Developer</code>、<code>/Library/Developer</code>以及<code>/Application/Xcode.app/</code>下的内容，其中第一个目录是用户使用Xcode产生的辅助文件，第二个目录主要是macOS SDK和CLTool所以我们只删除SDK，第三个是Xcode的本体，里面包含framework和toolchain。删除完后我们使用<code>sudo xcode-select -s %path%</code>设置我们要用的Xcode路径，此时运行Xcode10将会提示安装相应的组件，之后便可以正常使用。</p>
+<h3 id="0x82-bom文件的内容要仔细判断"><a href="#0x82-bom文件的内容要仔细判断" class="headerlink" title="0x82 bom文件的内容要仔细判断"></a>0x82 bom文件的内容要仔细判断</h3><p>正常来讲，经过上述操作，我们应该可以完成Xcode版本的切换，但是事与愿违，在清理Xcode9之前打开了Xcode10并安装了相关组件，我在删除完相关文件后后（其实主要是SDK等相关文件被删除了），导致了Xcode的闪退，猜测macOS记录了Xcode安装的组件，被我直接删除的文件Xcode是不知道的，而我之前执行了组件安装操作，所以Xcode也没有再次弹出安装组件的弹窗，最尴尬的是重新下载Xcode是没有用的。那解决这个问题的办法只有一个了，就是从头模拟一遍Xcode要正常运行需要进行的操作。</p>
+<p>依然是那一个目的，为了给予Xcode10一个相对干净的工作环境，我决定去Receipts下找到经过pkginstaller安装的相关Xcode文件并删除，然后手动安装Xcode10里提供的pkg文件，bom文件里的内容非常多，但是主要集中在<code>/Library/Developer</code>和<code>/System/Library/PrivateFrameworks</code>下。</p>
+<a id="more"></a>
+<h3 id="0x83-悲剧的开始"><a href="#0x83-悲剧的开始" class="headerlink" title="0x83 悲剧的开始"></a>0x83 悲剧的开始</h3><p>bom文件位置：<code>/System/Library/Receipts</code>，我们主要关注<code>com.apple.pkg.MobileDevice.bom</code>、<code>com.apple.pkg.MobileDeviceDevelopment.bom</code>和<code>com.apple.pkg.XcodeSystemResources.bom</code>这三个文件，这个目录下是系统组件的信息，有一些其他的组件感兴趣的可以自己看看。</p>
+<p>使用lsbom命令可以解析bom文件，内容显示pkg释放了哪些文件，我们要做的就是先删除这些文件。</p>
+<p><img src="/images/2018_07_14_01.png" alt="com.apple.pkg.MobileDevice.bom"></p>
+<p>经过分析，我们看到MobileDevice主要向<code>/System/Library/CoreServices/CoreTypes.bundle/Contents/Library/</code>写入了<code>MobileDevices.bundle</code>，向<code>/System/Library/Extensions/</code>写入了<code>AppleMobileDevice.kext</code>、<code>AppleUSBEthernetHost.kext</code>，向<code>/System/Library/LaunchAgents/</code>写入了<code>com.apple.mobiledeviceupdater.plist</code>，向<code>/System/Library/LaunchDaemons/</code>写入了<code>com.apple.usbmuxd.plist</code>，向<code>/System/Library/PrivateFrameworks/</code>写入了<code>AirTrafficHost.framework</code>、<code>DeviceLink.framework</code>、<code>MobileDevice.framework</code>，这些文件主要是用于移动设备支持。悲剧就发上在第一个目录上，CoreServices是系统的基础服务，像是Finder.app就在这个位置，而CoreTypes.bundle内有基础类型的定义，我因为失误不小心删除了整个CoreTypes.bundle，随之而来的就是Finder等系统内置App的崩溃，重启后不显示Dock等问题，完全没办法使用，最后我通过另一台10.13.3设备将CoreTypes打了个tar包，解压到了<code>/System/Library/CoreServices/</code>才得以解决这个问题，虽然系统是Mojave，但是并没有遇到什么大的问题，后面重新下载了PublicBeta全量更新了整个系统，这幕悲剧则彻底结束。</p>
+<p>其实对于<code>com.apple.pkg.MobileDevice.bom</code>和<code>com.apple.pkg.MobileDeviceDevelopment.bom</code>这两部分，他们的内容主要在/S<em>/L</em>，我感觉不应该去，甚至我连它们到底是不是Xcode的组件都不清楚，虽然在Xcode中能找到他们的pkg文件，否则也不会出现这次悲剧。我们看一下XcodeSystemResources：</p>
+<p><img src="/images/2018_07_14_02.png" alt="com.apple.pkg.XcodeSystemResources.bom"></p>
+<p>很明显，内容都在<code>/Library/Developer</code>下，可以放心大胆地删除。</p>
+<h3 id="0x84-手动安装组件"><a href="#0x84-手动安装组件" class="headerlink" title="0x84 手动安装组件"></a>0x84 手动安装组件</h3><p>剩下的工作就很简单了，打开Xcode的资源目录：<code>/Applications/Xcode.app/Contents/Resources/Packages</code>：</p>
+<p><img src="/images/2018_07_14_03.png" alt="Packages"></p>
+<p>我们能看到三个pkg文件，这就是我们刚刚分析三个bom文件对应的安装包，依次安装它们，之后Xcode应该就能正常工作了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2018/07/14/macOS误删CoreTypes/" data-id="ckfsdx7bv0021r49z78ytush4" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macOS/">macOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/08/01/在macOS-Mojave上使用VirtualBox/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          在macOS Mojave上使用VirtualBox
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/27/macOS使用seedutil选择不同的Beta版本/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">macOS使用seedutil选择不同的Beta版本</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Material Design绚丽动画：transition framework | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 Transition FrameworkTransition Framework是Android Kitkat开始添加的动画框架，在Lolipop才得到完美的支持，所以支持源码里会对当前版本进行判断，采用不同的实现，API 19和21是两个分水岭。Transition其实就是动效转场的意思，Google官网既推出PropertyAnimator之后，为充分利用RenderThread并解">
+<meta name="keywords" content="Android,Transition">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Material Design绚丽动画：transition framework">
+<meta property="og:url" content="https://fioneragh.github.io/2017/03/09/Material-Design绚丽动画：transition-framework/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 Transition FrameworkTransition Framework是Android Kitkat开始添加的动画框架，在Lolipop才得到完美的支持，所以支持源码里会对当前版本进行判断，采用不同的实现，API 19和21是两个分水岭。Transition其实就是动效转场的意思，Google官网既推出PropertyAnimator之后，为充分利用RenderThread并解">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.175Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Material Design绚丽动画：transition framework">
+<meta name="twitter:description" content="0x81 Transition FrameworkTransition Framework是Android Kitkat开始添加的动画框架，在Lolipop才得到完美的支持，所以支持源码里会对当前版本进行判断，采用不同的实现，API 19和21是两个分水岭。Transition其实就是动效转场的意思，Google官网既推出PropertyAnimator之后，为充分利用RenderThread并解">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Material-Design绚丽动画：transition-framework" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/09/Material-Design绚丽动画：transition-framework/" class="article-date">
+  <time datetime="2017-03-09T10:20:38.000Z" itemprop="datePublished">2017-03-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Material Design绚丽动画：transition framework
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-Transition-Framework"><a href="#0x81-Transition-Framework" class="headerlink" title="0x81 Transition Framework"></a>0x81 Transition Framework</h3><p>Transition Framework是Android Kitkat开始添加的动画框架，在Lolipop才得到完美的支持，所以支持源码里会对当前版本进行判断，采用不同的实现，API 19和21是两个分水岭。Transition其实就是动效转场的意思，Google官网既推出PropertyAnimator之后，为充分利用RenderThread并解放Android开发者，官方实现了一些专长动画，而这些动画是根据View状态来动态计算的，而Scene就保存了这些状态，动画实际上描述的就是从一种Scene到另一种Scene变化的过程。</p>
+<h3 id="0x82-Scene"><a href="#0x82-Scene" class="headerlink" title="0x82 Scene"></a>0x82 Scene</h3><p>Scene中文意为场景，就是将当前页面（或者说Activity，亦或者可以视为一个场景的View）以及其子View的状态抽象为一个场景，而它们的位置大小可视状态就是场景里的元素。TransitionManager就是负责将View从一个场景转变为另一个场景，而变换的方式就是Transition。</p>
+<a id="more"></a>
+<h3 id="0x83-生成一个场景"><a href="#0x83-生成一个场景" class="headerlink" title="0x83 生成一个场景"></a>0x83 生成一个场景</h3><p>场景的生成官方提供了标准API，直接调用即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Scene scene1 = Scene.getSceneForLayout(clImageDetailRoot, R.layout.scene_1_change_bounds, mContext);</span><br><span class="line">Scene scene2 = Scene.getSceneForLayout(clImageDetailRoot, R.layout.scene_2_change_bounds, mContext);</span><br></pre></td></tr></table></figure>
+<p>其中<code>Scene#getSceneForLayout</code>方法需要三个参数，第一个参数是要应用场景的RootView，第二个参数是描述了当前布局状态的layout文件，第三个是inflate布局要用到的上下文，API会读出所需要的参数保存到场景中并将这个场景缓存起来。</p>
+<h3 id="0x84-TransitionMangaer-go-方法"><a href="#0x84-TransitionMangaer-go-方法" class="headerlink" title="0x84 TransitionMangaer#go 方法"></a>0x84 TransitionMangaer#go 方法</h3><p>TransitionManager转场管理器提供了没几个方法，其中go是很重要的一个方法，因为它是直接输入Scene的唯一方法，用法很简单：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">TransitionManager.go(scene1);</span><br><span class="line">TransitionManager.go(scene2, <span class="keyword">new</span> ChangeBounds());</span><br></pre></td></tr></table></figure>
+<p>它接收1个或2个参数，第二个参数就是Transition对象，如果不传这个参数，它会自动使用<code>AutoTransition</code>这个类，看源码它就是个很简单的集合：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">AutoTransition</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(context, attrs);</span><br><span class="line">    init();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    setOrdering(ORDERING_SEQUENTIAL);</span><br><span class="line">    addTransition(<span class="keyword">new</span> Fade(Fade.OUT)).</span><br><span class="line">            addTransition(<span class="keyword">new</span> ChangeBounds()).</span><br><span class="line">            addTransition(<span class="keyword">new</span> Fade(Fade.IN));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而第二个参数Transition，Framework已经提供了很多个实现，当然也可以书写<code>res/transition/*.xml</code>文件自己定义transitionSet。</p>
+<blockquote>
+<p>PS：Transition Framework的完整特性是需要Lolipop以后才能使用的，比如这个Transition默认实现，基于形状的有ChangeBounds、ChangeClipBounds、ChangeTransform、ChangeImageTransform等多种实现，基于Visbility（不是View的Visibility）有Slide、Explode、Fade的实现。而Google虽然为Api14之后提供了支持库，但目前android.support.transition下提供的只有ChangeBounds和Fade，也许后续会慢慢增加支持。唉，什么时候能只支持Lolipop之后的设备。</p>
+</blockquote>
+<p>TransitionManager#go源码实际上调用了previousScene的exit()方法，然后调用了Scene的enter()方法，而这个两个方法分别会回调exitAction和enterAction，可以设置监听做些事情。</p>
+<h3 id="0x85-TransitionMangaer-beginDelayedTransition-方法"><a href="#0x85-TransitionMangaer-beginDelayedTransition-方法" class="headerlink" title="0x85 TransitionMangaer#beginDelayedTransition 方法"></a>0x85 TransitionMangaer#beginDelayedTransition 方法</h3><p>虽然Tranisition是使用Scene作为动画的根据，但是如果我们也这样用未免有点太麻烦，并且两个布局状态里的View是动态添加到RootSceneView的。经过我的测试，这种View添加后（go到某一个scene）对该View进行操作比如设置图片，转换到另一个场景时，View会恢复原状，猜测其实是两套View完成的动画（待进一步确认）。</p>
+<p>所以我们能不能直接对已存在的View进行Transition的相关操作呢，那就是TransitionMangaer#beginDelayedTransition方法了，看字面意思就是开始一段延时的转场，之后该View会经过一段延时变到设置后的状态，也就是从当前状态慢慢变成设置后的状态，也就是动画。用法很简单，下面是放大场景里的ImageView：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ivImageDetailPreview.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">        TransitionManager.beginDelayedTransition(clImageDetailRoot);</span><br><span class="line"></span><br><span class="line">        ViewGroup.LayoutParams layoutParams = v.getLayoutParams();</span><br><span class="line">        layoutParams.width = (<span class="keyword">int</span>) (<span class="number">1.5</span> * width);</span><br><span class="line">        layoutParams.height = (<span class="keyword">int</span>) (<span class="number">1.5</span> * width);</span><br><span class="line">        v.setLayoutParams(layoutParams);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="0x86-Activity-转场"><a href="#0x86-Activity-转场" class="headerlink" title="0x86 Activity 转场"></a>0x86 Activity 转场</h3><p>Activity 转场有两种方式，不带共享元素转场和带共享元素转场。</p>
+<ol>
+<li><p>contentTransition<br> 这种方式很简单，有点像之前的Activity切换动画，用法也差不多，但是这种方式可以让所有的View都有转场动画而不是仅仅作为一个整体（如果想作为几个整体可以分别使用setTransitionGroup方法）。触发动画需要在调用startActivity方法时多传一个Bundle类型的options参数，该参数由<code>ActivityOptionsCompat</code>生成。</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">context.startActivity(<span class="keyword">new</span> Intent(context, ImageDetailActivity.class)</span><br><span class="line">            .putExtra(<span class="string">"imageUrl"</span>, gankItemGirl.url), ActivityOptionsCompat</span><br><span class="line">            .makeSceneTransitionAnimation((Activity) context).toBundle());</span><br></pre></td></tr></table></figure>
+<p> 启用方式知道了，那我们如何设置效果呢，其实也很简单，首先设置<code>Window.FEATURE_CONTENT_TRANSITIONS</code>这个feature，用xml定义在style中或者用代码设置都可以：</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);</span><br><span class="line"><span class="keyword">super</span>.onCreate(savedInstanceState)；</span><br><span class="line">Explode explode = <span class="keyword">new</span> Explode();</span><br><span class="line">explode.setDuration(<span class="number">500</span>);</span><br><span class="line">explode.excludeTarget(TextView.class, <span class="keyword">true</span>);</span><br><span class="line">getWindow().setEnterTransition(explode);</span><br></pre></td></tr></table></figure>
+<p> 用代码设置要注意放在onCreate之前，不过我在Nougat模拟器上测试不设置也可以。</p>
+<p> setExitTransition/setReenterTransition用于设置当前Acitivity，分别表示跳转和返回的Transition，如果不特别设置它们是一样的。</p>
+<p> setEnterTransition/setReturnTransition用于设置当前Acitivity，分别表示进入和退出的Transition，如果不特别设置它们是一样的。</p>
+<p> 和Acitivity在style中设置动画方法一样，也可以在style中定义：</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowExitTransition"</span>&gt;</span>@transition/test1<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowEnterTransition"</span>&gt;</span>@transition/test2<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowReturnTransition"</span>&gt;</span>@transition/test3<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowReenterTransition"</span>&gt;</span>@transition/test4<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p> 如果不想让所有的View或只允许个别的View作出动画，可以设置exclude或target，然后配合group，通过代码和transition配置文件都可以。</p>
+<p> 如果动画时间太长，会发现原Acitivity动画还没完成就被后面覆盖了，也可以在style中配置不覆盖：</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowAllowEnterTransitionOverlap"</span>&gt;</span>false<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowAllowReturnTransitionOverlap"</span>&gt;</span>false<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p> 其实关于Transition有很多属性可以配置，还有针对fragment的，就像原本的Animation一样，基本上原本Animation的都有对应的Transition属性可配置（貌似没有task的）。</p>
+</li>
+<li><p>sharedElementTransition<br> 这种方式和第一种差不多，就是有一组共享的元素会被单独处理，具体的配置也有类似的属性，后面可以作为子篇单独记录一下，毕竟使用方法也很容易。</p>
+</li>
+</ol>
+<p>就这么多，当然其实还有很多细节，如果有机会后面再写。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/03/09/Material-Design绚丽动画：transition-framework/" data-id="ckfsdx7be001br49z1u9ryki7" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Transition/">Transition</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/11/Android-Scroller/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          Android Scroller
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/08/Android-DI利器：Dagger2应用/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">Android DI利器：Dagger2应用</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

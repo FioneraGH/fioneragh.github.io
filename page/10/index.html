@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Return To Innocence">
+<meta property="og:url" content="https://fioneragh.github.io/page/10/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Return To Innocence">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Android-Scroller" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/11/Android-Scroller/" class="article-date">
+  <time datetime="2017-03-11T04:36:47.000Z" itemprop="datePublished">2017-03-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/11/Android-Scroller/">Android Scroller</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-Scroller-是什么"><a href="#0x81-Scroller-是什么" class="headerlink" title="0x81 Scroller 是什么"></a>0x81 Scroller 是什么</h3><p>Scroller是Android提供的一个滚动计算器，我们通常用它在自定义View时形成动画，更是做滚性滚动提高用户体验的利器。Scroller跟踪整个View的内容位移变化，但是它不会主动做些什么，它只是计算了对应的数值用于返回给开发者使用。</p>
+<h3 id="0x82-startScroll-方法"><a href="#0x82-startScroll-方法" class="headerlink" title="0x82 startScroll 方法"></a>0x82 startScroll 方法</h3><p>该方法是触发滚动的最简单方法，它共接受5个参数，前四个分别为起始位置坐标和结束位置坐标，第五个参数是滚动计算时长，默认为250ms。</p>
+<p>看一下startScroll的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startScroll</span><span class="params">(<span class="keyword">int</span> startX, <span class="keyword">int</span> startY, <span class="keyword">int</span> dx, <span class="keyword">int</span> dy, <span class="keyword">int</span> duration)</span> </span>&#123;</span><br><span class="line">    mMode = SCROLL_MODE;</span><br><span class="line">    mFinished = <span class="keyword">false</span>;</span><br><span class="line">    mDuration = duration;</span><br><span class="line">    mStartTime =AnimationUtils.currentAnimationTimeMillis();</span><br><span class="line">    mStartX = startX;</span><br><span class="line">    mStartY = startY;</span><br><span class="line">    mFinalX = startX + dx;</span><br><span class="line">    mFinalY = startY + dy;</span><br><span class="line">    mDeltaX = dx;</span><br><span class="line">    mDeltaY = dy;</span><br><span class="line">    mDurationReciprocal = <span class="number">1.0f</span> / (<span class="keyword">float</span>) mDuration;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到实际上这个方法仅仅是保存了一下你传进去的值，并没有进行动画的相关代码。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/11/Android-Scroller/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/03/11/Android-Scroller/" data-id="ckfsdx7ak000cr49z0hmq93p1" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Scroller/">Scroller</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Material-Design绚丽动画：transition-framework" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/09/Material-Design绚丽动画：transition-framework/" class="article-date">
+  <time datetime="2017-03-09T10:20:38.000Z" itemprop="datePublished">2017-03-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/09/Material-Design绚丽动画：transition-framework/">Material Design绚丽动画：transition framework</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-Transition-Framework"><a href="#0x81-Transition-Framework" class="headerlink" title="0x81 Transition Framework"></a>0x81 Transition Framework</h3><p>Transition Framework是Android Kitkat开始添加的动画框架，在Lolipop才得到完美的支持，所以支持源码里会对当前版本进行判断，采用不同的实现，API 19和21是两个分水岭。Transition其实就是动效转场的意思，Google官网既推出PropertyAnimator之后，为充分利用RenderThread并解放Android开发者，官方实现了一些专长动画，而这些动画是根据View状态来动态计算的，而Scene就保存了这些状态，动画实际上描述的就是从一种Scene到另一种Scene变化的过程。</p>
+<h3 id="0x82-Scene"><a href="#0x82-Scene" class="headerlink" title="0x82 Scene"></a>0x82 Scene</h3><p>Scene中文意为场景，就是将当前页面（或者说Activity，亦或者可以视为一个场景的View）以及其子View的状态抽象为一个场景，而它们的位置大小可视状态就是场景里的元素。TransitionManager就是负责将View从一个场景转变为另一个场景，而变换的方式就是Transition。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/09/Material-Design绚丽动画：transition-framework/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/03/09/Material-Design绚丽动画：transition-framework/" data-id="ckfsdx7be001br49z1u9ryki7" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Transition/">Transition</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Android-DI利器：Dagger2应用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/08/Android-DI利器：Dagger2应用/" class="article-date">
+  <time datetime="2017-03-08T10:53:36.000Z" itemprop="datePublished">2017-03-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/08/Android-DI利器：Dagger2应用/">Android DI利器：Dagger2应用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-开始使用Dagger2"><a href="#0x81-开始使用Dagger2" class="headerlink" title="0x81 开始使用Dagger2"></a>0x81 开始使用Dagger2</h3><p>昨天我们说过了Dagger2的一些基本概念，比如Module、Component、Inject各自的职责，今天我们就根据之前的介绍动手试一试，看用Dagger2如何管理类对象实例。</p>
+<h3 id="0x82-全局唯一——AppModule"><a href="#0x82-全局唯一——AppModule" class="headerlink" title="0x82 全局唯一——AppModule"></a>0x82 全局唯一——AppModule</h3><p>在我们平时进行的应用开发中，有很多工具类是以全局唯一的单例对象存在的，比如网络请求OkHttpClient和Retrofit、数据库管理的Realm等，对于这种global的对象，我们便可以将其与Application绑定，我们只在Application里将他们实例化一次，之后的每次调用都是从该处获取的。</p>
+<p>Dagger2要实例化并缓存一个对象很容易，Dagger2有Scope的概念，在同一Scope内的对象可以认为是单例的，一经创建Dagger2便会将其缓存起来，以后有需要将缓存返回给Component。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppModule</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Application application;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AppModule</span><span class="params">(Application application)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.application = application;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="meta">@Singleton</span></span><br><span class="line">    <span class="function">Application <span class="title">provideApplication</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> application;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="meta">@Singleton</span></span><br><span class="line">    <span class="function">OkHttpClient <span class="title">provideOkHttpClient</span><span class="params">()</span></span>&#123;</span><br><span class="line">        File cacheFile = <span class="keyword">new</span> File(BaseApplication.getInstance().getCacheDir(), <span class="string">"HttpCache"</span>);</span><br><span class="line">        Cache cache = <span class="keyword">new</span> Cache(cacheFile, <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">        OkHttpClient.Builder builder = <span class="keyword">new</span> OkHttpClient.Builder().connectTimeout(<span class="number">10</span>,</span><br><span class="line">                TimeUnit.SECONDS).addInterceptor(<span class="keyword">new</span> LogInterceptor()).cache(cache);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> builder.build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="meta">@Singleton</span></span><br><span class="line">    <span class="function">Gson <span class="title">provideGson</span><span class="params">()</span></span>&#123;</span><br><span class="line">        GsonBuilder builder = <span class="keyword">new</span> GsonBuilder();</span><br><span class="line">        <span class="keyword">return</span> builder.create();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="meta">@Singleton</span></span><br><span class="line">    <span class="function">Retrofit <span class="title">provideRetrofit</span><span class="params">(OkHttpClient okHttpClient, Gson gson)</span> </span>&#123;</span><br><span class="line">        Retrofit.Builder builder = <span class="keyword">new</span> Retrofit.Builder().client(okHttpClient).baseUrl(</span><br><span class="line">                HttpConstants.BASE_URL).addConverterFactory(GsonConverterFactory.create(gson))</span><br><span class="line">                .addCallAdapterFactory(RxJava2CallAdapterFactory.create());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> builder.build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="meta">@Singleton</span></span><br><span class="line">    <span class="function">ApiService <span class="title">provideApiService</span><span class="params">(Retrofit retrofit)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> retrofit.create(ApiService.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中<code>@Module</code>注解指明了该类是一个工厂，就是它返回实例对象给Component然在再被注入到<code>@Inject</code>成员上。<code>@Provides</code>注解修饰的方法通常用provide开头（不强制），Dagger会主动寻找对应的方法获取对象。<code>@Singleton</code>注解是Dagger提供的默认的一个Scope注解，并不是说加了这个注解它就单例了，实际上它规约了一种Scope，如前面所说的同一Scope下它是单例的，因此如果我们只在一个地方进行初始化，那它就是单例的，而这个注解名也起到一定的标记作用。从OkHttpClient-&gt;Retrofit-&gt;ApiService，当我们注入ApiService时，Dagger会自动根据依赖图为我们创建好对象并注入。</p>
+<p>Module的最简单用法就是这样，当然它本身就是这么简单，当你理解了Scope，你就能了解到Dagger2的奇妙之处了。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/08/Android-DI利器：Dagger2应用/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/03/08/Android-DI利器：Dagger2应用/" data-id="ckfsdx7a70005r49zdgn9p39y" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Dagger/">Dagger</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Android-DI利器：Dagger2初探" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/07/Android-DI利器：Dagger2初探/" class="article-date">
+  <time datetime="2017-03-07T11:54:36.000Z" itemprop="datePublished">2017-03-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/07/Android-DI利器：Dagger2初探/">Android DI利器：Dagger2初探</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-DI"><a href="#0x81-DI" class="headerlink" title="0x81 DI"></a>0x81 DI</h3><p>Dependency Injection，简称DI，中文昵称依赖注入，一作IoC（控制反转）。这种模式很容易理解，就是将原本有我们控制的实例化对象，改为又容器动态注入，所以也有人说这是一种控制反转，但我觉得这还是有一些差别的，毕竟他们的陈述对象不算一样。</p>
+<h3 id="0x82-DI带来的好处"><a href="#0x82-DI带来的好处" class="headerlink" title="0x82 DI带来的好处"></a>0x82 DI带来的好处</h3><p>最早在接触SSH的时候，Spring等框架便对JavaBean采用依赖注入的方式管理对象，所有的对象都是容器管理的，框架在我们需要某些实例对象的时候动态的注入以提供我们使用。</p>
+<p>DI最明显的特点就是不再是我们自己手动管理类对象的创建，这也将我们从可能很繁杂的类组合中解救出来，解除编写代码时类与类之间的耦合，就好像响应式编程将我们带离了回调地狱，让我们能更优雅的编写代码，把更多的精力放到业务逻辑的实现上去。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/07/Android-DI利器：Dagger2初探/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/03/07/Android-DI利器：Dagger2初探/" data-id="ckfsdx7a60004r49zkk2luw7g" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DI/">DI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Dagger/">Dagger</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Vim的Python配置——YouCompleteMe" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/06/Vim的Python配置——YouCompleteMe/" class="article-date">
+  <time datetime="2017-03-06T09:54:35.000Z" itemprop="datePublished">2017-03-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/06/Vim的Python配置——YouCompleteMe/">Vim的Python配置——YouCompleteMe</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-YouCompleteMe"><a href="#0x81-YouCompleteMe" class="headerlink" title="0x81 YouCompleteMe"></a>0x81 YouCompleteMe</h3><p><a href="https://github.com/Valloric/YouCompleteMe" target="_blank" rel="noopener">YouCompleteMe: a code-completion engine for Vim</a></p>
+<p>正如它的README所说的，YCM是一个用于Vim自动补全的插件。它的功能十分强大，支持非常多的编程语言补全。</p>
+<ul>
+<li>Clang 为C/C++/OC/OC++提供补全支持</li>
+<li>Jedi 为Python2/Python3提供补全支持</li>
+<li>OmniSharp 为C#提供补全支持</li>
+<li>Gocode、Godef 为Golang提供支持</li>
+<li>TSServer、Tern 分别为TypeScript和JavaScript提供支持</li>
+<li>Racer 支持Rust</li>
+<li>其他补全支持</li>
+</ul>
+<h3 id="0x82-ycm-core的编译使用"><a href="#0x82-ycm-core的编译使用" class="headerlink" title="0x82 ycm_core的编译使用"></a>0x82 ycm_core的编译使用</h3><p>YCM提供了基于python的编译脚本，一般情况下，安装好依赖直接执行install.py脚本文件就可以了，用户还可以出入不同的参数以提供不同的补全支持。</p>
+<p>对于我的DST-Fedora 25，需要先使用dnf包管理工具安装基本的构建工具<code>sudo dnf install automake gcc gcc-c++ kernel-devel cmake</code>，还需要安装python的头文件<code>sudo dnf install python-devel python3-devel</code>，处理完这些依赖便可以进行编译工作了。</p>
+<p>PS：根据官方README的描述，如果YCM更新了，要使用新的特性，需要重新编译。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/06/Vim的Python配置——YouCompleteMe/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/03/06/Vim的Python配置——YouCompleteMe/" data-id="ckfsdx7br001vr49z4d7tldmz" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vim/">Vim</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/YCM/">YCM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Openstack快速安装：packstack" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/02/Openstack快速安装：packstack/" class="article-date">
+  <time datetime="2017-03-02T10:13:01.000Z" itemprop="datePublished">2017-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/02/Openstack快速安装：packstack/">Openstack快速安装：packstack</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x80-前言"><a href="#0x80-前言" class="headerlink" title="0x80 前言"></a>0x80 前言</h3><p>我曾经在差不多两年前安装过Openstack，当时是按照某个论坛的大牛的分享，一步一个脚印，用了很长时间才进入Openstack DashBoard并进行自己劳动成果的体验，感受自己为自己提供的服务。但是那次血泪安装史也并不完美，虽然核心组件成功运行，但是仍旧有部分功能存在问题，迫于精力有限，我便没有再碰过Openstack。<br>最近又心血来潮想要玩一玩这个曾经的玩物，恰巧了解到Openstack可以近乎一键安装，于是便再次操弄起来。</p>
+<p>这里要特别感谢《Linux就该这么学》的主题网站，两年前的论坛我是记不住了，但这个网站我个人觉得是非常适合参照学习来提升个人能力的。<a href="http://www.linuxprobe.com/chapter-22.html" target="_blank" rel="noopener">第22章 使用openstack部署云计算服务环境。 | 《Linux就该这么学》</a></p>
+<h3 id="0x81-安装准备"><a href="#0x81-安装准备" class="headerlink" title="0x81 安装准备"></a>0x81 安装准备</h3><p>处于学习目的，我使用的资源都是这篇教程的网站提供的。再次感谢让我有一次轻松学习部署Openstack的机会。<a href="http://www.linuxprobe.com/tools" target="_blank" rel="noopener">软件资源库 | 《Linux就该这么学》</a></p>
+<h3 id="0x82-RHEL-7-安装"><a href="#0x82-RHEL-7-安装" class="headerlink" title="0x82 RHEL 7 安装"></a>0x82 RHEL 7 安装</h3><p>和安装一般的虚拟机一样，但是我们需要添加两块虚拟硬盘，其中一块提供给Openstack的Cinder使用。内存至少4GB（这里坑了我好久，第一次是horizon配置失败，后来不定时的发生错误，经过监视CPU和内存的使用才发现根本原因是内存不够，我分配4G只有3.8可用，最高占用达到过3.77G），虚拟网卡至少要有一个方便主机直接控制虚拟机的，比如Host-Only模式，当然要链接外网下载Package的话可以再分一块NAT，我直接使用的桥接（我是在Virtual Box中完成的）。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/02/Openstack快速安装：packstack/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/03/02/Openstack快速安装：packstack/" data-id="ckfsdx7bj001jr49zkbr7qo3p" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Openstack/">Openstack</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Hexo-Image-Asset" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/02/Hexo-Image-Asset/" class="article-date">
+  <time datetime="2017-03-02T02:37:53.000Z" itemprop="datePublished">2017-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/02/Hexo-Image-Asset/">Hexo Image Asset</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-官方推荐做法"><a href="#0x81-官方推荐做法" class="headerlink" title="0x81 官方推荐做法"></a>0x81 官方推荐做法</h3><p>source目录下默认有一个图片目录提供给模板引擎，这个目录就是Images，放在该目录下的文件可以直接被Hexo使用。</p>
+<h3 id="0x82-自定义管理"><a href="#0x82-自定义管理" class="headerlink" title="0x82 自定义管理"></a>0x82 自定义管理</h3><p>config.yml配置文件，这里面有Hexo的相关配置，其中<code>post_asset_folder</code>属性决定是否导出资源文件夹。<br>这个导出的资源文件夹就不仅仅局限于图片了，音乐视频都可以，它会在你使用<code>hexo n [template] name</code>创建一个新的Post时同时生成资源文件夹，并在生成时导出。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/03/02/Hexo-Image-Asset/" data-id="ckfsdx7b5000zr49zn49kpumt" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Wine-解决中文字体方框" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/01/Wine-解决中文字体方框/" class="article-date">
+  <time datetime="2017-03-01T01:34:23.000Z" itemprop="datePublished">2017-03-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/01/Wine-解决中文字体方框/">Wine 解决中文字体方框</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-Wine"><a href="#0x81-Wine" class="headerlink" title="0x81 Wine"></a>0x81 Wine</h3><p>Wine的全称Wine Is not An Emulator，意思是Wine并不是一个模拟器，的确是这样。<br>Wine和hyperv这种虚拟机的实现原理不一样，它并没有模拟整个OS逻辑，而是采用有点类似Arm Translator的解释器的方式，动态的将Windows的系统调用转换成Posix调用，从而使用Windows软件。<br>Wine 2.2 于2月末发布，并且官方将默认系统兼容曾提升到Windows 7。而由于我有使用IDA的需要，Linux版的Decompiler只有Arm支持，因此决定采用Wine的方式模拟运行Windows版IDAPro6.8。</p>
+<h3 id="0x82-Wine-中文字体问题"><a href="#0x82-Wine-中文字体问题" class="headerlink" title="0x82 Wine 中文字体问题"></a>0x82 Wine 中文字体问题</h3><p>安装完Wine，并启动软件时，我们会发现只有一部分中文字体显示正常，其余的都显示方框（Wine 1.9.2的时候我记得所有的中文字都是方框）。<br>这是因为Wine使用的字体是Tahoma，而它对中文字体的支持并不好，或者说不提供支持，能显示一部分中文或许是因为个别地方使用了SimSun。</p>
+<h3 id="0x83-字体更换"><a href="#0x83-字体更换" class="headerlink" title="0x83 字体更换"></a>0x83 字体更换</h3><p>字体的配置主要在注册表当中，<code>HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Fonts</code>键下映射了当前系统中已存在并缓存的所有字体。<br><code>HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes</code>键下保存了字体的替代方案。<br><code>HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\FontLink\SystemLink</code>键下保存了字体的链接。<br>所以更换时一般有两种方式：修改FontSubstitutes或SystemLink：</p>
+<ol>
+<li><p>FontSubstitutes<br> 这里面是字体的替代方案，指定当系统需要这种字体时用哪一种字体替代，它配置的是要替代的字体名，网上很多解决办法就是通过在<code>~/.wine/dosdrive_c/windows/Fonts</code>下放置需要的字体（如果不是用Linux系统已有字体，而想要给特定的Wine Enviroment设定字体，可以放在这），<br> 然后配置替代方案。</p>
+</li>
+<li><p>FontLink\SystemLink<br> 这里配置字体链接，当系统加载某一种字体时实际上读取了哪个字体文件就可以在这里指定。我的配置如下：</p>
+<p> <img src="/images/2017_03_01_01.png" alt="配置结果"></p>
+<p> 这样重启Wine程序就能看到效果了。</p>
+</li>
+<li><p>HKCU/S/Wine/Fonts/Replacements<br> 这里面是字体的替代方案，指定当系统需要这种字体时用哪一种字体替代，它配置的是要替代的字体名，和第一种方法一致，唯一的区别就是这种替换仅仅发生在字体缺失时。</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/03/01/Wine-解决中文字体方框/" data-id="ckfsdx7bs001wr49zw22cmois" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Wine/">Wine</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-FileProvider-踩坑" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/28/FileProvider-踩坑/" class="article-date">
+  <time datetime="2017-02-28T09:51:46.000Z" itemprop="datePublished">2017-02-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/28/FileProvider-踩坑/">FileProvider 踩坑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-问题"><a href="#0x81-问题" class="headerlink" title="0x81 问题"></a>0x81 问题</h3><p>之前简单介绍过FileProvider的使用，由于Android Nougat的出现，我们不得不为7.x带来的安全文件访问策略作出兼容。<br>在低于Nougat的设备上，我们仍然使用File Uri，而在Nougat及更新平台的设备上，我们需要使用Content Uri共享文件来避免触发UriExposed异常。<br>问题出现在图片裁剪的文件导出上，原本需求通过<code>return-data</code>返回Bitmap并显示即可，现在需要对该图片按照一定的比例裁剪并上传，考虑放弃手动保存Bitmap的方式，让图库裁剪完直接导出文件即可。<br>但是导出的Uri使用的是FileProvider，从而导致了图库等三方应用的崩溃。</p>
+<h3 id="0x82-是怎样的异常"><a href="#0x82-是怎样的异常" class="headerlink" title="0x82 是怎样的异常"></a>0x82 是怎样的异常</h3><p>这个异常很多人应该都见过，也不是什么罕见的异常，就是跨进程组件调用的SecurityException，描述类似如下这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java.lang.SecurityException: Permission Denial: opening provider android.support.v4.content.FileProvider from </span><br><span class="line">ProcessRecord&#123;<span class="number">52</span>a99eb0 <span class="number">3493</span>:com.android.gallery3d/u0a57&#125; </span><br><span class="line">(pid=<span class="number">3493</span>, uid=<span class="number">10057</span>) that is not exported from uid <span class="number">10071</span></span><br></pre></td></tr></table></figure>
+<p>ErrorTrace说得很明白，<code>com.android.gallery3d</code>尝试开启FileProvider但是权限被拒绝从而触发了安全异常。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/02/28/FileProvider-踩坑/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/02/28/FileProvider-踩坑/" data-id="ckfsdx7b0000sr49zx9d680ea" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FileProvider/">FileProvider</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-Observable的转换" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/27/Observable的转换/" class="article-date">
+  <time datetime="2017-02-27T10:25:41.000Z" itemprop="datePublished">2017-02-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/27/Observable的转换/">Observable的转换</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-Observable的转换"><a href="#0x81-Observable的转换" class="headerlink" title="0x81 Observable的转换"></a>0x81 Observable的转换</h3><p>Observable 作为RxJava中极为重要的角色，在我们使用的过程中，经常需要对其转换以适应我们的需求。<br>无论是变换操作，切换Scheduler还是其他对Observable的操作，都有可能出现模板代码，即操作类型都是一样的。<br>这个时候我们需要对这些操作进行封装，来减少模板代码带来的弊端。</p>
+<h3 id="0x82-封装统一的转换方法"><a href="#0x82-封装统一的转换方法" class="headerlink" title="0x82 封装统一的转换方法"></a>0x82 封装统一的转换方法</h3><p>最简单直接，也最容易的方法就是将这一系列操作封装成一个函数，在这个函数中进行需要的转换操作。<br>举个最简单的例子，Retrofit是我们常用的网络请求框架，经由RxJavaAdapter转换后，他的ApiService可以返回一个Observable，<br>而对于这个操作，我们通常需将线程切换到非主线程进行网络请求，请求完成后再返回主线程进行相应的UI操作，我们便可以封装起来以减少模板代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Observable&lt;List&lt;TestEntity&gt;&gt; test(Map&lt;String, String&gt; options) &#123;</span><br><span class="line">    Observable&lt;BaseEntity&lt;List&lt;TestEntity&gt;&gt;&gt; observable = TestApi.getInstance().getApiService()</span><br><span class="line">            .test(options);</span><br><span class="line">    <span class="keyword">return</span> wrapObservable(observable);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Observable&lt;T&gt; <span class="title">wrapObservable</span><span class="params">(Observable&lt;BaseEntity&lt;T&gt;&gt; observable)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> observable.map(<span class="keyword">new</span> CommonFilter&lt;T&gt;()).subscribeOn(Schedulers.io()).observeOn(</span><br><span class="line">            AndroidSchedulers.mainThread());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该方法将Retrofit返回的Observable经过<code>wrapObservable()</code>方法转换成一个新的Observable，在订阅后Subscriber将接受经过转换的原始数据。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/02/27/Observable的转换/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/02/27/Observable的转换/" data-id="ckfsdx7bi001ir49zyeo16ize" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RxJava/">RxJava</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Transformer/">Transformer</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/9/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/11/">下一页 &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

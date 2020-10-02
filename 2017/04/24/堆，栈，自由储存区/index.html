@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>堆，栈，自由储存区 | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x79 假如生活强奸了你，生活还要继续，你也得继续刚度过了一个疲惫而无意义的周末：）有一个撒币女票真的是为生活增加了难度，4.23世界读书日这一天我们进入了一家图书咖啡馆，馆子不小人也不少，一路上她对于实验室藏书的炫耀间戏剧性的蹦出了mallo这个小玩意，我便问她“你知道malloc在内存里分配了哪一块区域吗？”，虽然我连续对“是在栈上”予以肯定想让她相信，可是她这次出奇的坚持，看来我的气势没以">
+<meta name="keywords" content="C++,Memery Allocation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="堆，栈，自由储存区">
+<meta property="og:url" content="https://fioneragh.github.io/2017/04/24/堆，栈，自由储存区/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x79 假如生活强奸了你，生活还要继续，你也得继续刚度过了一个疲惫而无意义的周末：）有一个撒币女票真的是为生活增加了难度，4.23世界读书日这一天我们进入了一家图书咖啡馆，馆子不小人也不少，一路上她对于实验室藏书的炫耀间戏剧性的蹦出了mallo这个小玩意，我便问她“你知道malloc在内存里分配了哪一块区域吗？”，虽然我连续对“是在栈上”予以肯定想让她相信，可是她这次出奇的坚持，看来我的气势没以">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.201Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="堆，栈，自由储存区">
+<meta name="twitter:description" content="0x79 假如生活强奸了你，生活还要继续，你也得继续刚度过了一个疲惫而无意义的周末：）有一个撒币女票真的是为生活增加了难度，4.23世界读书日这一天我们进入了一家图书咖啡馆，馆子不小人也不少，一路上她对于实验室藏书的炫耀间戏剧性的蹦出了mallo这个小玩意，我便问她“你知道malloc在内存里分配了哪一块区域吗？”，虽然我连续对“是在栈上”予以肯定想让她相信，可是她这次出奇的坚持，看来我的气势没以">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-堆，栈，自由储存区" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/24/堆，栈，自由储存区/" class="article-date">
+  <time datetime="2017-04-24T05:19:18.000Z" itemprop="datePublished">2017-04-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      堆，栈，自由储存区
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x79-假如生活强奸了你，生活还要继续，你也得继续"><a href="#0x79-假如生活强奸了你，生活还要继续，你也得继续" class="headerlink" title="0x79 假如生活强奸了你，生活还要继续，你也得继续"></a>0x79 假如生活强奸了你，生活还要继续，你也得继续</h3><p>刚度过了一个疲惫而无意义的周末：）有一个撒币女票真的是为生活增加了难度，4.23世界读书日这一天我们进入了一家图书咖啡馆，馆子不小人也不少，一路上她对于实验室藏书的炫耀间戏剧性的蹦出了mallo这个小玩意，我便问她“你知道malloc在内存里分配了哪一块区域吗？”，虽然我连续对“是在栈上”予以肯定想让她相信，可是她这次出奇的坚持，看来我的气势没以前那么有压迫性了：P</p>
+<p>虽然上大学首先学习的是C，然后学习了C++，但是做了这么久Java，我突然发现之前为编程而学的那点C语言知识根本经不住时间的考验。纵使自己后来玩过一段时间Linux系统编程，随着时间的推移，很多东西都抛于脑后了。刚巧最近在补C++的知识，借着这个契机，我打算从0开始重新学习一下C++11，有一些易忘的点就顺便做个记录。由这件小事作为一个引子，我们来看看这个比较基础的概念性问题。</p>
+<h3 id="0x80-内容参考"><a href="#0x80-内容参考" class="headerlink" title="0x80 内容参考"></a>0x80 内容参考</h3><ol>
+<li><a href="http://www.cnblogs.com/emanlee/archive/2009/04/12/1434278.html" target="_blank" rel="noopener">C语言变量声明内存分配</a></li>
+<li><a href="http://www.cnblogs.com/QG-whz/p/5060894.html" target="_blank" rel="noopener">C++ 自由存储区是否等价于堆？</a></li>
+<li><a href="http://www.cnblogs.com/QG-whz/p/5140930.html" target="_blank" rel="noopener">细说new与malloc的10点区别</a></li>
+</ol>
+<h3 id="0x81-程序运行时的内存组成"><a href="#0x81-程序运行时的内存组成" class="headerlink" title="0x81 程序运行时的内存组成"></a>0x81 程序运行时的内存组成</h3><p>我们从C语言说起：</p>
+<ol>
+<li><p>程序代码区<br> 这个又叫Code区，其实这个概念在每一个可执行程序中都有，你的程序要运行，把必要的二进制代码加载到内存里是必须的，当然并不代表要一次性把所有可能执行的代码都加载到内存中，它们通常是按需加载。这一部分是程序启动时创建，程序退出时回收。</p>
+</li>
+<li><p>常量存储区<br> 狭义上它也可以称作字符串常量区，之所以这么说是因为这里通常保存的是常量字符串，表面上看起来有点像JVM的String常量池。我们用IDA等静态分析工具也可以发现它可以把字符串分析出来，有的时候可以节省我们很多时间。这一部分是程序启动时创建，程序退出时回收。</p>
+</li>
+<li><p>全局/静态区<br> 这个区域存放全局变量和静态变量，初始化和未初始化的分开存放。这块区域是在编译时决定的，而不是像动态变量一样运行时申请内存区域，其实字符串常量区也可以看作一种特殊的静态变量区域。这一部分是程序启动时创建，程序退出时回收。</p>
+</li>
+<li><p>栈<br> 运行时自动分配，通常存放了函数参数和局部变量，比如我们在函数内使用<code>int num = 0;</code>生命一个变量，它便是在栈区。之所以叫栈区是因为他的行为类似于数据结构中的栈，使用时入栈，函数返回时出栈，大名鼎鼎的栈溢出就发生在这个位置。</p>
+</li>
+<li><p>堆<br> 和上面的栈一样，属于动态存储区，但是这一部分区域是由程序编写者主动申请和释放，最好的实践是申请空间不使用时释放内存空间，以免发生内存泄露，不能仅仅依靠程序退出时操作系统对其进行回收。malloc关键字申请的内存便在这个区域上，C++很多实现中new的默认实现也是在堆上申请内存。</p>
+</li>
+</ol>
+<p>然后我们来说一个C++特有的概念——自由存储区：</p>
+<p>我们通常会这样说，malloc在堆上分配一块指定大小的内存，用完使用free释放掉这一段内存；使用new 在自由存储区上分配一块对象大小的内存，使用delete删除该对象占用的内存。那自由存储区到底是什么？其实它只是C++里的一个抽象概念，它表示的是对象在new出来时所申请占用的内存区域。</p>
+<h3 id="0x82-栈和堆"><a href="#0x82-栈和堆" class="headerlink" title="0x82 栈和堆"></a>0x82 栈和堆</h3><p>栈和堆都属于动态分配，它们都是在运行时最终由操作系统负责分配给变量的内存，虽然堆（malloc/free）实际上给了编程人员更大的权利。栈的分配是在程序运行函数调用时由操作系统将局部变量、参数等压栈，在程序返回时出栈，这整个过程编程人员是没有办法直接干预的。使用malloc在堆上分配的内存则由编程人员控制，如果处理不好将产生内存泄露的风险，并且频繁的申请内存还会产生内存碎片影响整个作业系统的运行效率。</p>
+<h3 id="0x83-自由存储区与堆的区别"><a href="#0x83-自由存储区与堆的区别" class="headerlink" title="0x83 自由存储区与堆的区别"></a>0x83 自由存储区与堆的区别</h3><p>根据前面的说法，自由存储区只是C++里的一个抽象概念，它表示的是对象在new出来时所申请占用的内存区域。</p>
+<p>堆，是操作系统术语，它是操作系统维护的一块内存，专门用于动态分配给程序使用，调用malloc时分配，调用free时回收。自由存储，是C++的一个抽象概念，使用new关键字申请的内存就叫做自由存储区内存，然后使用delete释放内存，在大部分情况下C++编译器都使用堆来实现自由存储区的分配。但是做C++开发的都知道，C++提供了强大的重载操作符机制，我们完全可以使用别的区域来实现自由存储区，所以它们其实是不同层面的两种东西，它们完全可以是同一种类型也可以不同。</p>
+<h3 id="0x84-malloc-free和new-delete"><a href="#0x84-malloc-free和new-delete" class="headerlink" title="0x84 malloc/free和new/delete"></a>0x84 malloc/free和new/delete</h3><p>他们两个有很多相似的地方，但是却又有根本上的不同：</p>
+<ol>
+<li><p>前面着重提到的内存位置<br> malloc/free是在堆上为对象动态分配空间，new/delete是在自由存储区上。</p>
+</li>
+<li><p>返回值<br> malloc是void<em> 需要做强制类型转换，new是T</em> 对应类型指针无需转换。</p>
+</li>
+<li><p>是否显式指定分配大小<br> malloc需要显式指定大小，new不用。</p>
+</li>
+<li><p>构造函数与析构函数调用状况<br> 使用new创建的对象才会调用。</p>
+</li>
+<li><p>重新分配内存<br> 当发现内存不足时，我们可以使用realloc重新分配内存，如果连续内存足够则直接扩展，否则重新寻找内存区域。</p>
+</li>
+</ol>
+<p>差别其实有很多，甚至new也可以重载并使用malloc来实现一部分功能，但是不一样的东西过于揪住细节的话是没有意义的，我们需要做的就是在具有相似功能的事物上进行区分和甄别。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/04/24/堆，栈，自由储存区/" data-id="ckfsdx7d3002vr49z0y8e16y5" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Memery-Allocation/">Memery Allocation</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/25/静态库与动态库/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          静态库与动态库
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/20/Retrofit2-Converter的使用/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">Retrofit2 Converter的使用</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

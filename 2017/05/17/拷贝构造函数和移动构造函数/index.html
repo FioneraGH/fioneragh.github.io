@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>拷贝构造函数和移动构造函数 | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 构造函数这篇文章是继续C++学习的内容，由于最近事情很多，一直没机会静下心来学习，能做的只是晚上睡前抽点时间重新读一读《程序员的自我修养这本书》，不得不说好书每次重新读都有新的收获。牢骚就发到这，现在进入正题，聊聊构造函数。构造函数是面向对象编程最常见不过的东西了，一般情况下构造方法的名字通常与类名相同且声明时没有返回值，下面我们讨论一下C++中不同的构造函数。 0x82 默认构造函数最">
+<meta name="keywords" content="C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="拷贝构造函数和移动构造函数">
+<meta property="og:url" content="https://fioneragh.github.io/2017/05/17/拷贝构造函数和移动构造函数/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 构造函数这篇文章是继续C++学习的内容，由于最近事情很多，一直没机会静下心来学习，能做的只是晚上睡前抽点时间重新读一读《程序员的自我修养这本书》，不得不说好书每次重新读都有新的收获。牢骚就发到这，现在进入正题，聊聊构造函数。构造函数是面向对象编程最常见不过的东西了，一般情况下构造方法的名字通常与类名相同且声明时没有返回值，下面我们讨论一下C++中不同的构造函数。 0x82 默认构造函数最">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.202Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="拷贝构造函数和移动构造函数">
+<meta name="twitter:description" content="0x81 构造函数这篇文章是继续C++学习的内容，由于最近事情很多，一直没机会静下心来学习，能做的只是晚上睡前抽点时间重新读一读《程序员的自我修养这本书》，不得不说好书每次重新读都有新的收获。牢骚就发到这，现在进入正题，聊聊构造函数。构造函数是面向对象编程最常见不过的东西了，一般情况下构造方法的名字通常与类名相同且声明时没有返回值，下面我们讨论一下C++中不同的构造函数。 0x82 默认构造函数最">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-拷贝构造函数和移动构造函数" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/17/拷贝构造函数和移动构造函数/" class="article-date">
+  <time datetime="2017-05-17T12:25:24.000Z" itemprop="datePublished">2017-05-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      拷贝构造函数和移动构造函数
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-构造函数"><a href="#0x81-构造函数" class="headerlink" title="0x81 构造函数"></a>0x81 构造函数</h3><p>这篇文章是继续C++学习的内容，由于最近事情很多，一直没机会静下心来学习，能做的只是晚上睡前抽点时间重新读一读《程序员的自我修养这本书》，不得不说好书每次重新读都有新的收获。牢骚就发到这，现在进入正题，聊聊构造函数。构造函数是面向对象编程最常见不过的东西了，一般情况下构造方法的名字通常与类名相同且声明时没有返回值，下面我们讨论一下C++中不同的构造函数。</p>
+<h3 id="0x82-默认构造函数"><a href="#0x82-默认构造函数" class="headerlink" title="0x82 默认构造函数"></a>0x82 默认构造函数</h3><p>最常见的构造函数之一，无论是Java还是C++，当我们声明一个对象但不传入任何初始化参数时，这个构造函数就会调用，如果我们可以声明复写默认构造函数，来进行一些内部参数的初始化操作。但是这里有一个十分关键的地方，就是如果我们声明了含参构造函数，那编译器就不会主动为我们插入默认构造函数，也就是说不能使用默认构造方法声明对象，要想使用还需要手动声明无参构造函数。</p>
+<a id="more"></a>
+<h3 id="0x83-析构函数"><a href="#0x83-析构函数" class="headerlink" title="0x83 析构函数"></a>0x83 析构函数</h3><p>析构函数与构造函数对应，它们通常成对出现，构造函数用于使用对象时申请内存，而析构函数则用于回收对象时进行清理操作。我是在学习C++时才了解到析构函数，由于像Java等面向对象语言都是自带垃圾回收器，通常不需要我们手动清理内存，所以一般情况下不需要使用类似析构函数的东西来清理内存，但是C++能够非常直接的对内存进行操作，可以“随意”的申请某一块内存使用，为避免内存泄露我们通常需要回收使用的内存，而析构函数刚好可以hook到这个时机，它有点类似Android中Activity的onDestroy回调。</p>
+<h3 id="0x84-赋值构造函数"><a href="#0x84-赋值构造函数" class="headerlink" title="0x84 赋值构造函数"></a>0x84 赋值构造函数</h3><p>我们先来看一下头文件定义：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"> <span class="number">1</span> <span class="meta">#<span class="meta-keyword">ifndef</span> __TYPE_CLASS_H__</span></span><br><span class="line"> <span class="number">2</span> <span class="meta">#<span class="meta-keyword">define</span> __TYPE_CLASS_H__</span></span><br><span class="line"> <span class="number">3</span> <span class="keyword">namespace</span> type_class &#123;</span><br><span class="line"> <span class="number">4</span>     <span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>;</span><br><span class="line"> <span class="number">5</span>     <span class="class"><span class="keyword">class</span> <span class="title">Base</span> &#123;</span></span><br><span class="line"> <span class="number">6</span>         <span class="keyword">public</span>:</span><br><span class="line"> <span class="number">7</span>             Base();</span><br><span class="line"> <span class="number">8</span>             Base(<span class="keyword">int</span> a);</span><br><span class="line"> <span class="number">9</span>             Base(<span class="keyword">const</span> Base&amp; other);</span><br><span class="line"><span class="number">10</span>             Base&amp; <span class="keyword">operator</span>= (<span class="keyword">const</span> Base&amp; other);</span><br><span class="line"><span class="number">11</span> </span><br><span class="line"><span class="number">12</span>             Base(Base&amp;&amp; other);</span><br><span class="line"><span class="number">13</span>             Base&amp; <span class="keyword">operator</span>= (Base&amp;&amp; other);</span><br><span class="line"><span class="number">14</span>             ~Base();</span><br><span class="line"><span class="number">15</span> </span><br><span class="line"><span class="number">16</span>         <span class="keyword">protected</span>:</span><br><span class="line"><span class="number">17</span>             <span class="function"><span class="keyword">int</span> <span class="title">getMemberB</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="number">18</span>                 <span class="keyword">return</span> memberB;</span><br><span class="line"><span class="number">19</span>             &#125;</span><br><span class="line"><span class="number">20</span>             <span class="function"><span class="keyword">int</span> <span class="title">deleteC</span><span class="params">(<span class="keyword">int</span> a ,<span class="keyword">int</span> b = <span class="number">100</span>,<span class="keyword">bool</span> test=<span class="literal">true</span>)</span></span>;</span><br><span class="line"><span class="number">21</span></span><br><span class="line"><span class="number">22</span>         <span class="keyword">private</span>:</span><br><span class="line"><span class="number">23</span>             <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">int</span> size = <span class="number">512</span>;</span><br><span class="line"><span class="number">24</span>             <span class="keyword">int</span> memberA;</span><br><span class="line"><span class="number">25</span>             <span class="keyword">int</span> memberB;</span><br><span class="line"><span class="number">26</span>             <span class="keyword">int</span>* pMemberC;</span><br><span class="line"><span class="number">27</span>     &#125;;</span><br><span class="line"><span class="number">28</span> &#125;;</span><br><span class="line"><span class="number">29</span></span><br><span class="line"><span class="number">30</span> <span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<p>我们可以使用以下这种方式为类里的成员变量赋初值：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Base::Base() : memberA(<span class="number">0</span>), memberB(<span class="number">100</span>), pMemberC(<span class="keyword">new</span> <span class="keyword">int</span>[size]) &#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"In default constructor"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Base::Base(<span class="keyword">int</span> a) : memberA&#123;a&#125;, memberB&#123;<span class="number">100</span>&#125;, pMemberC&#123;<span class="keyword">new</span> <span class="keyword">int</span>[Base::size]&#125; &#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"In normal constructor"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>C++中的成员变量会生成对应的赋值函数用于在构造方法调用时赋值，这种写法比Java的构造方法中=式赋值要更加条理清晰。</p>
+<h3 id="0x85-拷贝构造函数"><a href="#0x85-拷贝构造函数" class="headerlink" title="0x85 拷贝构造函数"></a>0x85 拷贝构造函数</h3><p>拷贝构造函数的调用发生在当某个对象需要“背靠背”的时候，比如使用一个对象初始化另一个对象，或者以值传递的方式传递参数和返回值，都会调用拷贝构造函数。我们通常需要自行实现拷贝构造函数和拷贝赋值符，因为编译器默认生成的拷贝是浅拷贝且效率不高，而浅拷贝很容易带来莫名其妙的问题。简单的写法如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Base::Base(<span class="keyword">const</span> Base&amp; other) : memberA&#123;other.memberA&#125;,memberB&#123;other.memberB&#125;,pMemberC&#123;<span class="literal">nullptr</span>&#125;&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"In copy constructor"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">if</span> (other.pMemberC != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        pMemberC = <span class="keyword">new</span> <span class="keyword">int</span>[size];</span><br><span class="line">        <span class="built_in">memcpy</span>(pMemberC, other.pMemberC, size);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Base&amp; Base::<span class="keyword">operator</span>=(<span class="keyword">const</span> Base&amp; other) &#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;memberA = other.memberA;</span><br><span class="line">    (*<span class="keyword">this</span>).memberB = other.memberB;</span><br><span class="line">    <span class="keyword">if</span> (pMemberC != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="keyword">delete</span>[] pMemberC;</span><br><span class="line">        pMemberC = <span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (other.pMemberC != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        pMemberC = <span class="keyword">new</span> <span class="keyword">int</span>[size];</span><br><span class="line">        <span class="built_in">memcpy</span>(pMemberC, other.pMemberC, size);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们使用new和memcpy进行数据拷贝来完成深拷贝。</p>
+<h3 id="0x86-移动构造函数"><a href="#0x86-移动构造函数" class="headerlink" title="0x86 移动构造函数"></a>0x86 移动构造函数</h3><p>最后说一下这个移动构造函数，它的声明方式和拷贝构造函数类似，只是没有const关键字并多了一个&amp;取址符，与拷贝构造不同的是它并不是进行拷贝而是真的进行转移，执行完毕后源对象转移到新对象，而源对象将丢失其原有的内容，这种情况只发生在目的对象是匿名对象。这个语法是我在学习C++11时新遇到的，之前大学时期学的C++98应该是不支持的，并且实际上这种方式能带来更高效的内存管理，因为它不涉及新内存的申请：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Base::Base(Base&amp;&amp; other) : memberA(other.memberA), memberB(other.memberB), pMemberC(other.pMemberC) &#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"In move constructor"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    other.pMemberC = <span class="literal">nullptr</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Base&amp; Base::<span class="keyword">operator</span>=(Base&amp;&amp; other) &#123;</span><br><span class="line">    memberA = other.memberA;</span><br><span class="line">    memberB = other.memberB;</span><br><span class="line">    <span class="keyword">if</span> (pMemberC != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="keyword">delete</span>[] pMemberC;</span><br><span class="line">        pMemberC = <span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    pMemberC = other.pMemberC;</span><br><span class="line">    other.pMemberC = <span class="literal">nullptr</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>虽然我定义了移动构造函数并且打印了log，但是经过实验并不会触发。经过查阅，目前的编译器已经用一种返回值优化的方式优化了大多数可能调用的情况，所以它并不会被调用。</p>
+<p>C++11的内容非常的多，并不是几个字就能说的明白，还希望自己做的笔记能为自己起到一定的备忘的作用，哪怕完全将这些抛于脑后，依托自己写的笔记仍然可以快速的拿回所需的知识。</p>
+<p>技术的道路还有很长要走，能不能坚持不懈地走下去还要看自己的毅力和是否能一直持有磨灭不掉的兴趣，自己虽然有时也会疲惫，但只要不倦就会一直搞下去。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/05/17/拷贝构造函数和移动构造函数/" data-id="ckfsdx7d6002xr49z6f8mssg8" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/18/升级到gradle-plugin-3-0-0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          升级到gradle-plugin 3.0.0
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/16/使用lsof查看端口占用/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">使用lsof查看端口占用</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

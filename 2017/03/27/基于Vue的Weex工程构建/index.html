@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>基于Vue的Weex工程构建 | Return To Innocence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="0x81 工程初始化早期我们通过编写Weex特有的.we文件来实现我们的需求，we文件的语法和vue.js的语法非常类似，都是&amp;lt;template&amp;gt;&amp;lt;/template&amp;gt;、&amp;lt;style&amp;gt;&amp;lt;/style&amp;gt;、&amp;lt;script&amp;gt;&amp;lt;/script&amp;gt;三大标签构成模板、样式和逻辑。现如今，我们只需要使用最新的weex-toolkit即可以创建">
+<meta name="keywords" content="Vue,Weex">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Vue的Weex工程构建">
+<meta property="og:url" content="https://fioneragh.github.io/2017/03/27/基于Vue的Weex工程构建/index.html">
+<meta property="og:site_name" content="Return To Innocence">
+<meta property="og:description" content="0x81 工程初始化早期我们通过编写Weex特有的.we文件来实现我们的需求，we文件的语法和vue.js的语法非常类似，都是&amp;lt;template&amp;gt;&amp;lt;/template&amp;gt;、&amp;lt;style&amp;gt;&amp;lt;/style&amp;gt;、&amp;lt;script&amp;gt;&amp;lt;/script&amp;gt;三大标签构成模板、样式和逻辑。现如今，我们只需要使用最新的weex-toolkit即可以创建">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://fioneragh.github.io/images/2017_03_27_01.png">
+<meta property="og:updated_time" content="2020-10-02T08:45:39.201Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于Vue的Weex工程构建">
+<meta name="twitter:description" content="0x81 工程初始化早期我们通过编写Weex特有的.we文件来实现我们的需求，we文件的语法和vue.js的语法非常类似，都是&amp;lt;template&amp;gt;&amp;lt;/template&amp;gt;、&amp;lt;style&amp;gt;&amp;lt;/style&amp;gt;、&amp;lt;script&amp;gt;&amp;lt;/script&amp;gt;三大标签构成模板、样式和逻辑。现如今，我们只需要使用最新的weex-toolkit即可以创建">
+<meta name="twitter:image" content="https://fioneragh.github.io/images/2017_03_27_01.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Return To Innocence" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.proxy.ustclug.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Return To Innocence</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">We should remember what we have done.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">主页</a>
+        
+          <a class="main-nav-link" href="/archives/">文章</a>
+        
+          <a class="main-nav-link" href="/resume/">简历</a>
+        
+          <a class="main-nav-link" href="/about/">关于</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 流"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fioneragh.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-基于Vue的Weex工程构建" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/27/基于Vue的Weex工程构建/" class="article-date">
+  <time datetime="2017-03-27T10:22:23.000Z" itemprop="datePublished">2017-03-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      基于Vue的Weex工程构建
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0x81-工程初始化"><a href="#0x81-工程初始化" class="headerlink" title="0x81 工程初始化"></a>0x81 工程初始化</h3><p>早期我们通过编写Weex特有的.we文件来实现我们的需求，we文件的语法和vue.js的语法非常类似，都是<code>&lt;template&gt;&lt;/template&gt;、&lt;style&gt;&lt;/style&gt;、&lt;script&gt;&lt;/script&gt;</code>三大标签构成模板、样式和逻辑。<br>现如今，我们只需要使用最新的weex-toolkit即可以创建出基于webpack模块构建系统的工程，更让人欢喜的是，Weex在最新的SDK中已经引入了Vue2 Runtime，我们可以使用vue.js来开发我们的Weex应用。</p>
+<p>使用<code>weex init project</code>命令创建的工程目录结构如下：</p>
+<p><img src="/images/2017_03_27_01.png" alt="工程结构"></p>
+<p>其中.vscode是Visual Studio Code生成的配置文件夹，src是我们的源码目录，webpack.config.js是webpack（1.14.0）的配置文件，package.json是项目配置信息文件。</p>
+<h3 id="0x82-安装必要的包依赖"><a href="#0x82-安装必要的包依赖" class="headerlink" title="0x82 安装必要的包依赖"></a>0x82 安装必要的包依赖</h3><p>使用nodejs安装包依赖很简单，只需要在工程目录下使用npm工具执行<code>cnpm i</code>命令就可以了（cnpm是淘宝源的npm工具，由于npmjs在国外，由于国内特殊的状况速度很慢）。</p>
+<p>我们看一下package.json:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"weex"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">"A weex project."</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"0.1.0"</span>,</span><br><span class="line">  <span class="attr">"private"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"main"</span>: <span class="string">"index.js"</span>,</span><br><span class="line">  <span class="attr">"keywords"</span>: [</span><br><span class="line">    <span class="string">"weex"</span>,</span><br><span class="line">    <span class="string">"vue"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"build"</span>: <span class="string">"webpack"</span>,</span><br><span class="line">    <span class="attr">"dev"</span>: <span class="string">"webpack --watch"</span>,</span><br><span class="line">    <span class="attr">"serve"</span>: <span class="string">"node build/init.js &amp;&amp; serve -p 8080"</span>,</span><br><span class="line">    <span class="attr">"debug"</span>: <span class="string">"weex-devtool"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"dependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"axios"</span>: <span class="string">"^0.15.3"</span>,</span><br><span class="line">    <span class="attr">"uuid"</span>: <span class="string">"^3.0.1"</span>,</span><br><span class="line">    <span class="attr">"vue"</span>: <span class="string">"^2.1.8"</span>,</span><br><span class="line">    <span class="attr">"vue-awesome-swiper"</span>: <span class="string">"^2.3.8"</span>,</span><br><span class="line">    <span class="attr">"vue-router"</span>: <span class="string">"^2.1.1"</span>,</span><br><span class="line">    <span class="attr">"vuex"</span>: <span class="string">"^2.1.1"</span>,</span><br><span class="line">    <span class="attr">"vuex-router-sync"</span>: <span class="string">"^4.0.1"</span>,</span><br><span class="line">    <span class="attr">"weex-vue-render"</span>: <span class="string">"^0.1.4"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"babel-core"</span>: <span class="string">"^6.20.0"</span>,</span><br><span class="line">    <span class="attr">"babel-loader"</span>: <span class="string">"^6.2.9"</span>,</span><br><span class="line">    <span class="attr">"babel-preset-es2015"</span>: <span class="string">"^6.18.0"</span>,</span><br><span class="line">    <span class="attr">"css-loader"</span>: <span class="string">"^0.26.1"</span>,</span><br><span class="line">    <span class="attr">"ip"</span>: <span class="string">"^1.1.4"</span>,</span><br><span class="line">    <span class="attr">"serve"</span>: <span class="string">"^1.4.0"</span>,</span><br><span class="line">    <span class="attr">"vue-loader"</span>: <span class="string">"^10.0.2"</span>,</span><br><span class="line">    <span class="attr">"vue-template-compiler"</span>: <span class="string">"^2.1.8"</span>,</span><br><span class="line">    <span class="attr">"webpack"</span>: <span class="string">"^1.14.0"</span>,</span><br><span class="line">    <span class="attr">"weex-devtool"</span>: <span class="string">"^0.2.64"</span>,</span><br><span class="line">    <span class="attr">"weex-loader"</span>: <span class="string">"^0.4.1"</span>,</span><br><span class="line">    <span class="attr">"weex-vue-loader"</span>: <span class="string">"^0.2.5"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>和一般的包依赖配置一样，”script”下是npm命令脚本别名，”dependencies”和”devDependencies”分别是一般依赖和开发依赖。一般依赖主要是Vue和Weex，开发依赖主要是Babel翻译器和Webpack的Loader。</p>
+<a id="more"></a>
+<h3 id="0x83-Gif加载图标的支持"><a href="#0x83-Gif加载图标的支持" class="headerlink" title="0x83 Gif加载图标的支持"></a>0x83 Gif加载图标的支持</h3><p>我们有时候会使用一张旋转的gif作为加载内容的占位图，但Webpack可能会不识别Gif文件，这个时候我们需要添加”file-loader”到工程依赖，并在webpack.config.js中配置：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">loaders: [</span><br><span class="line">  &#123;</span><br><span class="line">    test: <span class="regexp">/\.gif$/</span>,</span><br><span class="line">    loader: <span class="string">'file'</span>,</span><br><span class="line">    exclude: <span class="regexp">/node_modules/</span></span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h3 id="0x84-Webpack的EsLint支持"><a href="#0x84-Webpack的EsLint支持" class="headerlink" title="0x84 Webpack的EsLint支持"></a>0x84 Webpack的EsLint支持</h3><p>根据weex-toolkit生成的webpack.config.js配置文件中的描述，如今weex开发得益于webpack丰富的loader已经可以使用eslint做代码检查，如果有需要已经可以使用样式处理器处理postcss这些样式库了。EsLint的支持也特别容易，在工程目录下运行<code>cnpm i babel-eslint eslint eslint-config-standard eslint-loader eslint-plugin-html eslint-plugin-promise eslint-plugin-standard --save-dev</code>后，eslint的基本依赖便会添加到工程目录下。接下来在webpack.config.js的preLoaders下添加配置：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">preLoaders: [</span><br><span class="line">  &#123;</span><br><span class="line">    test: <span class="regexp">/\.vue$/</span>,</span><br><span class="line">    loader: <span class="string">'eslint'</span>,</span><br><span class="line">    exclude: <span class="regexp">/node_modules/</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">    loader: <span class="string">'eslint'</span>,</span><br><span class="line">    exclude: <span class="regexp">/node_modules/</span></span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>这样webpack在构建工程时便会先通过eslint检查代码，如果发现错误会给出提醒并中止编译。</p>
+<h3 id="0x85-VS-Code的EsLint"><a href="#0x85-VS-Code的EsLint" class="headerlink" title="0x85 VS Code的EsLint"></a>0x85 VS Code的EsLint</h3><p>其实在安装EsLint的相关依赖后，VS Code便具有了代码检查的能力，根据自己的需要配置好eslint的配置文件<code>.eslintrc/.eslintrc.json</code>，EsLint Server便会在代码编写时就能提供代码警示：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">.vscode/.settings.json</span><br><span class="line"></span><br><span class="line">"emmet.syntaxProfiles": &#123;</span><br><span class="line">  "vue-html": "html",</span><br><span class="line">  "vue": "html"</span><br><span class="line">&#125;,</span><br><span class="line">"eslint.validate": [</span><br><span class="line">  "javascript",</span><br><span class="line">  "javascriptreact",</span><br><span class="line">  "html",</span><br><span class="line">  <span class="string">"vue"</span></span><br><span class="line">],</span><br><span class="line">"eslint.options": &#123;</span><br><span class="line">  "plugins": [</span><br><span class="line">    <span class="string">"html"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.eslintrc</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"root"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"parser"</span>: <span class="string">"babel-eslint"</span>,</span><br><span class="line">  <span class="attr">"parserOptions"</span>: &#123;</span><br><span class="line">    <span class="attr">"sourceType"</span>: <span class="string">"module"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"globals"</span>: &#123;</span><br><span class="line">    <span class="attr">"Vue"</span>: <span class="literal">false</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"extends"</span>: <span class="string">"standard"</span>,</span><br><span class="line">  <span class="attr">"plugins"</span>: [</span><br><span class="line">    <span class="string">"html"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">"rules"</span>: &#123;</span><br><span class="line">    <span class="attr">"arrow-parens"</span>: <span class="string">"off"</span>,</span><br><span class="line">    <span class="attr">"generator-star-spacing"</span>: <span class="string">"off"</span>,</span><br><span class="line">    <span class="attr">"semi"</span>: <span class="string">"error"</span>,</span><br><span class="line">    <span class="attr">"no-extra-semi"</span>: <span class="string">"error"</span>,</span><br><span class="line">    <span class="attr">"space-before-function-paren"</span>: <span class="string">"off"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0x86-使用stage-2支持Object-Spread-Operator"><a href="#0x86-使用stage-2支持Object-Spread-Operator" class="headerlink" title="0x86 使用stage-2支持Object Spread Operator"></a>0x86 使用stage-2支持Object Spread Operator</h3><p>根据官方的说法，rest spread等对象展开操作并不在es2015的标准中，因此babel默认并不支持对象展开，我们可以使用babel-stage-2开启支持。</p>
+<p>使用npm安装<code>cnpm i babel-preset-stage-2 --save-dev</code>安装stage-2 preset后配置.bablerc后便可以使用对象展开符了。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"presets"</span>: [</span><br><span class="line">    <span class="string">"es2015"</span>,</span><br><span class="line">    <span class="string">"stage-2"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上是目前学习新的weex和从头学习vue所遇到的几个简单的小问题，以后会再补充。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fioneragh.github.io/2017/03/27/基于Vue的Weex工程构建/" data-id="ckfsdx7d1002tr49zlg7rzwqt" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue/">Vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Weex/">Weex</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/28/Android-硬件加速：概述/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能太新了</strong>
+      <div class="article-nav-title">
+        
+          Android 硬件加速：概述
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/23/Android之startActivityForResult/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">这些东西可能过时了</strong>
+      <div class="article-nav-title">Android之startActivityForResult</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ACPI/" style="font-size: 10px;">ACPI</a> <a href="/tags/Activity/" style="font-size: 13.75px;">Activity</a> <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/AnimatedVectorDrawable/" style="font-size: 10px;">AnimatedVectorDrawable</a> <a href="/tags/AsyncTask/" style="font-size: 10px;">AsyncTask</a> <a href="/tags/Axel/" style="font-size: 10px;">Axel</a> <a href="/tags/BLE/" style="font-size: 10px;">BLE</a> <a href="/tags/Bazel/" style="font-size: 10px;">Bazel</a> <a href="/tags/Bitmap/" style="font-size: 10px;">Bitmap</a> <a href="/tags/BroadcastReceiver/" style="font-size: 10px;">BroadcastReceiver</a> <a href="/tags/C/" style="font-size: 11.25px;">C++</a> <a href="/tags/Clang/" style="font-size: 10px;">Clang</a> <a href="/tags/Clover/" style="font-size: 11.25px;">Clover</a> <a href="/tags/ConstraintSet/" style="font-size: 10px;">ConstraintSet</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Converter/" style="font-size: 10px;">Converter</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/DI/" style="font-size: 10px;">DI</a> <a href="/tags/Dagger/" style="font-size: 12.5px;">Dagger</a> <a href="/tags/DataBinding/" style="font-size: 10px;">DataBinding</a> <a href="/tags/DecimalFormat/" style="font-size: 10px;">DecimalFormat</a> <a href="/tags/Dex/" style="font-size: 10px;">Dex</a> <a href="/tags/ELF/" style="font-size: 11.25px;">ELF</a> <a href="/tags/Fedora/" style="font-size: 10px;">Fedora</a> <a href="/tags/FileProvider/" style="font-size: 12.5px;">FileProvider</a> <a href="/tags/FileVault/" style="font-size: 10px;">FileVault</a> <a href="/tags/Font/" style="font-size: 10px;">Font</a> <a href="/tags/Fragment/" style="font-size: 10px;">Fragment</a> <a href="/tags/Fresco/" style="font-size: 10px;">Fresco</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gradle/" style="font-size: 15px;">Gradle</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hackintosh/" style="font-size: 11.25px;">Hackintosh</a> <a href="/tags/Hadoop/" style="font-size: 10px;">Hadoop</a> <a href="/tags/HardwareAccelerate/" style="font-size: 10px;">HardwareAccelerate</a> <a href="/tags/Hexo/" style="font-size: 11.25px;">Hexo</a> <a href="/tags/Hive/" style="font-size: 10px;">Hive</a> <a href="/tags/Hotpatch/" style="font-size: 10px;">Hotpatch</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/IPC/" style="font-size: 11.25px;">IPC</a> <a href="/tags/Issues/" style="font-size: 10px;">Issues</a> <a href="/tags/Iterator/" style="font-size: 10px;">Iterator</a> <a href="/tags/JUnit/" style="font-size: 10px;">JUnit</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JitPack/" style="font-size: 10px;">JitPack</a> <a href="/tags/Kernel/" style="font-size: 10px;">Kernel</a> <a href="/tags/Linux/" style="font-size: 18.75px;">Linux</a> <a href="/tags/LoadLibrary/" style="font-size: 10px;">LoadLibrary</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Memery-Allocation/" style="font-size: 10px;">Memery Allocation</a> <a href="/tags/Messenger/" style="font-size: 11.25px;">Messenger</a> <a href="/tags/Mock/" style="font-size: 10px;">Mock</a> <a href="/tags/Mount/" style="font-size: 10px;">Mount</a> <a href="/tags/Multidex/" style="font-size: 10px;">Multidex</a> <a href="/tags/Mysql/" style="font-size: 11.25px;">Mysql</a> <a href="/tags/Nexus5/" style="font-size: 12.5px;">Nexus5</a> <a href="/tags/Nginx/" style="font-size: 11.25px;">Nginx</a> <a href="/tags/Openstack/" style="font-size: 10px;">Openstack</a> <a href="/tags/Ordinary/" style="font-size: 16.25px;">Ordinary</a> <a href="/tags/Path/" style="font-size: 10px;">Path</a> <a href="/tags/PhotoView/" style="font-size: 10px;">PhotoView</a> <a href="/tags/PopupWindow/" style="font-size: 12.5px;">PopupWindow</a> <a href="/tags/Proguard/" style="font-size: 10px;">Proguard</a> <a href="/tags/Python/" style="font-size: 11.25px;">Python</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/Realm/" style="font-size: 11.25px;">Realm</a> <a href="/tags/Retrofit/" style="font-size: 11.25px;">Retrofit</a> <a href="/tags/RoundingMode/" style="font-size: 10px;">RoundingMode</a> <a href="/tags/RxBinding/" style="font-size: 10px;">RxBinding</a> <a href="/tags/RxJava/" style="font-size: 13.75px;">RxJava</a> <a href="/tags/RxLifecycle/" style="font-size: 10px;">RxLifecycle</a> <a href="/tags/SVG/" style="font-size: 10px;">SVG</a> <a href="/tags/Screen/" style="font-size: 10px;">Screen</a> <a href="/tags/Scroller/" style="font-size: 10px;">Scroller</a> <a href="/tags/StartupWMClass/" style="font-size: 10px;">StartupWMClass</a> <a href="/tags/Stetho/" style="font-size: 10px;">Stetho</a> <a href="/tags/Sudoers/" style="font-size: 11.25px;">Sudoers</a> <a href="/tags/TensorFlow/" style="font-size: 12.5px;">TensorFlow</a> <a href="/tags/Theme/" style="font-size: 10px;">Theme</a> <a href="/tags/Transformer/" style="font-size: 10px;">Transformer</a> <a href="/tags/Transition/" style="font-size: 11.25px;">Transition</a> <a href="/tags/UEFI/" style="font-size: 10px;">UEFI</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/Uri/" style="font-size: 10px;">Uri</a> <a href="/tags/Vim/" style="font-size: 11.25px;">Vim</a> <a href="/tags/VirtualBox/" style="font-size: 10px;">VirtualBox</a> <a href="/tags/Vue/" style="font-size: 12.5px;">Vue</a> <a href="/tags/Vuex/" style="font-size: 10px;">Vuex</a> <a href="/tags/Weex/" style="font-size: 12.5px;">Weex</a> <a href="/tags/Wine/" style="font-size: 10px;">Wine</a> <a href="/tags/YCM/" style="font-size: 11.25px;">YCM</a> <a href="/tags/btrfs/" style="font-size: 10px;">btrfs</a> <a href="/tags/debugfs/" style="font-size: 10px;">debugfs</a> <a href="/tags/dnf/" style="font-size: 10px;">dnf</a> <a href="/tags/efibootmgr/" style="font-size: 10px;">efibootmgr</a> <a href="/tags/iOSm-iMazing/" style="font-size: 10px;">iOSm iMazing</a> <a href="/tags/inobounce/" style="font-size: 10px;">inobounce</a> <a href="/tags/libGDX/" style="font-size: 11.25px;">libGDX</a> <a href="/tags/lsof/" style="font-size: 10px;">lsof</a> <a href="/tags/macOS/" style="font-size: 17.5px;">macOS</a> <a href="/tags/node-js/" style="font-size: 11.25px;">node.js</a> <a href="/tags/npm/" style="font-size: 11.25px;">npm</a> <a href="/tags/objdump/" style="font-size: 10px;">objdump</a> <a href="/tags/share/" style="font-size: 10px;">share</a> <a href="/tags/vux/" style="font-size: 10px;">vux</a> <a href="/tags/webpack/" style="font-size: 12.5px;">webpack</a> <a href="/tags/webpack-dev-server/" style="font-size: 10px;">webpack-dev-server</a> <a href="/tags/zRAM/" style="font-size: 10px;">zRAM</a> <a href="/tags/速记/" style="font-size: 13.75px;">速记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/23/Broadcast和Receiver的变更/">Broadcast和Receiver的变更</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/Gradle依赖管理踩坑/">Gradle依赖管理踩坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/12/macOS-Default-Setting/">macOS Default Setting</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/13/Git-ignore-file-locally/">Git ignore file locally</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/04/Android-无法扫描蓝牙设备踩坑/">Android 无法扫描蓝牙设备踩坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Weibo show</h3>
+    <div class="widget-weibo">
+      <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="//widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=2594140111&verifier=ec1b7a42&dpc=1"></iframe>
+    </div>
+  </div>
+
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Fionera<br>
+      巨大能量来源 <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">主页</a>
+  
+    <a href="/archives/" class="mobile-nav-link">文章</a>
+  
+    <a href="/resume/" class="mobile-nav-link">简历</a>
+  
+    <a href="/about/" class="mobile-nav-link">关于</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
